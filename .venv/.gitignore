@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Entorno virtual
+.venv/
+
+# Archivos de Django
+db.sqlite3
+/media/
+staticfiles/
+
+# Configuración local
+.env
