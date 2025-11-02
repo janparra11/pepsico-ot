@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Detalle OT {{ ot.folio }}{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">OT {{ ot.folio }}</h1>
+
+<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+
+  <!-- Columna: Cambiar estado -->
+  <div class="col">
+    <div class="card card-body shadow-sm control-card">
+      <h2 class="h6 mb-3">Cambiar estado</h2>
+
+      {% if ot.activa %}
+        <form method="post" action="{% url 'ot_cambiar_estado' ot.id %}">
+          {% csrf_token %}
+          <div class="mb-2">
+            <select name="nuevo_estado" class="form-select">
+              {% for value,label in estado_choices %}
+                <option value="{{ value }}" {% if value == ot.estado_actual %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <!-- Botón de ancho completo y misma altura -->
+          <button class="btn btn-primary w-100 btn-action">Aplicar</button>
+        </form>
+        <div class="form-text mt-2">Solo se permiten transiciones válidas.</div>
+
+      {% else %}
+        <!-- Aviso gris igual al de Pausa cuando OT está cerrada -->
+        <div class="alert alert-secondary mb-0">
+          La OT está <strong>cerrada</strong> ({{ ot.fecha_cierre }}). No admite cambios.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Columna: Pausa -->
+  <div class="col">
+    <div class="card card-body shadow-sm control-card">
+      <h2 class="h6 mb-3">Pausa</h2>
+
+      {% if pausa_abierta %}
+        <div class="alert alert-warning">
+          <div><strong>Pausa abierta</strong></div>
+          <div><strong>Motivo:</strong> {{ pausa_abierta.motivo }}</div>
+          <div><strong>Desde:</strong> {{ pausa_abierta.inicio }}</div>
+        </div>
+
+        {% if ot.activa %}
+          <form method="post" action="{% url 'pausa_finalizar' ot.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="confirmar" value="on"/>
+            <!-- Botón del mismo tamaño -->
+            <button class="btn btn-danger w-100 btn-action">Finalizar pausa</button>
+          </form>
+        {% else %}
+          <div class="alert alert-secondary mb-0">
+            La OT está <strong>cerrada</strong>. No se pueden finalizar pausas aquí.
+          </div>
+        {% endif %}
+
+      {% else %}
+        {% if ot.activa %}
+          <form method="post" action="{% url 'pausa_iniciar' ot.id %}">
+            {% csrf_token %}
+            <div class="mb-2">
+              <input name="motivo" class="form-control" placeholder="Motivo (ej. Espera de repuesto)" required />
+            </div>
+            <!-- Botón del mismo tamaño -->
+            <button class="btn btn-warning w-100 btn-action">Iniciar pausa</button>
+          </form>
+          <div class="form-text mt-2">Solo puede haber una pausa abierta a la vez.</div>
+        {% else %}
+          <!-- Mismo aviso gris cuando OT está cerrada -->
+          <div class="alert alert-secondary mb-0">
+            La OT está <strong>cerrada</strong>. No se pueden iniciar pausas.
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+  <dl class="row">
+    <dt class="col-sm-3">Patente</dt><dd class="col-sm-9">{{ ot.vehiculo.patente }}</dd>
+    <dt class="col-sm-3">Taller</dt><dd class="col-sm-9">{{ ot.taller.nombre }}</dd>
+    <dt class="col-sm-3">Estado actual</dt><dd class="col-sm-9"><span class="badge bg-info">{{ ot.get_estado_actual_display }}</span></dd>
+    <dt class="col-sm-3">Activa</dt><dd class="col-sm-9">{{ ot.activa|yesno:"Sí,No" }}</dd>
+    <dt class="col-sm-3">Ingreso</dt><dd class="col-sm-9">{{ ot.fecha_ingreso }}</dd>
+  </dl>
+
+  <h2 class="h6 mt-4">Historial</h2>
+  <ul class="list-group mb-3">
+    {% for h in historial %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ h.get_estado_display }} — desde {{ h.inicio }}{% if h.fin %} hasta {{ h.fin }}{% endif %}</span>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Sin historial.</li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="h6 mt-4">Pausas</h2>
+  <ul class="list-group">
+    {% for p in pausas %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ p.motivo }} — desde {{ p.inicio }}{% if p.fin %} hasta {{ p.fin }}{% endif %}</span>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Sin pausas.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

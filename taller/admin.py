@@ -1,3 +1,12 @@
 from django.contrib import admin
+from .models import Taller, Vehiculo
 
-# Register your models here.
+@admin.register(Taller)
+class TallerAdmin(admin.ModelAdmin):
+    list_display = ("id", "nombre", "capacidad")
+    search_fields = ("nombre",)
+
+@admin.register(Vehiculo)
+class VehiculoAdmin(admin.ModelAdmin):
+    list_display = ("id", "patente", "marca", "modelo")
+    search_fields = ("patente", "marca", "modelo")

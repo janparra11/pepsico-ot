@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Nuevo Ingreso{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Registrar Ingreso de Vehículo</h1>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {# Errores generales del formulario #}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.patente.id_for_label }}">Patente</label>
+      {{ form.patente }}
+      {% if form.patente.errors %}
+        <div class="text-danger small">{{ form.patente.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.taller.id_for_label }}">Taller</label>
+      {{ form.taller }}
+      {% if form.taller.errors %}
+        <div class="text-danger small">{{ form.taller.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.observaciones.id_for_label }}">Observaciones</label>
+      {{ form.observaciones }}
+      {% if form.observaciones.errors %}
+        <div class="text-danger small">{{ form.observaciones.errors }}</div>
+      {% endif %}
+    </div>
+
+    <button class="btn btn-primary">Registrar ingreso</button>
+  </form>
+</div>
+{% endblock %}

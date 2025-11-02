@@ -1,0 +1,12 @@
+[
+  {
+    "model": "taller.taller",
+    "pk": 1,
+    "fields": { "nombre": "Maipú", "direccion": "Av. X 123", "capacidad": 6 }
+  },
+  {
+    "model": "taller.vehiculo",
+    "pk": 1,
+    "fields": { "patente": "AB12-34", "marca": "Mercedes", "modelo": "Actros" }
+  }
+]
