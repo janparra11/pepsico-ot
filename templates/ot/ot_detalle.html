@@ -83,6 +83,76 @@
 
 </div>
 
+<h2 class="h6 mt-4">Documentos</h2>
+
+<div class="row g-3">
+  <div class="col-12 col-md-5">
+    <div class="card card-body shadow-sm">
+      <h3 class="h6">Subir documento</h3>
+      {% if ot.activa %}
+      <form method="post" action="{% url 'ot_subir_documento' ot.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-2">
+          {{ doc_form.archivo }}
+          <div class="form-text">Permitidos: JPG, PNG, PDF. Máx: {{ settings.MAX_UPLOAD_MB }} MB.</div>
+        </div>
+        <div class="mb-2">
+          {{ doc_form.tipo }}
+        </div>
+        <button class="btn btn-success w-100 py-2">Subir</button>
+      </form>
+      {% else %}
+      <div class="alert alert-secondary mb-0">La OT está cerrada. No se pueden subir documentos.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-12 col-md-7">
+    <div class="card card-body shadow-sm">
+      <h3 class="h6">Adjuntos</h3>
+      {% if ot.documentos.all %}
+        <div class="row g-3">
+          {% for d in ot.documentos.all|dictsortreversed:"ts" %}
+            <div class="col-12 col-sm-6">
+              <div class="border rounded p-2 h-100">
+                {% with nombre=d.archivo.url|lower %}
+                  {% if ".jpg" in nombre or ".jpeg" in nombre or ".png" in nombre %}
+                    <img src="{{ d.archivo.url }}" alt="Imagen" class="img-fluid rounded mb-2" />
+                  {% elif ".pdf" in nombre %}
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <span class="badge text-bg-secondary">PDF</span>
+                      <a href="{{ d.archivo.url }}" target="_blank" rel="noopener">Abrir documento</a>
+                    </div>
+                  {% else %}
+                    <a href="{{ d.archivo.url }}" target="_blank" rel="noopener">Descargar archivo</a>
+                  {% endif %}
+                {% endwith %}
+
+                <div class="small text-muted mb-2">
+                  {{ d.tipo|default:"(sin tipo)" }} · {{ d.ts }}
+                </div>
+
+                {% if ot.activa %}
+                <form method="post" action="{% url 'ot_eliminar_documento' ot.id d.id %}">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
+                </form>
+                {% else %}
+                <div class="alert alert-secondary mb-0">OT cerrada · No se puede eliminar</div>
+                {% endif %}
+              </div>
+            </div>
+          {% empty %}
+            <div class="text-muted">Sin documentos.</div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-muted">Sin documentos.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
   <dl class="row">
     <dt class="col-sm-3">Patente</dt><dd class="col-sm-9">{{ ot.vehiculo.patente }}</dd>
     <dt class="col-sm-3">Taller</dt><dd class="col-sm-9">{{ ot.taller.nombre }}</dd>

@@ -1,5 +1,6 @@
 from django import forms
 from taller.models import Taller
+import os
 
 class IngresoForm(forms.Form):
     patente = forms.CharField(
@@ -51,3 +52,32 @@ class PausaFinalizarForm(forms.Form):
         initial=True,
         label="Confirmar término de pausa"
     )
+
+from django.conf import settings
+
+class DocumentoForm(forms.Form):
+    archivo = forms.FileField(
+        label="Archivo (JPG/PNG/PDF)",
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"})
+    )
+    tipo = forms.CharField(
+        required=False,
+        max_length=30,
+        label="Tipo (opcional)",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "ej. Informe, Siniestro, Antes/Después"})
+    )
+
+def clean_archivo(self):
+    import os
+    f = self.cleaned_data["archivo"]
+    max_bytes = settings.MAX_UPLOAD_MB * 1024 * 1024
+    if f.size > max_bytes:
+        raise forms.ValidationError(f"El archivo excede {settings.MAX_UPLOAD_MB} MB.")
+
+    nombre = f.name.lower()
+    _, ext = os.path.splitext(nombre)
+    ext = ext.replace(".", "")
+    if ext not in settings.ALLOWED_EXTENSIONS:
+        raise forms.ValidationError("Solo se permiten archivos JPG, JPEG, PNG o PDF.")
+    return f
+

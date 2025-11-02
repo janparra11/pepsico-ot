@@ -3,9 +3,21 @@ from django.contrib import messages
 from django.db import transaction
 from django.utils import timezone
 
+from django.views.decorators.http import require_POST
+from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm
+from .services import cambiar_estado, iniciar_pausa, finalizar_pausa
+from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT
+
 from .forms import IngresoForm
 from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT
 from taller.models import Vehiculo
+
+from django.views.decorators.http import require_POST
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseForbidden
+from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm, DocumentoForm
+from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT, DocumentoOT
+
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -50,9 +62,8 @@ def ot_detalle(request, ot_id):
     historial = ot.historial.order_by("-inicio")
     pausas = ot.pausas.order_by("-inicio")
     estado_choices = ot._meta.get_field("estado_actual").choices
-
-    # Pausa abierta si existe una con fin null
     pausa_abierta = ot.pausas.filter(fin__isnull=True).order_by("-inicio").first()
+    doc_form = DocumentoForm()  # ← nuevo
 
     return render(
         request,
@@ -62,16 +73,10 @@ def ot_detalle(request, ot_id):
             "historial": historial,
             "pausas": pausas,
             "estado_choices": estado_choices,
-            "pausa_abierta": pausa_abierta,  # <- importante
+            "pausa_abierta": pausa_abierta,
+            "doc_form": doc_form,  # ← nuevo
         },
     )
-
-
-# ot/views.py (agrega imports)
-from django.views.decorators.http import require_POST
-from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm
-from .services import cambiar_estado, iniciar_pausa, finalizar_pausa
-from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT
 
 # Vista para cambiar estado
 @require_POST
@@ -117,7 +122,6 @@ def pausa_iniciar(request, ot_id):
         messages.error(request, "Ocurrió un error al iniciar la pausa.")
     return redirect("ot_detalle", ot_id=ot.id)
 
-
 @require_POST
 def pausa_finalizar(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -136,4 +140,56 @@ def pausa_finalizar(request, ot_id):
         messages.error(request, str(e))
     except Exception:
         messages.error(request, "Ocurrió un error al finalizar la pausa.")
+    return redirect("ot_detalle", ot_id=ot.id)
+
+@require_POST
+def ot_subir_documento(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    if not ot.activa:
+        messages.error(request, "La OT está cerrada. No puedes adjuntar documentos.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    form = DocumentoForm(request.POST, request.FILES)
+    if not form.is_valid():
+        messages.error(request, "; ".join([str(e) for e in form.errors.get("__all__", [])]))
+        for campo, errs in form.errors.items():
+            if campo != "__all__":
+                messages.error(request, f"{campo}: {', '.join(errs)}")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    try:
+        doc = DocumentoOT(
+            ot=ot,
+            archivo=form.cleaned_data["archivo"],
+            tipo=form.cleaned_data.get("tipo", "") or "",
+            creado_por=request.user if request.user.is_authenticated else None
+        )
+        # Ejecuta clean() del modelo (valida tamaño/MIME/ext)
+        doc.full_clean()
+        doc.save()
+        messages.success(request, "Documento subido correctamente.")
+    except ValidationError as e:
+        messages.error(request, "; ".join(e.messages))
+    except Exception:
+        messages.error(request, "Ocurrió un error al subir el documento.")
+    return redirect("ot_detalle", ot_id=ot.id)
+
+
+@require_POST
+def ot_eliminar_documento(request, ot_id, doc_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    doc = get_object_or_404(DocumentoOT, id=doc_id, ot=ot)
+
+    # (Simple) Autorización: sólo si la OT está activa. Puedes endurecer por rol/propiedad.
+    if not ot.activa:
+        messages.error(request, "La OT está cerrada. No puedes eliminar documentos.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    try:
+        # Borra el archivo del storage y el registro
+        doc.archivo.delete(save=False)
+        doc.delete()
+        messages.success(request, "Documento eliminado.")
+    except Exception:
+        messages.error(request, "No se pudo eliminar el documento.")
     return redirect("ot_detalle", ot_id=ot.id)

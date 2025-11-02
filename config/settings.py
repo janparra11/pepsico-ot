@@ -116,3 +116,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Seguridad mínima (endurecer en prod)
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
+
+# === Subidas de archivos ===
+MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))  # 10 MB por defecto
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf"}

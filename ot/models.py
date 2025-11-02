@@ -2,6 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from taller.models import Vehiculo, Taller
+import os
+from uuid import uuid4
+from django.conf import settings
+from django.core.exceptions import ValidationError
+
 
 class EstadoOT(models.TextChoices):
     INGRESADO   = "ING", "Ingresado"
@@ -67,9 +72,27 @@ class PausaOT(models.Model):
         verbose_name = "Pausa"
         verbose_name_plural = "Pausas"
 
+def documento_upload_path(instance, filename):
+    # carpeta por OT, nombre aleatorio
+    ext = os.path.splitext(filename)[1].lower()  # conserva extensión
+    return f"docs/ot_{instance.ot_id}/{uuid4().hex}{ext}"
+
+def validar_archivo(archivo):
+    """Valida tamaño y extensión de forma tolerante (sin depender de MIME)."""
+    import os
+    max_bytes = settings.MAX_UPLOAD_MB * 1024 * 1024
+    if archivo.size > max_bytes:
+        raise ValidationError(f"El archivo excede el límite de {settings.MAX_UPLOAD_MB} MB.")
+
+    nombre = archivo.name.lower()
+    _, ext = os.path.splitext(nombre)
+    ext = ext.replace(".", "")
+    if ext not in settings.ALLOWED_EXTENSIONS:
+        raise ValidationError("Solo se permiten archivos JPG, JPEG, PNG o PDF.")
+
 class DocumentoOT(models.Model):
     ot = models.ForeignKey(OrdenTrabajo, on_delete=models.CASCADE, related_name="documentos")
-    archivo = models.FileField(upload_to="docs/")  # valida mime/tamaño en vistas/forms
+    archivo = models.FileField(upload_to=documento_upload_path)  # ← NUEVO upload_to
     tipo = models.CharField(max_length=30, blank=True)
     creado_por = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     ts = models.DateTimeField(auto_now_add=True)
@@ -78,3 +101,8 @@ class DocumentoOT(models.Model):
         indexes = [models.Index(fields=["ot", "ts"])]
         verbose_name = "Documento"
         verbose_name_plural = "Documentos"
+
+    def clean(self):
+        # Llama al validador
+        if self.archivo:
+            validar_archivo(self.archivo)
