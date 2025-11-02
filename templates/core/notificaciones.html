@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Notificaciones{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5 mb-0">Notificaciones</h1>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'core_notificaciones_todas_leidas' %}">Marcar todas como leídas</a>
+  </div>
+
+  {% if items %}
+    <ul class="list-group">
+      {% for n in items %}
+        <li class="list-group-item d-flex align-items-start {{ '' if n.leida else 'list-group-item-action' }}">
+          <div class="me-3">
+            {% if n.leida %}
+              <span class="badge text-bg-secondary">Leída</span>
+            {% else %}
+              <span class="badge text-bg-primary">Nueva</span>
+            {% endif %}
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-semibold">{{ n.titulo }}</div>
+            {% if n.mensaje %}<div class="text-muted small">{{ n.mensaje }}</div>{% endif %}
+            <div class="small text-muted">{{ n.creada_en }}</div>
+          </div>
+          <div class="ms-3">
+            {% if not n.leida %}
+              <a class="btn btn-sm btn-outline-primary" href="{% url 'core_notificacion_leida' n.id %}">
+                Ver / Marcar leída
+              </a>
+            {% else %}
+              {% if n.url %}
+                <a class="btn btn-sm btn-outline-secondary" href="{{ n.url }}">Abrir</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-muted">No tienes notificaciones.</div>
+  {% endif %}
+</div>
+{% endblock %}

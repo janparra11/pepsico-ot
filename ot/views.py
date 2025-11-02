@@ -18,6 +18,9 @@ from django.http import HttpResponseForbidden
 from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm, DocumentoForm
 from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT, DocumentoOT
 
+from core.services import notificar
+from django.utils import timezone
+from datetime import timedelta
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -50,6 +53,15 @@ def ingreso_nuevo(request):
                 # abrir tramo de historial
                 HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO)
 
+                # Notificar al usuario actual (si está logueado)
+                if request.user.is_authenticated:
+                    notificar(
+                        destinatario=request.user,
+                        titulo=f"OT creada: {ot.folio}",
+                        mensaje=f"Se creó la OT {ot.folio} para el vehículo {ot.vehiculo.patente} en {ot.taller.nombre}.",
+                        url=f"/ot/{ot.id}/"
+                    )
+
                 messages.success(request, f"Ingreso registrado. OT {ot.folio} creada.")
                 return redirect("ot_detalle", ot_id=ot.id)
     else:
@@ -63,7 +75,20 @@ def ot_detalle(request, ot_id):
     pausas = ot.pausas.order_by("-inicio")
     estado_choices = ot._meta.get_field("estado_actual").choices
     pausa_abierta = ot.pausas.filter(fin__isnull=True).order_by("-inicio").first()
-    doc_form = DocumentoForm()  # ← nuevo
+
+    # alarma simple v1: si hay pausa abierta > 30 min, crear notificación (una por visita)
+    if pausa_abierta:
+        limite = timezone.now() - timedelta(minutes=30)  # ajusta a gusto
+        if pausa_abierta.inicio < limite and request.user.is_authenticated:
+            # Puedes mejorar: guardar un flag para no duplicar. Para v1, basta.
+            notificar(
+                destinatario=request.user,
+                titulo=f"Alerta: Pausa prolongada en OT {ot.folio}",
+                mensaje=f"La pausa iniciada a las {pausa_abierta.inicio} superó los 30 minutos.",
+                url=f"/ot/{ot.id}/"
+            )
+
+    doc_form = DocumentoForm()
 
     return render(
         request,

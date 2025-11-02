@@ -2,6 +2,7 @@
 from django.db import transaction
 from django.utils import timezone
 from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT
+from core.services import notificar   # ← este import es clave
 
 # Matriz de transiciones válidas (puedes ajustar según tu SRS)
 ALLOWED_TRANSITIONS = {
@@ -52,6 +53,10 @@ def cambiar_estado(ot: OrdenTrabajo, nuevo_estado: str, usuario=None):
         ot=ot,
         estado=nuevo_estado,
     )
+    # notificar si se pasó a un estado relevante
+    titulo = f"OT {ot.folio}: {ot.get_estado_actual_display()}"
+    msg = f"La OT {ot.folio} cambió a {ot.get_estado_actual_display()}."
+    notificar(destinatario=usuario, titulo=titulo, mensaje=msg, url=f"/ot/{ot.id}/")
     return ot
 
 @transaction.atomic

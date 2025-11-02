@@ -10,15 +10,27 @@
         <li class="nav-item"><a class="nav-link" href="#">Ingresos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
       </ul>
+
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
-          <li class="nav-item"><span class="navbar-text">Hola, {{ user.username }}</span></li>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="{% url 'core_notificaciones' %}">
+              🔔 Notificaciones
+              {% if notif_unread and notif_unread > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {{ notif_unread }}
+                  <span class="visually-hidden">no leídas</span>
+                </span>
+              {% endif %}
+            </a>
+          </li>
           <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
           <li class="nav-item"><a class="nav-link" href="/logout/">Salir</a></li>
         {% else %}
           <li class="nav-item"><a class="nav-link" href="/login/">Ingresar</a></li>
         {% endif %}
       </ul>
+
     </div>
   </div>
 </nav>
