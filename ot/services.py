@@ -22,13 +22,17 @@ def cambiar_estado(ot: OrdenTrabajo, nuevo_estado: str, usuario=None):
     """
     Cambia el estado de la OT de forma atómica:
     - valida transición
-    - cierra tramo abierto en historial anterior (fin = now)
-    - cierra pausa abierta (si la hubiera)
-    - actualiza estado_actual y abre nuevo tramo de historial
-    - si CERRADO: inactiva la OT y pone fecha_cierre
+    - cierra tramo anterior en historial
+    - actualiza estado_actual
+    - crea notificación
     """
-    if not validar_transicion(ot.estado_actual, nuevo_estado):
-        raise ValueError(f"Transición inválida: {ot.estado_actual} → {nuevo_estado}")
+    from core.services import notificar
+
+    # 👉 Guardamos el estado antes de cambiarlo
+    estado_anterior = ot.estado_actual
+
+    if not validar_transicion(estado_anterior, nuevo_estado):
+        raise ValueError(f"Transición inválida: {estado_anterior} → {nuevo_estado}")
 
     # Cerrar pausa abierta (si existe)
     pausa_abierta = PausaOT.objects.filter(ot=ot, fin__isnull=True).first()
@@ -42,21 +46,30 @@ def cambiar_estado(ot: OrdenTrabajo, nuevo_estado: str, usuario=None):
         tramo_abierto.fin = timezone.now()
         tramo_abierto.save()
 
-    # Cambiar estado y abrir nuevo tramo
+    # Cambiar estado
     ot.estado_actual = nuevo_estado
     if nuevo_estado == EstadoOT.CERRADO:
         ot.activa = False
         ot.fecha_cierre = timezone.now()
     ot.save()
 
-    HistorialEstadoOT.objects.create(
-        ot=ot,
-        estado=nuevo_estado,
-    )
-    # notificar si se pasó a un estado relevante
-    titulo = f"OT {ot.folio}: {ot.get_estado_actual_display()}"
-    msg = f"La OT {ot.folio} cambió a {ot.get_estado_actual_display()}."
-    notificar(destinatario=usuario, titulo=titulo, mensaje=msg, url=f"/ot/{ot.id}/")
+    # Registrar nuevo tramo
+    HistorialEstadoOT.objects.create(ot=ot, estado=nuevo_estado)
+
+    # 🔔 Crear notificación
+    try:
+        nombre_estado_anterior = ot.get_estado_actual_display() if estado_anterior == nuevo_estado else dict(EstadoOT.choices).get(estado_anterior, estado_anterior)
+        nombre_estado_nuevo = ot.get_estado_actual_display()
+        notificar(
+            destinatario=usuario,
+            titulo=f"OT {ot.folio}: {nombre_estado_nuevo}",
+            mensaje=f"Cambio de estado: {nombre_estado_anterior} → {nombre_estado_nuevo}.",
+            url=f"/ot/{ot.id}/"
+        )
+    except Exception:
+        # Silenciar cualquier error de notificación (no debe romper flujo)
+        pass
+
     return ot
 
 @transaction.atomic

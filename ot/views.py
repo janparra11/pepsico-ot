@@ -141,6 +141,13 @@ def pausa_iniciar(request, ot_id):
     try:
         iniciar_pausa(ot, motivo)
         messages.success(request, "Pausa iniciada.")
+        if request.user.is_authenticated:
+            notificar(
+                destinatario=request.user,
+                titulo=f"Pausa iniciada en OT {ot.folio}",
+                mensaje=f"Motivo: {motivo}",
+                url=f"/ot/{ot.id}/"
+            )
     except ValueError as e:
         messages.error(request, str(e))
     except Exception:
@@ -161,6 +168,13 @@ def pausa_finalizar(request, ot_id):
     try:
         finalizar_pausa(ot)
         messages.success(request, "Pausa finalizada.")
+        if request.user.is_authenticated:
+            notificar(
+                destinatario=request.user,
+                titulo=f"Pausa finalizada en OT {ot.folio}",
+                mensaje=f"Se cerró la pausa abierta.",
+                url=f"/ot/{ot.id}/"
+            )
     except ValueError as e:
         messages.error(request, str(e))
     except Exception:
@@ -193,6 +207,13 @@ def ot_subir_documento(request, ot_id):
         doc.full_clean()
         doc.save()
         messages.success(request, "Documento subido correctamente.")
+        if request.user.is_authenticated:
+            notificar(
+                destinatario=request.user,
+                titulo=f"Documento agregado en OT {ot.folio}",
+                mensaje=f"Tipo: {doc.tipo or '(sin tipo)'} · Archivo: {doc.archivo.name}",
+                url=f"/ot/{ot.id}/"
+            )
     except ValidationError as e:
         messages.error(request, "; ".join(e.messages))
     except Exception:

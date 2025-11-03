@@ -10,7 +10,7 @@
   {% if items %}
     <ul class="list-group">
       {% for n in items %}
-        <li class="list-group-item d-flex align-items-start {{ '' if n.leida else 'list-group-item-action' }}">
+        <li class="list-group-item d-flex align-items-start{% if not n.leida %} list-group-item-action{% endif %}">
           <div class="me-3">
             {% if n.leida %}
               <span class="badge text-bg-secondary">Leída</span>
@@ -25,8 +25,8 @@
           </div>
           <div class="ms-3">
             {% if not n.leida %}
-              <a class="btn btn-sm btn-outline-primary" href="{% url 'core_notificacion_leida' n.id %}">
-                Ver / Marcar leída
+              <a class="btn btn-sm btn-outline-primary" href="{% url 'core_notificacion_detalle' n.id %}">
+              Ver detalle
               </a>
             {% else %}
               {% if n.url %}
