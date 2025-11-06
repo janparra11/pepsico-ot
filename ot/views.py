@@ -314,3 +314,39 @@ def vehiculo_cambiar_estado(request, ot_id):
             url=f"/ot/{ot.id}/"
         )
     return redirect("ot_detalle", ot_id=ot.id)
+
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import OrdenTrabajo, EstadoOT, PrioridadOT
+
+def ot_lista(request):
+    q = request.GET.get("q", "").strip()
+    estado = request.GET.get("estado", "")
+    activa = request.GET.get("activa", "1")  # 1=solo activas por defecto
+
+    qs = OrdenTrabajo.objects.all()
+
+    if activa == "1":
+        qs = qs.filter(activa=True)
+
+    if estado:
+        qs = qs.filter(estado_actual=estado)
+
+    if q:
+        qs = qs.filter(Q(folio__icontains=q) | Q(vehiculo__patente__icontains=q))
+
+    # 🔽 AQUÍ aplicas el orden por prioridad
+    qs = qs.order_by("-prioridad", "fecha_ingreso")
+
+    paginator = Paginator(qs, 10)
+    page = request.GET.get("page")
+    page_obj = paginator.get_page(page)
+
+    return render(request, "ot/ot_lista.html", {
+        "page_obj": page_obj,
+        "q": q,
+        "estado": estado,
+        "activa": activa,
+        "estado_choices": EstadoOT.choices,
+        "prioridad_choices": PrioridadOT.choices,
+    })
