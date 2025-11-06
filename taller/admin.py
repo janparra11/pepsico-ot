@@ -8,5 +8,6 @@ class TallerAdmin(admin.ModelAdmin):
 
 @admin.register(Vehiculo)
 class VehiculoAdmin(admin.ModelAdmin):
-    list_display = ("id", "patente", "marca", "modelo")
+    list_display = ("id", "patente", "marca", "modelo", "estado")
     search_fields = ("patente", "marca", "modelo")
+    list_filter = ("estado",)

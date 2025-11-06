@@ -81,3 +81,20 @@ def clean_archivo(self):
         raise forms.ValidationError("Solo se permiten archivos JPG, JPEG, PNG o PDF.")
     return f
 
+from django import forms
+from .models import PrioridadOT
+from taller.models import EstadoVehiculo
+
+class PrioridadForm(forms.Form):
+    prioridad = forms.ChoiceField(
+        choices=PrioridadOT.choices,
+        label="Prioridad",
+        widget=forms.Select(attrs={"class": "form-select"})
+    )
+
+class EstadoVehiculoForm(forms.Form):
+    estado = forms.ChoiceField(
+        choices=EstadoVehiculo.choices,
+        label="Estado del vehículo",
+        widget=forms.Select(attrs={"class": "form-select"})
+    )

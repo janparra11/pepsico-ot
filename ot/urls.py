@@ -9,4 +9,6 @@ urlpatterns = [
     path("ot/<int:ot_id>/pausa/finalizar/", views.pausa_finalizar, name="pausa_finalizar"),
     path("ot/<int:ot_id>/docs/subir/", views.ot_subir_documento, name="ot_subir_documento"),
     path("ot/<int:ot_id>/docs/<int:doc_id>/eliminar/", views.ot_eliminar_documento, name="ot_eliminar_documento"),
+    path("ot/<int:ot_id>/prioridad/", views.ot_cambiar_prioridad, name="ot_cambiar_prioridad"),
+    path("ot/<int:ot_id>/vehiculo/estado/", views.vehiculo_cambiar_estado, name="vehiculo_cambiar_estado"),
 ]

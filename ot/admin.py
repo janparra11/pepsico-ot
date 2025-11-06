@@ -3,9 +3,9 @@ from .models import OrdenTrabajo, HistorialEstadoOT, PausaOT, DocumentoOT
 
 @admin.register(OrdenTrabajo)
 class OTAdmin(admin.ModelAdmin):
-    list_display = ("id", "folio", "vehiculo", "taller", "estado_actual", "activa", "fecha_ingreso")
+    list_display = ("id", "folio", "vehiculo", "taller", "estado_actual", "prioridad", "activa", "fecha_ingreso")
+    list_filter = ("estado_actual", "taller", "activa", "prioridad")
     search_fields = ("folio", "vehiculo__patente")
-    list_filter = ("estado_actual", "taller", "activa")
 
 @admin.register(HistorialEstadoOT)
 class HistorialAdmin(admin.ModelAdmin):

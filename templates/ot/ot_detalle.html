@@ -83,6 +83,60 @@
 
 </div>
 
+<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+
+  <!-- Prioridad de la OT -->
+  <div class="col">
+    <div class="card card-body shadow-sm control-card">
+      <h2 class="h6 mb-3">Prioridad de la OT</h2>
+
+      {% if ot.activa %}
+        <form method="post" action="{% url 'ot_cambiar_prioridad' ot.id %}">
+          {% csrf_token %}
+          <div class="mb-2">
+            {{ prioridad_form.prioridad }}
+          </div>
+          <button class="btn btn-primary w-100 py-2">Actualizar prioridad</button>
+        </form>
+      {% else %}
+        <div class="alert alert-secondary mb-0">
+          La OT está <strong>cerrada</strong> ({{ ot.fecha_cierre }}). No admite cambios.
+        </div>
+      {% endif %}
+
+      <div class="mt-2">
+        <span class="badge {% if ot.prioridad == 4 %}text-bg-danger{% elif ot.prioridad == 3 %}text-bg-warning{% elif ot.prioridad == 2 %}text-bg-info{% else %}text-bg-secondary{% endif %}">
+          {{ ot.get_prioridad_display }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado del Vehículo -->
+  <div class="col">
+    <div class="card card-body shadow-sm control-card">
+      <h2 class="h6 mb-3">Estado del vehículo</h2>
+
+      <form method="post" action="{% url 'vehiculo_cambiar_estado' ot.id %}">
+        {% csrf_token %}
+        <div class="mb-2">
+          {{ estado_veh_form.estado }}
+        </div>
+        <button class="btn btn-outline-primary w-100 py-2" {% if not ot.activa %}disabled{% endif %}>
+          Actualizar estado de vehículo
+        </button>
+      </form>
+
+      <div class="mt-2">
+        <span class="badge {% if ot.vehiculo.estado == 'FUERA' %}text-bg-danger{% elif ot.vehiculo.estado == 'TALLER' %}text-bg-warning{% else %}text-bg-success{% endif %}">
+          {{ ot.vehiculo.get_estado_display }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <h2 class="h6 mt-4">Documentos</h2>
 
 <div class="row g-3">

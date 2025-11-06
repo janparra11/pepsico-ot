@@ -4,23 +4,19 @@ from django.db import transaction
 from django.utils import timezone
 
 from django.views.decorators.http import require_POST
-from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm
 from .services import cambiar_estado, iniciar_pausa, finalizar_pausa
-from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT
 
-from .forms import IngresoForm
-from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT
-from taller.models import Vehiculo
-
-from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseForbidden
-from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm, DocumentoForm
-from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT, DocumentoOT
 
 from core.services import notificar
 from django.utils import timezone
 from datetime import timedelta
+
+from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm, DocumentoForm, PrioridadForm, EstadoVehiculoForm
+from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT, DocumentoOT, PrioridadOT
+from taller.models import Vehiculo, EstadoVehiculo
+
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -75,6 +71,19 @@ def ot_detalle(request, ot_id):
     pausas = ot.pausas.order_by("-inicio")
     estado_choices = ot._meta.get_field("estado_actual").choices
     pausa_abierta = ot.pausas.filter(fin__isnull=True).order_by("-inicio").first()
+
+    doc_form = DocumentoForm()
+    prioridad_form = PrioridadForm(initial={"prioridad": ot.prioridad})
+    estado_veh_form = EstadoVehiculoForm(initial={"estado": ot.vehiculo.estado})
+
+    return render(
+        request, "ot/ot_detalle.html",
+        {
+            "ot": ot, "historial": historial, "pausas": pausas,
+            "estado_choices": estado_choices, "pausa_abierta": pausa_abierta,
+            "doc_form": doc_form, "prioridad_form": prioridad_form, "estado_veh_form": estado_veh_form
+        }
+    )
 
     # alarma simple v1: si hay pausa abierta > 30 min, crear notificación (una por visita)
     if pausa_abierta:
@@ -245,4 +254,63 @@ def ot_eliminar_documento(request, ot_id, doc_id):
             )
     except Exception:
         messages.error(request, "No se pudo eliminar el documento.")
+    return redirect("ot_detalle", ot_id=ot.id)
+
+@require_POST
+def ot_cambiar_prioridad(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    if not ot.activa:
+        messages.error(request, "La OT está cerrada. No puedes cambiar la prioridad.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    form = PrioridadForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, "Formulario de prioridad inválido.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    nueva = int(form.cleaned_data["prioridad"])
+    if nueva not in [p.value for p in PrioridadOT]:
+        messages.error(request, "Prioridad no válida.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    ot.prioridad = nueva
+    ot.save()
+    messages.success(request, f"Prioridad actualizada a {ot.get_prioridad_display()}.")
+    # notificación opcional
+    if request.user.is_authenticated:
+        from core.services import notificar
+        notificar(
+            destinatario=request.user,
+            titulo=f"OT {ot.folio}: Prioridad {ot.get_prioridad_display()}",
+            mensaje=f"Se actualizó la prioridad a {ot.get_prioridad_display()}.",
+            url=f"/ot/{ot.id}/"
+        )
+    return redirect("ot_detalle", ot_id=ot.id)
+
+
+@require_POST
+def vehiculo_cambiar_estado(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    form = EstadoVehiculoForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, "Formulario de estado de vehículo inválido.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    nuevo = form.cleaned_data["estado"]
+    if nuevo not in [e.value for e in EstadoVehiculo]:
+        messages.error(request, "Estado de vehículo no válido.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    ot.vehiculo.estado = nuevo
+    ot.vehiculo.save()
+    messages.success(request, f"Estado del vehículo: {ot.vehiculo.get_estado_display()}.")
+    # notificación opcional
+    if request.user.is_authenticated:
+        from core.services import notificar
+        notificar(
+            destinatario=request.user,
+            titulo=f"Vehículo {ot.vehiculo.patente}: {ot.vehiculo.get_estado_display()}",
+            mensaje=f"Estado de vehículo actualizado a {ot.vehiculo.get_estado_display()}.",
+            url=f"/ot/{ot.id}/"
+        )
     return redirect("ot_detalle", ot_id=ot.id)

@@ -16,19 +16,26 @@ class EstadoOT(models.TextChoices):
     ENTREGADO   = "ENT", "Entregado"
     CERRADO     = "CER", "Cerrado"
 
+class PrioridadOT(models.IntegerChoices):
+    BAJA = 1, "Baja"
+    MEDIA = 2, "Media"
+    ALTA = 3, "Alta"
+    CRITICA = 4, "Crítica"
+
 class OrdenTrabajo(models.Model):
     folio = models.CharField(max_length=20, unique=True)
     vehiculo = models.ForeignKey(Vehiculo, on_delete=models.PROTECT)
     taller = models.ForeignKey(Taller, on_delete=models.PROTECT)
     responsable = models.CharField(max_length=120, blank=True)
     estado_actual = models.CharField(max_length=3, choices=EstadoOT.choices, default=EstadoOT.INGRESADO)
+    # NUEVO:
+    prioridad = models.IntegerField(choices=PrioridadOT.choices, default=PrioridadOT.MEDIA)
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     fecha_cierre = models.DateTimeField(null=True, blank=True)
-    activa = models.BooleanField(default=True)  # bloquear duplicidad activa por patente
+    activa = models.BooleanField(default=True)
 
     class Meta:
         constraints = [
-            # No más de una OT activa por vehículo
             models.UniqueConstraint(
                 fields=["vehiculo"],
                 condition=models.Q(activa=True),
@@ -38,6 +45,7 @@ class OrdenTrabajo(models.Model):
         indexes = [
             models.Index(fields=["folio"]),
             models.Index(fields=["estado_actual"]),
+            models.Index(fields=["prioridad"]),  # ← para ordenar/buscar por prioridad
         ]
 
     def __str__(self):
