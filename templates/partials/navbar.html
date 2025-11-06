@@ -25,7 +25,12 @@
             </a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
-          <li class="nav-item"><a class="nav-link" href="/logout/">Salir</a></li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link p-0 text-white">Salir</button>
+            </form>
+          </li>
         {% else %}
           <li class="nav-item"><a class="nav-link" href="/login/">Ingresar</a></li>
         {% endif %}

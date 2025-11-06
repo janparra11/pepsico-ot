@@ -36,3 +36,13 @@ def notificacion_detalle(request, notif_id):
         n.leida = True
         n.save()
     return render(request, "core/notificacion_detalle.html", {"n": n})
+
+# core/views.py
+from django.contrib.auth import logout
+from django.contrib import messages
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Sesión cerrada correctamente.")
+    return redirect("login")

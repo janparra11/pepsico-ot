@@ -236,6 +236,13 @@ def ot_eliminar_documento(request, ot_id, doc_id):
         doc.archivo.delete(save=False)
         doc.delete()
         messages.success(request, "Documento eliminado.")
+        if request.user.is_authenticated:
+            notificar(
+                destinatario=request.user,
+                titulo=f"Documento eliminado en OT {ot.folio}",
+                mensaje=f"Tipo: {doc.tipo or '(sin tipo)'} · Archivo: {doc.archivo.name}",
+                url=f"/ot/{ot.id}/"
+            )
     except Exception:
         messages.error(request, "No se pudo eliminar el documento.")
     return redirect("ot_detalle", ot_id=ot.id)

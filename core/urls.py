@@ -8,4 +8,5 @@ urlpatterns = [
     path("notificaciones/<int:notif_id>/", views.notificacion_detalle, name="core_notificacion_detalle"),  # ← nuevo
     path("notificaciones/<int:notif_id>/leida/", views.notificacion_marcar_leida, name="core_notificacion_leida"),
     path("notificaciones/leidas/todas/", views.notificaciones_marcar_todas_leidas, name="core_notificaciones_todas_leidas"),
+    path("logout/", views.logout_view, name="logout"),
 ]
