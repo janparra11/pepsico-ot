@@ -30,36 +30,36 @@ document.addEventListener('DOMContentLoaded', function() {
     events: '{% url "core_agenda_api" %}',
 
     eventClick: function(info) {
-      if (info.event.url) {
-        window.location.href = info.event.url;
-        info.jsEvent.preventDefault();
-      }
+    info.jsEvent.preventDefault();     // evita cualquier click por defecto
+    if (info.event.url) {
+        window.location.href = info.event.url;  // abre solo si hay URL válida
+    }
     },
+
 
     // 👇 habilitamos agregar eventos manuales
     selectable: true,
     select: function(selectionInfo) {
-      const titulo = prompt("Título del evento:");
-      if (titulo) {
+    const titulo = prompt("Título del evento:");
+    if (titulo) {
         fetch("{% url 'core_agenda_crear_api' %}", {
-          method: "POST",
-          headers: {
+        method: "POST",
+        headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": "{{ csrf_token }}"
-          },
-          body: JSON.stringify({
+        },
+        body: JSON.stringify({
             titulo: titulo,
             inicio: selectionInfo.startStr,
             fin: selectionInfo.endStr
-          })
+        })
         })
         .then(r => r.json())
-        .then(data => {
-          calendar.refetchEvents(); // recarga los eventos
-          alert("Evento agregado correctamente.");
+        .then(() => {
+        calendar.refetchEvents(); // recarga sin mostrar nada
         });
-      }
-      calendar.unselect();
+    }
+    calendar.unselect();
     }
   });
   calendar.render();

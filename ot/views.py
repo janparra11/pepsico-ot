@@ -91,6 +91,7 @@ def ot_detalle(request, ot_id):
     prioridad_form = PrioridadForm(initial={"prioridad": ot.prioridad})
     estado_veh_form = EstadoVehiculoForm(initial={"estado": ot.vehiculo.estado})
     evento_form = EventoOTForm()
+    eventos_ot = ot.eventos.order_by("-inicio")[:10] 
 
 
     return render(
@@ -100,6 +101,7 @@ def ot_detalle(request, ot_id):
             "estado_choices": estado_choices, "pausa_abierta": pausa_abierta,
             "doc_form": doc_form, "prioridad_form": prioridad_form, "estado_veh_form": estado_veh_form,
             "evento_form": evento_form,
+            "eventos_ot": eventos_ot,
         }
     )
 

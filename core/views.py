@@ -126,14 +126,16 @@ def agenda_events_api(request):
         qs = qs.filter(inicio__lte=end).filter(models.Q(fin__gte=start) | models.Q(fin__isnull=True))
     items = []
     for e in qs.select_related("ot", "asignado_a"):
-        items.append({
+        ev = {
             "id": e.id,
             "title": e.titulo if not e.ot else f"{e.titulo} · {e.ot.folio}",
             "start": e.inicio.isoformat(),
             "end": e.fin.isoformat() if e.fin else None,
             "allDay": e.todo_el_dia,
-            "url": f"/ot/{e.ot_id}/" if e.ot_id else None,
-        })
+        }
+        if e.ot_id:               # 👈 solo si hay OT
+            ev["url"] = f"/ot/{e.ot_id}/"
+        items.append(ev)
     return JsonResponse(items, safe=False)
 
 from django.views.decorators.csrf import csrf_exempt
@@ -141,21 +143,26 @@ import json
 from django.utils.dateparse import parse_datetime
 from django.http import JsonResponse
 
-@login_required
 @csrf_exempt
+@login_required
 def agenda_crear_api(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
         titulo = data.get("titulo")
         inicio = parse_datetime(data.get("inicio"))
         fin = parse_datetime(data.get("fin"))
+        ot_id = data.get("ot_id")  # 👈 opcional
+
         if not titulo or not inicio:
             return JsonResponse({"error": "Datos incompletos"}, status=400)
+
         e = EventoAgenda.objects.create(
             titulo=titulo,
             inicio=inicio,
             fin=fin,
-            asignado_a=request.user
+            asignado_a=request.user,
+            ot_id=ot_id if ot_id else None
         )
         return JsonResponse({"id": e.id, "titulo": e.titulo})
     return JsonResponse({"error": "Método no permitido"}, status=405)
+
