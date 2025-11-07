@@ -98,3 +98,9 @@ class EstadoVehiculoForm(forms.Form):
         label="Estado del vehículo",
         widget=forms.Select(attrs={"class": "form-select"})
     )
+
+from django import forms
+
+class EventoOTForm(forms.Form):
+    titulo = forms.CharField(max_length=140, widget=forms.TextInput(attrs={"class":"form-control"}))
+    fecha = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type":"datetime-local", "class":"form-control"}))

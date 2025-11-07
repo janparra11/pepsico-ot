@@ -137,6 +137,17 @@
 
 </div>
 
+<h2 class="h6 mt-4">Agendar evento</h2>
+<div class="card card-body shadow-sm">
+  <form method="post" action="{% url 'ot_agendar_evento' ot.id %}">
+    {% csrf_token %}
+    <div class="mb-2">{{ evento_form.titulo }}</div>
+    <div class="mb-2">{{ evento_form.fecha }}</div>
+    <button class="btn btn-primary w-100">Agendar</button>
+  </form>
+</div>
+
+
 <h2 class="h6 mt-4">Documentos</h2>
 
 <div class="row g-3">

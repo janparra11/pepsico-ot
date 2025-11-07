@@ -21,6 +21,7 @@ from django.db.models import Count, Avg, Sum, Q, F
 import json
 
 from taller.models import Taller
+from .forms import EventoOTForm
 
 
 def generar_folio():
@@ -89,13 +90,16 @@ def ot_detalle(request, ot_id):
     doc_form = DocumentoForm()
     prioridad_form = PrioridadForm(initial={"prioridad": ot.prioridad})
     estado_veh_form = EstadoVehiculoForm(initial={"estado": ot.vehiculo.estado})
+    evento_form = EventoOTForm()
+
 
     return render(
         request, "ot/ot_detalle.html",
         {
             "ot": ot, "historial": historial, "pausas": pausas,
             "estado_choices": estado_choices, "pausa_abierta": pausa_abierta,
-            "doc_form": doc_form, "prioridad_form": prioridad_form, "estado_veh_form": estado_veh_form
+            "doc_form": doc_form, "prioridad_form": prioridad_form, "estado_veh_form": estado_veh_form,
+            "evento_form": evento_form,
         }
     )
 
@@ -453,3 +457,26 @@ def dashboard(request):
         "chart_motivos_data": json.dumps(motivos_data),
     }
     return render(request, "ot/dashboard.html", ctx)
+
+from core.models import EventoAgenda
+from .forms import EventoOTForm
+
+@require_POST
+def ot_agendar_evento(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    form = EventoOTForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, "Formulario de evento inválido.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    titulo = form.cleaned_data["titulo"]
+    fecha = form.cleaned_data["fecha"]
+
+    EventoAgenda.objects.create(
+        titulo=f"{titulo} (OT {ot.folio})",
+        inicio=fecha,
+        ot=ot,
+        asignado_a=request.user if request.user.is_authenticated else None
+    )
+    messages.success(request, "Evento agendado correctamente.")
+    return redirect("ot_detalle", ot_id=ot.id)

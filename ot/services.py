@@ -26,6 +26,7 @@ def cambiar_estado(ot: OrdenTrabajo, nuevo_estado: str, usuario=None):
     - actualiza estado_actual
     - crea notificación
     """
+    
     from core.services import notificar
 
     # 👉 Guardamos el estado antes de cambiarlo
@@ -52,6 +53,18 @@ def cambiar_estado(ot: OrdenTrabajo, nuevo_estado: str, usuario=None):
         ot.activa = False
         ot.fecha_cierre = timezone.now()
     ot.save()
+
+    from core.models import EventoAgenda
+    from datetime import timedelta
+
+    if nuevo_estado in [EstadoOT.LISTO, EstadoOT.ENTREGADO, EstadoOT.CERRADO]:
+        EventoAgenda.objects.create(
+            titulo=f"Entrega OT {ot.folio}",
+            inicio=timezone.now() + timedelta(hours=1),
+            ot=ot,
+            asignado_a=usuario
+        )
+
 
     # Registrar nuevo tramo
     HistorialEstadoOT.objects.create(ot=ot, estado=nuevo_estado)
