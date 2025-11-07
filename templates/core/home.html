@@ -1,18 +1,59 @@
 {% extends "base.html" %}
+{% load dict_extras %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h5 mb-0">Bienvenido, {{ username }}</h1>
+    {% if can_ver_dashboard %}
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'ot_dashboard' %}">Ver Dashboard</a>
+    {% endif %}
   </div>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  <!-- KPIs livianos -->
+  <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">OTs activas</div>
+          <div class="fs-4 fw-bold">{{ kpi_activas }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">OTs en pausa</div>
+          <div class="fs-4 fw-bold">{{ kpi_en_pausa }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">OTs creadas hoy</div>
+          <div class="fs-4 fw-bold">{{ kpi_creadas_hoy }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Notificaciones no leídas</div>
+          <div class="fs-4 fw-bold">{{ notif_unread }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accesos rápidos -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
     {% if can_registrar_ingreso %}
     <div class="col">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body d-flex flex-column">
           <h2 class="h6">Registrar ingreso</h2>
-          <p class="text-muted small mb-3">Crear una nueva OT a partir de patente y taller.</p>
+          <p class="text-muted small mb-3">Crear nueva OT.</p>
           <div class="mt-auto">
             <a class="btn btn-primary w-100" href="{% url 'ingreso_nuevo' %}">Nuevo ingreso</a>
           </div>
@@ -26,7 +67,7 @@
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body d-flex flex-column">
           <h2 class="h6">Órdenes de Trabajo</h2>
-          <p class="text-muted small mb-3">Listado con filtros por estado, prioridad y búsqueda.</p>
+          <p class="text-muted small mb-3">Listado con filtros y búsqueda.</p>
           <div class="mt-auto">
             <a class="btn btn-outline-primary w-100" href="{% url 'ot_lista' %}">Ver OTs</a>
           </div>
@@ -40,9 +81,9 @@
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body d-flex flex-column">
           <h2 class="h6">Dashboard</h2>
-          <p class="text-muted small mb-3">KPIs y gráficos (estados, prioridades, talleres, pausas).</p>
+          <p class="text-muted small mb-3">KPIs y gráficos.</p>
           <div class="mt-auto">
-            <a class="btn btn-outline-secondary w-100" href="{% url 'ot_dashboard' %}">Abrir dashboard</a>
+            <a class="btn btn-outline-secondary w-100" href="{% url 'ot_dashboard' %}">Abrir Dashboard</a>
           </div>
         </div>
       </div>
@@ -54,14 +95,75 @@
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body d-flex flex-column">
           <h2 class="h6">Notificaciones</h2>
-          <p class="text-muted small mb-3">Eventos recientes de tus OTs (cambios, pausas, documentos).</p>
+          <p class="text-muted small mb-3">Eventos recientes de tus OTs.</p>
           <div class="mt-auto">
-            <a class="btn btn-outline-secondary w-100" href="{% url 'core_notificaciones' %}">Ver notificaciones</a>
+            <a class="btn btn-outline-secondary w-100" href="{% url 'core_notificaciones' %}">Ver Notificaciones</a>
           </div>
         </div>
       </div>
     </div>
     {% endif %}
+  </div>
+
+  <!-- Últimas 5 OTs y Notificaciones -->
+  <div class="row g-3">
+    <div class="col-12 col-lg-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6 mb-3">Últimas OTs</h2>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Folio</th>
+                  <th>Estado</th>
+                  <th>Ingreso</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for ot in ultimas_ots %}
+                <tr>
+                  <td>{{ ot.folio }}</td>
+                  <td><span class="badge text-bg-info">{{ estado_choices_dict|get_item:ot.estado_actual }}</span></td>
+                  <td>{{ ot.fecha_ingreso }}</td>
+                  <td><a class="btn btn-outline-primary btn-sm" href="{% url 'ot_detalle' ot.id %}">Abrir</a></td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="4" class="text-muted">No hay OTs aún.</td></tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end"><a href="{% url 'ot_lista' %}" class="btn btn-link btn-sm">Ver todas</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6 mb-3">Notificaciones recientes</h2>
+          <ul class="list-group">
+            {% for n in ultimas_notifs %}
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="fw-semibold">{{ n.titulo }}</div>
+                  {% if n.mensaje %}<div class="small text-muted">{{ n.mensaje }}</div>{% endif %}
+                  <div class="small text-muted">{{ n.creada_en }}</div>
+                </div>
+                <div>
+                  {% if n.url %}<a class="btn btn-outline-secondary btn-sm" href="{{ n.url }}">Abrir</a>{% endif %}
+                </div>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">Sin notificaciones.</li>
+            {% endfor %}
+          </ul>
+          <div class="text-end mt-2"><a href="{% url 'core_notificaciones' %}" class="btn btn-link btn-sm">Ver todas</a></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

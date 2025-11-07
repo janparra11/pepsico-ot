@@ -2,21 +2,65 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.utils import timezone
+from datetime import timedelta
+
+from ot.models import OrdenTrabajo, PausaOT, EstadoOT
+from core.models import Notificacion
 
 @login_required
 def home(request):
     user = request.user
-    # Flags simples hoy; mañana se conectan a roles/permisos
+    now = timezone.now()
+    hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    hace_7 = now - timedelta(days=7)
+
+    # KPIs livianos (rápidos)
+    kpi_activas = OrdenTrabajo.objects.filter(activa=True).count()
+    kpi_en_pausa = (
+        OrdenTrabajo.objects.filter(activa=True, pausas__fin__isnull=True)
+        .distinct().count()
+    )
+    kpi_creadas_hoy = OrdenTrabajo.objects.filter(fecha_ingreso__gte=hoy_inicio).count()
+
+    # Listados cortos (últimas 5)
+    ultimas_ots = (
+        OrdenTrabajo.objects
+        .order_by("-fecha_ingreso")
+        .only("id", "folio", "estado_actual", "fecha_ingreso")
+    )[:5]
+
+    ultimas_notifs = (
+        Notificacion.objects
+        .filter(destinatario=user)
+        .order_by("-creada_en")
+    )[:5]
+
+    notif_unread = Notificacion.objects.filter(destinatario=user, leida=False).count()
+
     ctx = {
         "username": user.get_username(),
-        "can_registrar_ingreso": True,   # luego: user.perfil.rol in ["GUARDIA","SUP","JEFE"]
-        "can_ver_ots": True,             # luego: cualquier rol autenticado
-        "can_ver_dashboard": True,       # luego: user.perfil.rol in ["SUP","JEFE"]
-        "can_ver_notifs": True,          # luego: cualquier rol autenticado
+
+        # KPIs
+        "kpi_activas": kpi_activas,
+        "kpi_en_pausa": kpi_en_pausa,
+        "kpi_creadas_hoy": kpi_creadas_hoy,
+        "notif_unread": notif_unread,
+
+        # Listas
+        "ultimas_ots": ultimas_ots,
+        "ultimas_notifs": ultimas_notifs,
+
+        # Flags para accesos (luego se conectan a roles)
+        "can_registrar_ingreso": True,
+        "can_ver_ots": True,
+        "can_ver_dashboard": True,
+        "can_ver_notifs": True,
+
+        # Choices para render amigable
+        "estado_choices_dict": dict(EstadoOT.choices),
     }
     return render(request, "core/home.html", ctx)
-
 
 def healthcheck(request):
     return HttpResponse("OK", content_type="text/plain")
