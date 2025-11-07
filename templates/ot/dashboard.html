@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Dashboard</h1>
+
+  <!-- KPIs -->
+  <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">OTs activas</div>
+          <div class="fs-4 fw-bold">{{ kpi_activas }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">OTs con pausa</div>
+          <div class="fs-4 fw-bold">{{ kpi_en_pausa }}</div>
+          <div class="small text-muted">{{ kpi_pct_pausa }}% de activas</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Ciclo promedio</div>
+          <div class="fs-4 fw-bold">{{ kpi_ciclo_promedio }} h</div>
+          <div class="small text-muted">Cerradas últimos 90 días</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="row g-3">
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6">OTs por estado (activas)</h2>
+          <canvas id="chartEstados"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6">OTs por prioridad (activas)</h2>
+          <canvas id="chartPrioridad"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6">OTs por taller (top 10, activas)</h2>
+          <canvas id="chartTalleres"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h2 class="h6">Motivos de pausa (últimos 30 días)</h2>
+          <canvas id="chartMotivos"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const estadosLabels = {{ chart_estados_labels|safe }};
+const estadosData   = {{ chart_estados_data|safe }};
+const prioridadLabels = {{ chart_prioridades_labels|safe }};
+const prioridadData   = {{ chart_prioridades_data|safe }};
+const talleresLabels = {{ chart_talleres_labels|safe }};
+const talleresData   = {{ chart_talleres_data|safe }};
+const motivosLabels  = {{ chart_motivos_labels|safe }};
+const motivosData    = {{ chart_motivos_data|safe }};
+
+function barConfig(labels, data) {
+  return {
+    type: 'bar',
+    data: { labels, datasets: [{ data }] },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  };
+}
+
+new Chart(document.getElementById('chartEstados'),   barConfig(estadosLabels, estadosData));
+new Chart(document.getElementById('chartPrioridad'), barConfig(prioridadLabels, prioridadData));
+new Chart(document.getElementById('chartTalleres'),  barConfig(talleresLabels, talleresData));
+new Chart(document.getElementById('chartMotivos'),   barConfig(motivosLabels, motivosData));
+</script>
+{% endblock %}

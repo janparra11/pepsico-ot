@@ -10,12 +10,17 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseForbidden
 
 from core.services import notificar
-from django.utils import timezone
 from datetime import timedelta
 
 from .forms import IngresoForm, CambioEstadoForm, PausaIniciarForm, PausaFinalizarForm, DocumentoForm, PrioridadForm, EstadoVehiculoForm
 from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT, PausaOT, DocumentoOT, PrioridadOT
 from taller.models import Vehiculo, EstadoVehiculo
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Avg, Sum, Q, F
+import json
+
+from taller.models import Taller
 
 
 def generar_folio():
@@ -350,3 +355,90 @@ def ot_lista(request):
         "estado_choices": EstadoOT.choices,
         "prioridad_choices": PrioridadOT.choices,
     })
+
+@login_required
+def dashboard(request):
+    now = timezone.now()
+
+    # 1) Conteos por estado (solo activas)
+    por_estado = (
+        OrdenTrabajo.objects
+        .filter(activa=True)
+        .values("estado_actual")
+        .annotate(total=Count("id"))
+    )
+    estados_labels = [dict(EstadoOT.choices).get(row["estado_actual"], row["estado_actual"]) for row in por_estado]
+    estados_data = [row["total"] for row in por_estado]
+
+    # 2) Conteos por prioridad (solo activas)
+    por_prioridad = (
+        OrdenTrabajo.objects
+        .filter(activa=True)
+        .values("prioridad")
+        .annotate(total=Count("id"))
+    )
+    prioridades_labels = [dict(PrioridadOT.choices).get(row["prioridad"], row["prioridad"]) for row in por_prioridad]
+    prioridades_data = [row["total"] for row in por_prioridad]
+
+    # 3) OTs por taller (activas)
+    por_taller = (
+        OrdenTrabajo.objects
+        .filter(activa=True)
+        .values("taller__nombre")
+        .annotate(total=Count("id"))
+        .order_by("-total")[:10]
+    )
+    talleres_labels = [row["taller__nombre"] for row in por_taller]
+    talleres_data = [row["total"] for row in por_taller]
+
+    # 4) Tiempo de ciclo promedio (OTs cerradas últimos 90 días)
+    hace_90 = now - timedelta(days=90)
+    cerradas = OrdenTrabajo.objects.filter(activa=False, fecha_cierre__gte=hace_90, fecha_cierre__isnull=False)
+    # calculamos en Python para compatibilidad total
+    duraciones_horas = []
+    for ot in cerradas.only("fecha_ingreso", "fecha_cierre"):
+        diff = (ot.fecha_cierre - ot.fecha_ingreso).total_seconds() / 3600.0
+        if diff >= 0:
+            duraciones_horas.append(diff)
+    ciclo_promedio_horas = round(sum(duraciones_horas) / len(duraciones_horas), 2) if duraciones_horas else 0.0
+
+    # 5) % OTs en pausa (activas con una pausa abierta)
+    ots_con_pausa = (
+        OrdenTrabajo.objects
+        .filter(activa=True, pausas__fin__isnull=True)
+        .distinct()
+        .count()
+    )
+    activas_total = OrdenTrabajo.objects.filter(activa=True).count() or 1
+    porcentaje_pausa = round(100.0 * ots_con_pausa / activas_total, 1)
+
+    # 6) Motivos de pausa top 5 (últimos 30 días)
+    hace_30 = now - timedelta(days=30)
+    motivos = (
+        PausaOT.objects
+        .filter(inicio__gte=hace_30)
+        .values("motivo")
+        .annotate(total=Count("id"))
+        .order_by("-total")[:5]
+    )
+    motivos_labels = [row["motivo"] or "(sin motivo)" for row in motivos]
+    motivos_data = [row["total"] for row in motivos]
+
+    ctx = {
+        # KPIs
+        "kpi_activas": activas_total if activas_total != 1 else OrdenTrabajo.objects.filter(activa=True).count(),
+        "kpi_en_pausa": ots_con_pausa,
+        "kpi_pct_pausa": porcentaje_pausa,
+        "kpi_ciclo_promedio": ciclo_promedio_horas,
+
+        # Charts
+        "chart_estados_labels": json.dumps(estados_labels),
+        "chart_estados_data": json.dumps(estados_data),
+        "chart_prioridades_labels": json.dumps(prioridades_labels),
+        "chart_prioridades_data": json.dumps(prioridades_data),
+        "chart_talleres_labels": json.dumps(talleres_labels),
+        "chart_talleres_data": json.dumps(talleres_data),
+        "chart_motivos_labels": json.dumps(motivos_labels),
+        "chart_motivos_data": json.dumps(motivos_data),
+    }
+    return render(request, "ot/dashboard.html", ctx)

@@ -12,5 +12,5 @@ urlpatterns = [
     path("ot/<int:ot_id>/prioridad/", views.ot_cambiar_prioridad, name="ot_cambiar_prioridad"),
     path("ot/<int:ot_id>/vehiculo/estado/", views.vehiculo_cambiar_estado, name="vehiculo_cambiar_estado"),
     path("ots/", views.ot_lista, name="ot_lista"),
-
+    path("dashboard/", views.dashboard, name="ot_dashboard"),
 ]
