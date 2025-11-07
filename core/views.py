@@ -1,8 +1,22 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
 def home(request):
-    return render(request, "home.html")
+    user = request.user
+    # Flags simples hoy; mañana se conectan a roles/permisos
+    ctx = {
+        "username": user.get_username(),
+        "can_registrar_ingreso": True,   # luego: user.perfil.rol in ["GUARDIA","SUP","JEFE"]
+        "can_ver_ots": True,             # luego: cualquier rol autenticado
+        "can_ver_dashboard": True,       # luego: user.perfil.rol in ["SUP","JEFE"]
+        "can_ver_notifs": True,          # luego: cualquier rol autenticado
+    }
+    return render(request, "core/home.html", ctx)
+
 
 def healthcheck(request):
     return HttpResponse("OK", content_type="text/plain")
