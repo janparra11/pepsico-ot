@@ -9,4 +9,8 @@ urlpatterns = [
     path("notificaciones/<int:notif_id>/leida/", views.notificacion_marcar_leida, name="core_notificacion_leida"),
     path("notificaciones/leidas/todas/", views.notificaciones_marcar_todas_leidas, name="core_notificaciones_todas_leidas"),
     path("logout/", views.logout_view, name="logout"),
+    path("agenda/", views.agenda_view, name="core_agenda"),
+    path("agenda/events/", views.agenda_events_api, name="core_agenda_api"),
+    path("agenda/create/", views.agenda_crear_api, name="core_agenda_crear_api"),
+
 ]

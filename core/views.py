@@ -104,3 +104,58 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Sesión cerrada correctamente.")
     return redirect("login")
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.utils.dateparse import parse_datetime
+from django.db import models
+from .models import EventoAgenda
+
+@login_required
+def agenda_view(request):
+    return render(request, "core/agenda.html")
+
+@login_required
+def agenda_events_api(request):
+    start = request.GET.get("start")  # ISO8601
+    end = request.GET.get("end")
+    qs = EventoAgenda.objects.all()
+    if start and end:
+        # FullCalendar envía rango visible
+        qs = qs.filter(inicio__lte=end).filter(models.Q(fin__gte=start) | models.Q(fin__isnull=True))
+    items = []
+    for e in qs.select_related("ot", "asignado_a"):
+        items.append({
+            "id": e.id,
+            "title": e.titulo if not e.ot else f"{e.titulo} · {e.ot.folio}",
+            "start": e.inicio.isoformat(),
+            "end": e.fin.isoformat() if e.fin else None,
+            "allDay": e.todo_el_dia,
+            "url": f"/ot/{e.ot_id}/" if e.ot_id else None,
+        })
+    return JsonResponse(items, safe=False)
+
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.utils.dateparse import parse_datetime
+from django.http import JsonResponse
+
+@login_required
+@csrf_exempt
+def agenda_crear_api(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        titulo = data.get("titulo")
+        inicio = parse_datetime(data.get("inicio"))
+        fin = parse_datetime(data.get("fin"))
+        if not titulo or not inicio:
+            return JsonResponse({"error": "Datos incompletos"}, status=400)
+        e = EventoAgenda.objects.create(
+            titulo=titulo,
+            inicio=inicio,
+            fin=fin,
+            asignado_a=request.user
+        )
+        return JsonResponse({"id": e.id, "titulo": e.titulo})
+    return JsonResponse({"error": "Método no permitido"}, status=405)

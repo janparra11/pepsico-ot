@@ -54,6 +54,15 @@ def ingreso_nuevo(request):
                 # abrir tramo de historial
                 HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO)
 
+                # Crear evento de ingreso en la agenda
+                from core.models import EventoAgenda
+                EventoAgenda.objects.create(
+                    titulo=f"Ingreso OT {ot.folio}",
+                    inicio=ot.fecha_ingreso,
+                    ot=ot,
+                    asignado_a=request.user if request.user.is_authenticated else None
+                )
+
                 # Notificar al usuario actual (si está logueado)
                 if request.user.is_authenticated:
                     notificar(
@@ -116,6 +125,8 @@ def ot_detalle(request, ot_id):
             "doc_form": doc_form,  # ← nuevo
         },
     )
+
+
 
 # Vista para cambiar estado
 @require_POST

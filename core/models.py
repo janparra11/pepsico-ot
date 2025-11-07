@@ -33,3 +33,24 @@ class Notificacion(models.Model):
 
     def __str__(self):
         return f"{self.titulo} · {'leída' if self.leida else 'no leída'}"
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+from ot.models import OrdenTrabajo
+
+class EventoAgenda(models.Model):
+    titulo = models.CharField(max_length=140)
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField(null=True, blank=True)
+    todo_el_dia = models.BooleanField(default=False)
+    asignado_a = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="eventos")
+    ot = models.ForeignKey(OrdenTrabajo, null=True, blank=True, on_delete=models.SET_NULL, related_name="eventos")
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["inicio"]), models.Index(fields=["asignado_a", "inicio"])]
+        ordering = ["-inicio"]
+
+    def __str__(self):
+        return self.titulo
