@@ -227,3 +227,20 @@ def notif_unread_count(request):
     from core.models import Notificacion
     count = Notificacion.objects.filter(destinatario=request.user, leida=False).count()
     return JsonResponse({"count": count})
+
+from django.shortcuts import redirect
+from .roles import Rol
+
+@login_required
+def redir_por_rol(request):
+    rol = getattr(getattr(request.user, "perfil", None), "rol", None)
+    if rol in (Rol.ADMIN, Rol.SUPERVISOR, Rol.JEFE_TALLER):
+        return redirect("ot_dashboard")
+    if rol == Rol.GUARDIA:
+        return redirect("ingreso_nuevo")
+    if rol == Rol.MECANICO:
+        return redirect("ot_lista")
+    if rol == Rol.ASISTENTE_REPUESTO:
+        return redirect("ot_lista")  # luego: módulo inventario
+    # default recepcionista
+    return redirect("home")

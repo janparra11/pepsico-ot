@@ -55,3 +55,14 @@ class EventoAgenda(models.Model):
 
     def __str__(self):
         return self.titulo
+
+from django.db import models
+from django.contrib.auth.models import User
+from .roles import Rol
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
+    rol = models.CharField(max_length=32, choices=Rol.choices, default=Rol.RECEPCIONISTA)
+
+    def __str__(self):
+        return f"{self.user.username} · {self.get_rol_display()}"

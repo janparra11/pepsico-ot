@@ -14,5 +14,5 @@ urlpatterns = [
     path("agenda/create/", views.agenda_crear_api, name="core_agenda_crear_api"),
     path("agenda/event/<int:ev_id>/", views.agenda_detalle_api, name="core_agenda_detalle_api"),
     path("notificaciones/unread-count/", views.notif_unread_count, name="core_notif_unread_count"),
-
+    path("redir/", views.redir_por_rol, name="redir_por_rol"),
 ]

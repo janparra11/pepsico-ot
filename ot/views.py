@@ -548,3 +548,26 @@ def ot_asignar_mecanico(request, ot_id):
     else:
         messages.error(request, "Formulario inválido al asignar mecánico.")
     return redirect("ot_detalle", ot_id=ot.id)
+
+from core.auth import require_recepcionista, require_guardia, require_mecanico, require_roles
+from core.roles import Rol
+
+@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
+def ingreso_nuevo(request):
+    ...
+
+@require_roles(Rol.JEFE_TALLER, Rol.SUPERVISOR)
+def ot_asignar_mecanico(request, ot_id):
+    ...
+
+@require_roles(Rol.MECANICO, Rol.JEFE_TALLER)
+def ot_cambiar_estado(request, ot_id):
+    ...
+
+@require_mecanico
+def pausa_iniciar(request, ot_id):
+    ...
+
+@require_mecanico
+def pausa_finalizar(request, ot_id):
+    ...

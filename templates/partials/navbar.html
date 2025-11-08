@@ -63,7 +63,7 @@
             {{ request.user.username|capfirst }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li><a class="dropdown-item disabled"><i class="bi bi-person"></i> Rol: Admin</a></li>
+            <li><a class="dropdown-item disabled">Rol: {{ request.user.perfil.get_rol_display|default:"(sin rol)" }}</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
           </ul>
