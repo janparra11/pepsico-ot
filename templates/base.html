@@ -30,13 +30,15 @@
   <script>
   (function tick(){
     const el = document.getElementById('clock');
-    if (el) {
+    if (el){
       const now = new Date();
-      el.textContent = now.toLocaleString();
+      const opciones = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      el.textContent = now.toLocaleTimeString('es-CL', opciones);
     }
     setTimeout(tick, 1000);
   })();
   </script>
+
   <footer class="text-center text-muted small py-3">
     Sistema de Taller · v0.9 · {{ request.get_host }}
   </footer>

@@ -50,6 +50,7 @@ def home(request):
         # Listas
         "ultimas_ots": ultimas_ots,
         "ultimas_notifs": ultimas_notifs,
+        "now": timezone.now(),
 
         # Flags para accesos (luego se conectan a roles)
         "can_registrar_ingreso": True,

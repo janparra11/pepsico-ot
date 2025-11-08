@@ -2,13 +2,14 @@
 {% load dict_extras %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
-<div class="bg-white p-4 rounded shadow-sm">
-  <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
     <h1 class="h5 mb-0">Bienvenido, {{ username }}</h1>
-    {% if can_ver_dashboard %}
-      <a class="btn btn-outline-secondary btn-sm" href="{% url 'ot_dashboard' %}">Ver Dashboard</a>
-    {% endif %}
+    <p class="text-muted small mb-0">{{ now|date:"j \\d\\e F \\d\\e Y" }}</p>
   </div>
+  <a class="btn btn-outline-secondary btn-sm align-self-start" href="{% url 'ot_dashboard' %}">Ver Dashboard</a>
+</div>
+
 
   <!-- KPIs livianos -->
   <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
