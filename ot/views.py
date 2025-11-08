@@ -25,6 +25,9 @@ from .forms import EventoOTForm
 
 from .forms import AsignarMecanicoForm
 
+from core.auth import require_roles
+from core.roles import Rol
+
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -44,6 +47,7 @@ from core.models import EventoAgenda
 # Si tienes el helper notificar, importa así. Si no existe, puedes omitir el try/except más abajo.
 # from core.services import notificar
 
+@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
 @login_required
 def ingreso_nuevo(request):
     if request.method == "POST":
@@ -177,6 +181,7 @@ def ot_detalle(request, ot_id):
     )
 
 # Vista para cambiar estado
+@require_roles(Rol.MECANICO, Rol.JEFE_TALLER)
 @require_POST
 def ot_cambiar_estado(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)  # sin activa=True
@@ -533,6 +538,7 @@ def ot_agendar_evento(request, ot_id):
     messages.success(request, "Evento agendado correctamente.")
     return redirect("ot_detalle", ot_id=ot.id)
 
+@require_roles(Rol.JEFE_TALLER, Rol.SUPERVISOR)
 @require_POST
 def ot_asignar_mecanico(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -549,25 +555,4 @@ def ot_asignar_mecanico(request, ot_id):
         messages.error(request, "Formulario inválido al asignar mecánico.")
     return redirect("ot_detalle", ot_id=ot.id)
 
-from core.auth import require_recepcionista, require_guardia, require_mecanico, require_roles
-from core.roles import Rol
 
-@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
-def ingreso_nuevo(request):
-    ...
-
-@require_roles(Rol.JEFE_TALLER, Rol.SUPERVISOR)
-def ot_asignar_mecanico(request, ot_id):
-    ...
-
-@require_roles(Rol.MECANICO, Rol.JEFE_TALLER)
-def ot_cambiar_estado(request, ot_id):
-    ...
-
-@require_mecanico
-def pausa_iniciar(request, ot_id):
-    ...
-
-@require_mecanico
-def pausa_finalizar(request, ot_id):
-    ...
