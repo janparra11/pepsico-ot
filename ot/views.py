@@ -31,34 +31,67 @@ def generar_folio():
     from uuid import uuid4
     return uuid4().hex[:8].upper()
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
+from .forms import IngresoForm
+from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT
+from taller.models import Vehiculo
+from core.models import EventoAgenda
+# Si tienes el helper notificar, importa así. Si no existe, puedes omitir el try/except más abajo.
+# from core.services import notificar
+
+@login_required
 def ingreso_nuevo(request):
     if request.method == "POST":
-        form = IngresoForm(request.POST)
+        form = IngresoForm(request.POST, request.FILES)
         if form.is_valid():
-            patente = form.cleaned_data["patente"]
+            patente = form.cleaned_data["patente"].strip().upper()
+            chofer = (form.cleaned_data.get("chofer") or "").strip()
+            tipo   = form.cleaned_data.get("tipo")
             taller = form.cleaned_data["taller"]
-            with transaction.atomic():
-                veh, _ = Vehiculo.objects.get_or_create(
-                    patente=patente,
-                    defaults={"marca": "", "modelo": ""}
-                )
-                # Bloquear duplicidad de OT activa
-                if OrdenTrabajo.objects.filter(vehiculo=veh, activa=True).exists():
-                    messages.error(request, "Ya existe una OT activa para esta patente.")
-                    return redirect("ingreso_nuevo")
+            obs    = (form.cleaned_data.get("observaciones") or "").strip()
 
+            with transaction.atomic():
+                # Aseguramos creación/actualización del vehículo
+                veh, _ = Vehiculo.objects.select_for_update().get_or_create(
+                    patente=patente,
+                    defaults={"tipo": tipo}
+                )
+                if tipo and veh.tipo_id != tipo.id:
+                    veh.tipo = tipo
+                    veh.save(update_fields=["tipo"])
+
+                # Regla: solo una OT ACTIVA por vehículo
+                ot_activa = OrdenTrabajo.objects.filter(vehiculo=veh, activa=True).first()
+                if ot_activa:
+                    messages.warning(
+                        request,
+                        f"Ya existe una OT activa para {veh.patente} (OT {ot_activa.folio})."
+                    )
+                    return redirect("ot_detalle", ot_id=ot_activa.id)
+
+                # Crear OT
                 ot = OrdenTrabajo.objects.create(
                     folio=generar_folio(),
                     vehiculo=veh,
                     taller=taller,
                     estado_actual=EstadoOT.INGRESADO,
-                    activa=True
+                    activa=True,
+                    chofer=chofer,
                 )
-                # abrir tramo de historial
-                HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO)
 
-                # Crear evento de ingreso en la agenda
-                from core.models import EventoAgenda
+                # Primer registro de historial (usa obs del ingreso si corresponde)
+                HistorialEstadoOT.objects.create(
+                    ot=ot,
+                    estado=EstadoOT.INGRESADO,
+                    observaciones=obs
+                )
+
+                # Evento en Agenda (ingreso)
                 EventoAgenda.objects.create(
                     titulo=f"Ingreso OT {ot.folio}",
                     inicio=ot.fecha_ingreso,
@@ -66,47 +99,27 @@ def ingreso_nuevo(request):
                     asignado_a=request.user if request.user.is_authenticated else None
                 )
 
-                # Notificar al usuario actual (si está logueado)
-                if request.user.is_authenticated:
-                    notificar(
-                        destinatario=request.user,
-                        titulo=f"OT creada: {ot.folio}",
-                        mensaje=f"Se creó la OT {ot.folio} para el vehículo {ot.vehiculo.patente} en {ot.taller.nombre}.",
-                        url=f"/ot/{ot.id}/"
-                    )
-
-                if request.method == "POST":
-                    form = IngresoForm(request.POST, request.FILES)
-                    if form.is_valid():
-                        patente = form.cleaned_data["patente"].strip().upper()
-                        chofer = form.cleaned_data["chofer"].strip()
-                        tipo = form.cleaned_data["tipo"]
-                        taller = form.cleaned_data["taller"]
-                        obs = form.cleaned_data["observaciones"]
-
-                        veh, _ = Vehiculo.objects.get_or_create(patente=patente, defaults={"tipo": tipo})
-                        if tipo and veh.tipo_id != tipo.id:
-                            veh.tipo = tipo
-                            veh.save()
-
-                        ot = OrdenTrabajo.objects.create(
-                            folio=generar_folio(),
-                            vehiculo=veh,
-                            taller=taller,
-                            estado_actual=EstadoOT.INGRESADO,
-                            activa=True,
-                            chofer=chofer,
+                # Notificación opcional al usuario actual
+                try:
+                    from core.services import notificar
+                    if request.user.is_authenticated:
+                        notificar(
+                            destinatario=request.user,
+                            titulo=f"OT creada: {ot.folio}",
+                            mensaje=f"Se creó la OT {ot.folio} para {veh.patente} en {taller.nombre}.",
+                            url=f"/ot/{ot.id}/"
                         )
-                        HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO, observaciones=obs or "")
+                except Exception:
+                    # Si no tienes `notificar`, o falla, seguimos sin romper el flujo
+                    pass
 
-                        # (si usas agenda automática, se crea el evento aquí)
-
-                messages.success(request, f"Ingreso registrado. OT {ot.folio} creada.")
-                return redirect("ot_detalle", ot_id=ot.id)
+            messages.success(request, f"OT {ot.folio} creada correctamente.")
+            return redirect("ot_detalle", ot_id=ot.id)
     else:
         form = IngresoForm()
 
     return render(request, "ot/ingreso_nuevo.html", {"form": form})
+
 
 def ot_detalle(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)

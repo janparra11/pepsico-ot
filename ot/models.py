@@ -6,6 +6,7 @@ import os
 from uuid import uuid4
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db.models import Q, UniqueConstraint
 
 
 class EstadoOT(models.TextChoices):
@@ -24,7 +25,11 @@ class PrioridadOT(models.IntegerChoices):
 
 class OrdenTrabajo(models.Model):
     folio = models.CharField(max_length=20, unique=True)
-    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.PROTECT)
+    vehiculo = models.ForeignKey(
+        Vehiculo,
+        on_delete=models.PROTECT,   # o CASCADE si lo prefieres
+        related_name="ots"
+    )
     taller = models.ForeignKey(Taller, on_delete=models.PROTECT)
     responsable = models.CharField(max_length=120, blank=True)
     estado_actual = models.CharField(max_length=3, choices=EstadoOT.choices, default=EstadoOT.INGRESADO)
@@ -68,9 +73,9 @@ class OrdenTrabajo(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["vehiculo"],
-                condition=models.Q(activa=True),
-                name="uq_ot_activa_por_vehiculo"
+                fields=['vehiculo'],
+                condition=Q(activa=True),
+                name='uniq_ot_activa_por_vehiculo'
             )
         ]
         indexes = [
@@ -87,6 +92,7 @@ class HistorialEstadoOT(models.Model):
     estado = models.CharField(max_length=3, choices=EstadoOT.choices)
     inicio = models.DateTimeField(auto_now_add=True)
     fin = models.DateTimeField(null=True, blank=True)
+    observaciones = models.TextField(blank=True)
 
     class Meta:
         indexes = [models.Index(fields=["ot", "estado", "inicio"])]
