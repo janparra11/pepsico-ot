@@ -14,6 +14,47 @@
       </ul>
 
       <ul class="navbar-nav ms-auto align-items-center">
+        <!-- Notificaciones en barra azul -->
+        <li class="nav-item dropdown me-3">
+          <a class="nav-link dropdown-toggle position-relative text-light" href="#" id="notifDropdown"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            🔔
+            {% if notif_unread|add:0 > 0 %}
+              <span id="notif-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ notif_unread }}
+              </span>
+            {% else %}
+              <span id="notif-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notifDropdown" style="min-width: 340px;">
+            <li class="dropdown-header d-flex justify-content-between align-items-center">
+              <span>Notificaciones</span>
+              <a class="small" href="{% url 'core_notificaciones' %}">Ver todas</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+
+            {% if notif_latest %}
+              {% for n in notif_latest %}
+                <li>
+                  <a class="dropdown-item d-flex justify-content-between align-items-start"
+                    href="{{ n.url|default:request.build_absolute_uri|slice:':0' }}{% if n.url %}{{ n.url }}{% else %}{% url 'core_notificaciones' %}{% endif %}">
+                    <div class="me-2">
+                      <div class="fw-semibold">{{ n.titulo }}</div>
+                      {% if n.mensaje %}<div class="small text-muted">{{ n.mensaje|truncatechars:60 }}</div>{% endif %}
+                      <div class="small text-muted">{{ n.creada_en }}</div>
+                    </div>
+                    {% if not n.leida %}
+                      <span class="badge text-bg-primary">Nueva</span>
+                    {% endif %}
+                  </a>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li><span class="dropdown-item-text text-muted">Sin notificaciones aún.</span></li>
+            {% endif %}
+          </ul>
+        </li>
         <li class="nav-item me-3">
           <span class="text-light small" id="clock"></span>
         </li>

@@ -13,4 +13,6 @@ urlpatterns = [
     path("agenda/events/", views.agenda_events_api, name="core_agenda_api"),
     path("agenda/create/", views.agenda_crear_api, name="core_agenda_crear_api"),
     path("agenda/event/<int:ev_id>/", views.agenda_detalle_api, name="core_agenda_detalle_api"),
+    path("notificaciones/unread-count/", views.notif_unread_count, name="core_notif_unread_count"),
+
 ]

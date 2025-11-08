@@ -218,3 +218,12 @@ def agenda_detalle_api(request, ev_id):
         return JsonResponse({"ok": True})
 
     return JsonResponse({"error":"Método no permitido"}, status=405)
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def notif_unread_count(request):
+    from core.models import Notificacion
+    count = Notificacion.objects.filter(destinatario=request.user, leida=False).count()
+    return JsonResponse({"count": count})
