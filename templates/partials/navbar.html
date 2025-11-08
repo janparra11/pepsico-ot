@@ -27,6 +27,13 @@
               {% endif %}
             </a>
           </li>
+          <li class="nav-item">
+            <span class="nav-link disabled" id="clock">--:--:--</span>
+          </li>
+          <li class="nav-item">
+              <span class="nav-link">Hola, {{ request.user.username }}</span>
+          </li>
+
           <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="d-inline">
