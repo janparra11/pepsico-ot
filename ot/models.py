@@ -28,11 +28,42 @@ class OrdenTrabajo(models.Model):
     taller = models.ForeignKey(Taller, on_delete=models.PROTECT)
     responsable = models.CharField(max_length=120, blank=True)
     estado_actual = models.CharField(max_length=3, choices=EstadoOT.choices, default=EstadoOT.INGRESADO)
-    # NUEVO:
     prioridad = models.IntegerField(choices=PrioridadOT.choices, default=PrioridadOT.MEDIA)
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     fecha_cierre = models.DateTimeField(null=True, blank=True)
     activa = models.BooleanField(default=True)
+    mecanico_asignado = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True, on_delete=models.SET_NULL,
+        related_name="ots_asignadas"
+    )
+    fecha_compromiso = models.DateTimeField(null=True, blank=True)
+    chofer = models.CharField(max_length=120, blank=True)
+
+    # --- Helpers de tiempo total y atraso ---
+    def duracion_segundos(self):
+        """Tiempo de ciclo neto: (cierre o ahora) - ingreso - pausas."""
+        import datetime
+        fin = self.fecha_cierre or datetime.datetime.now(tz=self.fecha_ingreso.tzinfo)
+        total = (fin - self.fecha_ingreso).total_seconds()
+        # descuenta pausas cerradas
+        pausas_cerradas = self.pausas.exclude(fin__isnull=True)
+        descuento = sum([(p.fin - p.inicio).total_seconds() for p in pausas_cerradas], 0.0)
+        # si hay una pausa abierta, descuéntala también hasta ahora/fin
+        pausa_abierta = self.pausas.filter(fin__isnull=True).first()
+        if pausa_abierta:
+            descuento += (fin - pausa_abierta.inicio).total_seconds()
+        return max(0.0, total - descuento)
+
+    def duracion_horas(self):
+        return round(self.duracion_segundos() / 3600.0, 2)
+
+    def esta_atrasada(self):
+        """True si tiene fecha_compromiso y la excede (usando cierre o ahora)."""
+        if not self.fecha_compromiso:
+            return False
+        fin = self.fecha_cierre or self.fecha_ingreso.tzinfo.localize(__import__('datetime').datetime.now())
+        return fin > self.fecha_compromiso
 
     class Meta:
         constraints = [

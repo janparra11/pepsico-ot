@@ -32,10 +32,15 @@ class EstadoVehiculo(models.TextChoices):
     FUERA_SERVICIO = "FUERA", "Fuera de servicio"
     OPERATIVO = "OPER", "Operativo"
 
+class TipoVehiculo(models.Model):
+    nombre = models.CharField(max_length=60, unique=True)
+    def __str__(self): return self.nombre
+
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=12, unique=True)
     marca = models.CharField(max_length=80, blank=True)
     modelo = models.CharField(max_length=80, blank=True)
+    tipo = models.ForeignKey(TipoVehiculo, null=True, blank=True, on_delete=models.SET_NULL)
     estado = models.CharField(
         max_length=10,
         choices=EstadoVehiculo.choices,
@@ -48,3 +53,4 @@ class Vehiculo(models.Model):
 
     def __str__(self):
         return self.patente.upper()
+    

@@ -14,5 +14,5 @@ urlpatterns = [
     path("ots/", views.ot_lista, name="ot_lista"),
     path("dashboard/", views.dashboard, name="ot_dashboard"),
     path("ot/<int:ot_id>/agendar/", views.ot_agendar_evento, name="ot_agendar_evento"),
-
+    path("ot/<int:ot_id>/asignar-mecanico/", views.ot_asignar_mecanico, name="ot_asignar_mecanico"),
 ]

@@ -23,6 +23,8 @@ import json
 from taller.models import Taller
 from .forms import EventoOTForm
 
+from .forms import AsignarMecanicoForm
+
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -73,6 +75,32 @@ def ingreso_nuevo(request):
                         url=f"/ot/{ot.id}/"
                     )
 
+                if request.method == "POST":
+                    form = IngresoForm(request.POST, request.FILES)
+                    if form.is_valid():
+                        patente = form.cleaned_data["patente"].strip().upper()
+                        chofer = form.cleaned_data["chofer"].strip()
+                        tipo = form.cleaned_data["tipo"]
+                        taller = form.cleaned_data["taller"]
+                        obs = form.cleaned_data["observaciones"]
+
+                        veh, _ = Vehiculo.objects.get_or_create(patente=patente, defaults={"tipo": tipo})
+                        if tipo and veh.tipo_id != tipo.id:
+                            veh.tipo = tipo
+                            veh.save()
+
+                        ot = OrdenTrabajo.objects.create(
+                            folio=generar_folio(),
+                            vehiculo=veh,
+                            taller=taller,
+                            estado_actual=EstadoOT.INGRESADO,
+                            activa=True,
+                            chofer=chofer,
+                        )
+                        HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO, observaciones=obs or "")
+
+                        # (si usas agenda automática, se crea el evento aquí)
+
                 messages.success(request, f"Ingreso registrado. OT {ot.folio} creada.")
                 return redirect("ot_detalle", ot_id=ot.id)
     else:
@@ -92,7 +120,7 @@ def ot_detalle(request, ot_id):
     estado_veh_form = EstadoVehiculoForm(initial={"estado": ot.vehiculo.estado})
     evento_form = EventoOTForm()
     eventos_ot = ot.eventos.order_by("-inicio")[:10] 
-
+    asignar_mec_form = AsignarMecanicoForm(initial={"mecanico": ot.mecanico_asignado})
 
     return render(
         request, "ot/ot_detalle.html",
@@ -102,8 +130,11 @@ def ot_detalle(request, ot_id):
             "doc_form": doc_form, "prioridad_form": prioridad_form, "estado_veh_form": estado_veh_form,
             "evento_form": evento_form,
             "eventos_ot": eventos_ot,
+            "asignar_mec_form": asignar_mec_form,
         }
     )
+
+
 
     # alarma simple v1: si hay pausa abierta > 30 min, crear notificación (una por visita)
     if pausa_abierta:
@@ -131,8 +162,6 @@ def ot_detalle(request, ot_id):
             "doc_form": doc_form,  # ← nuevo
         },
     )
-
-
 
 # Vista para cambiar estado
 @require_POST
@@ -481,4 +510,20 @@ def ot_agendar_evento(request, ot_id):
         asignado_a=request.user if request.user.is_authenticated else None
     )
     messages.success(request, "Evento agendado correctamente.")
+    return redirect("ot_detalle", ot_id=ot.id)
+
+@require_POST
+def ot_asignar_mecanico(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    if not ot.activa:
+        messages.error(request, "La OT está cerrada. No puedes asignar mecánico.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    form = AsignarMecanicoForm(request.POST)
+    if form.is_valid():
+        ot.mecanico_asignado = form.cleaned_data["mecanico"]
+        ot.save()
+        messages.success(request, "Mecánico asignado correctamente.")
+    else:
+        messages.error(request, "Formulario inválido al asignar mecánico.")
     return redirect("ot_detalle", ot_id=ot.id)

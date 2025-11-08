@@ -2,31 +2,50 @@ from django import forms
 from taller.models import Taller
 import os
 
+from taller.models import TipoVehiculo
+
 class IngresoForm(forms.Form):
-    patente = forms.CharField(
-        max_length=12,
-        label="Patente",
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "AB12-34"
-        })
+    patente = forms.CharField(max_length=12, widget=forms.TextInput(attrs={"class":"form-control"}))
+    chofer = forms.CharField(max_length=120, required=False, widget=forms.TextInput(attrs={"class":"form-control"}))
+    tipo = forms.ModelChoiceField(
+        queryset=TipoVehiculo.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={"class":"form-select"})
     )
     taller = forms.ModelChoiceField(
         queryset=Taller.objects.all(),
-        label="Taller",
-        widget=forms.Select(attrs={"class": "form-select"})
+        widget=forms.Select(attrs={"class":"form-select"})
     )
-    observaciones = forms.CharField(
-        required=False,
-        label="Observaciones",
-        widget=forms.Textarea(attrs={
-            "class": "form-control",
-            "rows": 3
-        })
-    )
+    observaciones = forms.CharField(required=False, widget=forms.Textarea(attrs={"class":"form-control", "rows":3}))
 
     def clean_patente(self):
         return self.cleaned_data["patente"].strip().upper()
+
+#class IngresoForm(forms.Form):
+#    patente = forms.CharField(
+#        max_length=12,
+#        label="Patente",
+#        widget=forms.TextInput(attrs={
+#            "class": "form-control",
+#            "placeholder": "AB12-34"
+#        })
+#    )
+#    taller = forms.ModelChoiceField(
+#        queryset=Taller.objects.all(),
+#        label="Taller",
+#        widget=forms.Select(attrs={"class": "form-select"})
+#    )
+#    observaciones = forms.CharField(
+#        required=False,
+#        label="Observaciones",
+#        widget=forms.Textarea(attrs={
+#            "class": "form-control",
+#            "rows": 3
+#        })
+#    )
+#
+#    def clean_patente(self):
+#        return self.cleaned_data["patente"].strip().upper()
 
 # ot/forms.py
 from django import forms
@@ -104,3 +123,14 @@ from django import forms
 class EventoOTForm(forms.Form):
     titulo = forms.CharField(max_length=140, widget=forms.TextInput(attrs={"class":"form-control"}))
     fecha = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type":"datetime-local", "class":"form-control"}))
+
+from django import forms
+from django.contrib.auth.models import User  # si usas el User por defecto
+
+class AsignarMecanicoForm(forms.Form):
+    mecanico = forms.ModelChoiceField(
+        queryset=User.objects.filter(is_active=True).order_by("username"),
+        required=False,
+        label="Mecánico",
+        widget=forms.Select(attrs={"class": "form-select"})
+    )
