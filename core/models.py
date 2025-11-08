@@ -46,6 +46,7 @@ class EventoAgenda(models.Model):
     todo_el_dia = models.BooleanField(default=False)
     asignado_a = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="eventos")
     ot = models.ForeignKey(OrdenTrabajo, null=True, blank=True, on_delete=models.SET_NULL, related_name="eventos")
+    descripcion = models.TextField(blank=True)  # ← NUEVO
     creado_en = models.DateTimeField(auto_now_add=True)
 
     class Meta:

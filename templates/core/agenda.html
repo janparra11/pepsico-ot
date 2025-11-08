@@ -2,67 +2,206 @@
 {% block title %}Agenda{% endblock %}
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
-  <h1 class="h5 mb-3">Agenda</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5 mb-0">Agenda</h1>
+    <div>
+      <div class="btn-group">
+        <button class="btn btn-outline-secondary btn-sm" id="btnMonth">Mes</button>
+        <button class="btn btn-outline-secondary btn-sm" id="btnWeek">Semana</button>
+        <button class="btn btn-outline-secondary btn-sm" id="btnDay">Día</button>
+        <button class="btn btn-primary btn-sm" id="btnNuevo">+ Nuevo</button>
+      </div>
+    </div>
+  </div>
   <div id="calendar"></div>
+</div>
+
+<!-- MODAL crear/editar -->
+<div class="modal fade" id="eventoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="eventoForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Evento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="ev_id">
+          <div class="mb-2">
+            <label class="form-label">Título</label>
+            <input class="form-control" id="titulo" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Inicio</label>
+            <input class="form-control" id="inicio" type="datetime-local" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Fin</label>
+            <input class="form-control" id="fin" type="datetime-local">
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="todo_el_dia">
+            <label class="form-check-label" for="todo_el_dia">Todo el día</label>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">OT (opcional, id numérico)</label>
+            <input class="form-control" id="ot_id" type="number" min="1" placeholder="Ej: 12">
+            <div class="form-text">Si lo completas, el evento quedará vinculado a esa OT.</div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcion" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-danger" id="btnEliminar" style="display:none">Eliminar</button>
+          <div>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales-all.global.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const el = document.getElementById('calendar');
   const calendar = new FullCalendar.Calendar(el, {
-    initialView: 'dayGridMonth',
-    locale: 'es', // 👈 idioma español
+    initialView: 'timeGridWeek',          // 👈 vista con horas por defecto
+    locale: 'es',
     timeZone: 'local',
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
-    },
-    buttonText: {
-      today: 'Hoy',
-      month: 'Mes',
-      week: 'Semana',
-      day: 'Día'
-    },
+    headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
     events: '{% url "core_agenda_api" %}',
+    selectable: true,
+    selectMirror: true,
+    slotMinTime: "07:00:00",
+    slotMaxTime: "20:00:00",
+    expandRows: true,
+    eventTimeFormat: { hour: '2-digit', minute: '2-digit' },
+
+    select: function(info) {
+      abrirModalCrear(info.start, info.end);
+      calendar.unselect();
+    },
 
     eventClick: function(info) {
-    info.jsEvent.preventDefault();     // evita cualquier click por defecto
-    if (info.event.url) {
-        window.location.href = info.event.url;  // abre solo si hay URL válida
-    }
-    },
-
-
-    // 👇 habilitamos agregar eventos manuales
-    selectable: true,
-    select: function(selectionInfo) {
-    const titulo = prompt("Título del evento:");
-    if (titulo) {
-        fetch("{% url 'core_agenda_crear_api' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: JSON.stringify({
-            titulo: titulo,
-            inicio: selectionInfo.startStr,
-            fin: selectionInfo.endStr
-        })
-        })
-        .then(r => r.json())
-        .then(() => {
-        calendar.refetchEvents(); // recarga sin mostrar nada
-        });
-    }
-    calendar.unselect();
+      info.jsEvent.preventDefault();
+      abrirModalEditar(info.event);
     }
   });
+
   calendar.render();
+
+  // botones de vista
+  document.getElementById('btnMonth').onclick = () => calendar.changeView('dayGridMonth');
+  document.getElementById('btnWeek').onclick  = () => calendar.changeView('timeGridWeek');
+  document.getElementById('btnDay').onclick   = () => calendar.changeView('timeGridDay');
+  document.getElementById('btnNuevo').onclick = () => abrirModalCrear();
+
+  // utilidades modal
+  const modalEl = document.getElementById('eventoModal');
+  const modal = new bootstrap.Modal(modalEl);
+  const form  = document.getElementById('eventoForm');
+  const evId  = document.getElementById('ev_id');
+  const titulo= document.getElementById('titulo');
+  const inicio= document.getElementById('inicio');
+  const fin   = document.getElementById('fin');
+  const todo  = document.getElementById('todo_el_dia');
+  const otId  = document.getElementById('ot_id');
+  const desc  = document.getElementById('descripcion');
+  const btnEliminar = document.getElementById('btnEliminar');
+
+  function toLocalInput(dt) {
+    if (!dt) return "";
+    const d = new Date(dt);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0,16);
+  }
+
+  function abrirModalCrear(start=null, end=null) {
+    document.getElementById('modalTitle').innerText = "Nuevo evento";
+    evId.value = "";
+    titulo.value = "";
+    inicio.value = start ? toLocalInput(start) : "";
+    fin.value = end ? toLocalInput(end) : "";
+    todo.checked = false;
+    otId.value = "";
+    desc.value = "";
+    btnEliminar.style.display = "none";
+    modal.show();
+  }
+
+  function abrirModalEditar(event) {
+    document.getElementById('modalTitle').innerText = "Editar evento";
+    evId.value = event.id;
+    titulo.value = event.title || "";
+    inicio.value = toLocalInput(event.start);
+    fin.value = event.end ? toLocalInput(event.end) : "";
+    todo.checked = event.allDay || false;
+    otId.value = (event.extendedProps && event.extendedProps.ot_id) ? event.extendedProps.ot_id : "";
+    desc.value = (event.extendedProps && event.extendedProps.descripcion) ? event.extendedProps.descripcion : "";
+    btnEliminar.style.display = "inline-block";
+    modal.show();
+  }
+
+  // guardar (create / update)
+  form.onsubmit = async function(e) {
+    e.preventDefault();
+    const payload = {
+      titulo: titulo.value.trim(),
+      inicio: inicio.value ? new Date(inicio.value).toISOString() : "",
+      fin: (todo.checked || !fin.value) ? "" : new Date(fin.value).toISOString(),
+      todo_el_dia: todo.checked,
+      ot_id: otId.value ? parseInt(otId.value, 10) : null,
+      descripcion: desc.value || ""
+    };
+
+    let resp;
+    if (evId.value) {
+      // update
+      resp = await fetch(`{% url "core_agenda_detalle_api" 0 %}`.replace('/0/', `/${evId.value}/`), {
+        method: "PUT",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": "{{ csrf_token }}"},
+        body: JSON.stringify(payload)
+      });
+    } else {
+      // create
+      resp = await fetch("{% url 'core_agenda_crear_api' %}", {
+        method: "POST",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": "{{ csrf_token }}"},
+        body: JSON.stringify(payload)
+      });
+    }
+
+    if (resp.ok) {
+      modal.hide();
+      calendar.refetchEvents();
+    } else {
+      const data = await resp.json().catch(()=>({}));
+      alert(data.error || "Error al guardar");
+    }
+  };
+
+  // eliminar
+  btnEliminar.onclick = async function() {
+    if (!evId.value) return;
+    if (!confirm("¿Eliminar este evento?")) return;
+    const resp = await fetch(`{% url "core_agenda_detalle_api" 0 %}`.replace('/0/', `/${evId.value}/`), {
+      method: "DELETE",
+      headers: {"X-CSRFToken": "{{ csrf_token }}"}
+    });
+    if (resp.ok) {
+      modal.hide();
+      calendar.refetchEvents();
+    } else {
+      alert("No se pudo eliminar");
+    }
+  };
 });
 </script>
 {% endblock %}

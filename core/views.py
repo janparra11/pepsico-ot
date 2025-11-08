@@ -118,51 +118,102 @@ def agenda_view(request):
 
 @login_required
 def agenda_events_api(request):
-    start = request.GET.get("start")  # ISO8601
+    start = request.GET.get("start")
     end = request.GET.get("end")
     qs = EventoAgenda.objects.all()
     if start and end:
-        # FullCalendar envía rango visible
         qs = qs.filter(inicio__lte=end).filter(models.Q(fin__gte=start) | models.Q(fin__isnull=True))
+
     items = []
     for e in qs.select_related("ot", "asignado_a"):
         ev = {
             "id": e.id,
-            "title": e.titulo if not e.ot else f"{e.titulo} · {e.ot.folio}",
+            "title": e.titulo,                       # título limpio
             "start": e.inicio.isoformat(),
             "end": e.fin.isoformat() if e.fin else None,
             "allDay": e.todo_el_dia,
+            # Datos extra para el modal (no rompen el calendario)
+            "extendedProps": {
+                "descripcion": e.descripcion or "",
+                "ot_id": e.ot_id,
+                "ot_folio": (e.ot.folio if e.ot_id else ""),
+                "asignado": (e.asignado_a.get_username() if e.asignado_a_id else ""),
+            }
         }
-        if e.ot_id:               # 👈 solo si hay OT
+        # Sólo agrega url si hay OT
+        if e.ot_id:
             ev["url"] = f"/ot/{e.ot_id}/"
         items.append(ev)
+
     return JsonResponse(items, safe=False)
 
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.utils.dateparse import parse_datetime
-from django.http import JsonResponse
 
-@csrf_exempt
 @login_required
+@csrf_exempt
 def agenda_crear_api(request):
-    if request.method == "POST":
+    if request.method != "POST":
+        return JsonResponse({"error":"Método no permitido"}, status=405)
+
+    data = json.loads(request.body.decode("utf-8"))
+    titulo = data.get("titulo") or ""
+    inicio = parse_datetime(data.get("inicio") or "")
+    fin = parse_datetime(data.get("fin") or "")
+    todo = bool(data.get("todo_el_dia", False))
+    descripcion = data.get("descripcion") or ""
+    ot_id = data.get("ot_id")
+
+    if not titulo or not inicio:
+        return JsonResponse({"error":"Faltan título o inicio"}, status=400)
+
+    e = EventoAgenda.objects.create(
+        titulo=titulo,
+        inicio=inicio,
+        fin=fin if not todo else None,
+        todo_el_dia=todo,
+        descripcion=descripcion,
+        ot_id=ot_id if ot_id else None,
+        asignado_a=request.user
+    )
+    return JsonResponse({"ok": True, "id": e.id})
+
+@login_required
+@csrf_exempt
+def agenda_detalle_api(request, ev_id):
+    try:
+        e = EventoAgenda.objects.get(id=ev_id)
+    except EventoAgenda.DoesNotExist:
+        return JsonResponse({"error":"No existe"}, status=404)
+
+    if request.method == "GET":
+        return JsonResponse({
+            "id": e.id,
+            "titulo": e.titulo,
+            "inicio": e.inicio.isoformat(),
+            "fin": e.fin.isoformat() if e.fin else "",
+            "todo_el_dia": e.todo_el_dia,
+            "descripcion": e.descripcion or "",
+            "ot_id": e.ot_id,
+            "ot_folio": (e.ot.folio if e.ot_id else "")
+        })
+
+    if request.method == "PUT":
         data = json.loads(request.body.decode("utf-8"))
-        titulo = data.get("titulo")
-        inicio = parse_datetime(data.get("inicio"))
-        fin = parse_datetime(data.get("fin"))
-        ot_id = data.get("ot_id")  # 👈 opcional
+        e.titulo = data.get("titulo") or e.titulo
+        e.inicio = parse_datetime(data.get("inicio") or e.inicio.isoformat())
+        fin = data.get("fin")
+        e.fin = parse_datetime(fin) if fin else None
+        e.todo_el_dia = bool(data.get("todo_el_dia", e.todo_el_dia))
+        e.descripcion = data.get("descripcion") or ""
+        e.ot_id = data.get("ot_id") or None
+        e.asignado_a = request.user
+        e.save()
+        return JsonResponse({"ok": True})
 
-        if not titulo or not inicio:
-            return JsonResponse({"error": "Datos incompletos"}, status=400)
+    if request.method == "DELETE":
+        e.delete()
+        return JsonResponse({"ok": True})
 
-        e = EventoAgenda.objects.create(
-            titulo=titulo,
-            inicio=inicio,
-            fin=fin,
-            asignado_a=request.user,
-            ot_id=ot_id if ot_id else None
-        )
-        return JsonResponse({"id": e.id, "titulo": e.titulo})
-    return JsonResponse({"error": "Método no permitido"}, status=405)
-
+    return JsonResponse({"error":"Método no permitido"}, status=405)
