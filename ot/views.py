@@ -418,6 +418,8 @@ def ot_lista(request):
 @login_required
 def dashboard(request):
     now = timezone.now()
+    hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
 
     # 1) Conteos por estado (solo activas)
     por_estado = (
@@ -483,12 +485,18 @@ def dashboard(request):
     motivos_labels = [row["motivo"] or "(sin motivo)" for row in motivos]
     motivos_data = [row["total"] for row in motivos]
 
+    finalizados_hoy = OrdenTrabajo.objects.filter(
+        activa=False,
+        fecha_cierre__gte=hoy_inicio
+    ).count()
+
     ctx = {
         # KPIs
         "kpi_activas": activas_total if activas_total != 1 else OrdenTrabajo.objects.filter(activa=True).count(),
         "kpi_en_pausa": ots_con_pausa,
         "kpi_pct_pausa": porcentaje_pausa,
         "kpi_ciclo_promedio": ciclo_promedio_horas,
+        "kpi_finalizados_hoy": finalizados_hoy,
 
         # Charts
         "chart_estados_labels": json.dumps(estados_labels),
