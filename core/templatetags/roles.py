@@ -1,6 +1,5 @@
 # core/templatetags/roles.py
 from django import template
-from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -13,10 +12,10 @@ def _get_user_role(user):
 def _is_admin(user):
     return _get_user_role(user) == "ADMIN"
 
-@register.filter
+@register.filter(name="has_role")
 def has_role(user, role_code):
     """
-    Uso: {% if request.user|has_role:"JEFE_TALLER" %} ... {% endif %}
+    Uso: {% if request.user|has_role:"JEFE_TALLER" %}...{% endif %}
     ADMIN siempre pasa.
     """
     if _is_admin(user):
@@ -27,12 +26,11 @@ def has_role(user, role_code):
 def is_role(context, *roles):
     """
     Uso:
-      {% is_role 'RECEPCIONISTA' 'GUARDIA' as can_ingresar %}
-      {% if can_ingresar %} ... {% endif %}
+      {% is_role 'RECEPCIONISTA' 'GUARDIA' as puede %}
+      {% if puede %}...{% endif %}
     ADMIN siempre pasa.
     """
     user = context.get("request").user
     if _is_admin(user):
         return True
-    current = _get_user_role(user)
-    return current in roles
+    return _get_user_role(user) in roles

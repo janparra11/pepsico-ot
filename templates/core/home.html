@@ -61,8 +61,7 @@
           <h2 class="h6">Registrar ingreso</h2>
           <p class="text-muted small mb-3">Crear nueva OT.</p>
           <div class="mt-auto">
-          {% load roles %}
-
+            
           {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' as can_ingresar %}
           {% if can_ingresar %}
             <a class="btn btn-primary" href="{% url 'ingreso_nuevo' %}">Nuevo ingreso</a>
