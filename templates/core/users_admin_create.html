@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Nuevo usuario{% endblock %}
+{% block content %}
+<div class="bg-white p-3 rounded shadow-sm" style="max-width:600px">
+  <h1 class="h5 mb-3">Crear usuario</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-2"><label class="form-label">Username</label>{{ form.username }}</div>
+    <div class="mb-2"><label class="form-label">Nombres</label>{{ form.first_name }}</div>
+    <div class="mb-2"><label class="form-label">Apellidos</label>{{ form.last_name }}</div>
+    <div class="mb-2"><label class="form-label">Email</label>{{ form.email }}</div>
+    <div class="mb-2"><label class="form-label">Contraseña (temporal)</label>{{ form.password }}</div>
+    <div class="mb-3"><label class="form-label">Rol</label>{{ form.rol }}</div>
+    <button class="btn btn-primary">Crear</button>
+    <a class="btn btn-outline-secondary" href="{% url 'users_admin_list' %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

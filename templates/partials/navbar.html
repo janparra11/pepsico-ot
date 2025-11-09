@@ -10,6 +10,10 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
 
+      {% if request.user|has_role:"ADMIN" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'users_admin_list' %}">Usuarios</a></li>
+      {% endif %}
+
       {# Dashboard: Supervisor / Jefe de Taller / Admin #}
       {% if request.user|has_role:"SUPERVISOR" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
         <li class="nav-item"><a class="nav-link" href="{% url 'ot_dashboard' %}">Dashboard</a></li>

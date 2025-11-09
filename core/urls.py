@@ -15,4 +15,9 @@ urlpatterns = [
     path("agenda/event/<int:ev_id>/", views.agenda_detalle_api, name="core_agenda_detalle_api"),
     path("notificaciones/unread-count/", views.notif_unread_count, name="core_notif_unread_count"),
     path("redir/", views.redir_por_rol, name="redir_por_rol"),
+    path("usuarios/", views.users_admin_list, name="users_admin_list"),
+    path("usuarios/nuevo/", views.users_admin_create, name="users_admin_create"),
+    path("usuarios/<int:user_id>/rol/", views.users_admin_set_role, name="users_admin_set_role"),
+    path("usuarios/<int:user_id>/activar/", views.users_admin_toggle_active, name="users_admin_toggle_active"),
+    path("usuarios/<int:user_id>/reset-pass/", views.users_admin_reset_password, name="users_admin_reset_password"),
 ]

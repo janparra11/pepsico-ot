@@ -244,3 +244,91 @@ def redir_por_rol(request):
         return redirect("ot_lista")  # luego: módulo inventario
     # default recepcionista
     return redirect("home")
+
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.crypto import get_random_string
+
+from core.auth import require_roles
+from core.roles import Rol
+from .forms import UserCreateForm, UserRoleForm, UserStatusForm
+
+@require_roles(Rol.ADMIN)
+@login_required
+def users_admin_list(request):
+    qs = User.objects.select_related("perfil").order_by("username")
+    return render(request, "core/users_admin_list.html", {"users": qs})
+
+@require_roles(Rol.ADMIN)
+@login_required
+def users_admin_create(request):
+    if request.method == "POST":
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            u = User(
+                username=form.cleaned_data["username"].strip(),
+                first_name=form.cleaned_data["first_name"].strip(),
+                last_name=form.cleaned_data["last_name"].strip(),
+                email=form.cleaned_data["email"].strip(),
+                is_active=True,
+                password=make_password(form.cleaned_data["password"]),
+            )
+            u.save()
+            # asegurar perfil
+            from .models import Perfil
+            Perfil.objects.get_or_create(user=u, defaults={"rol": form.cleaned_data["rol"]})
+            if hasattr(u, "perfil"):
+                u.perfil.rol = form.cleaned_data["rol"]
+                u.perfil.save()
+            messages.success(request, f"Usuario {u.username} creado con rol {u.perfil.get_rol_display()}.")
+            return redirect("users_admin_list")
+    else:
+        form = UserCreateForm()
+    return render(request, "core/users_admin_create.html", {"form": form})
+
+@require_roles(Rol.ADMIN)
+@login_required
+def users_admin_set_role(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+    if request.method == "POST":
+        form = UserRoleForm(request.POST)
+        if form.is_valid():
+            rol = form.cleaned_data["rol"]
+            u.perfil.rol = rol
+            u.perfil.save()
+            messages.success(request, f"Rol de {u.username} actualizado a {u.perfil.get_rol_display()}.")
+            return redirect("users_admin_list")
+    else:
+        form = UserRoleForm(initial={"rol": getattr(u.perfil, "rol", Rol.RECEPCIONISTA)})
+    return render(request, "core/users_admin_set_role.html", {"u": u, "form": form})
+
+@require_roles(Rol.ADMIN)
+@login_required
+def users_admin_toggle_active(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+    if request.method == "POST":
+        form = UserStatusForm(request.POST)
+        if form.is_valid():
+            u.is_active = form.cleaned_data["activo"]
+            u.save()
+            messages.success(request, f"Usuario {u.username} ahora está {'activo' if u.is_active else 'inactivo'}.")
+            return redirect("users_admin_list")
+    else:
+        form = UserStatusForm(initial={"activo": u.is_active})
+    return render(request, "core/users_admin_toggle_active.html", {"u": u, "form": form})
+
+@require_roles(Rol.ADMIN)
+@login_required
+def users_admin_reset_password(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+    # genera una contraseña temporal segura (12 chars)
+    temp_password = get_random_string(12)
+    u.password = make_password(temp_password)
+    u.save()
+    messages.success(request, f"Contraseña temporal de {u.username}: {temp_password}")
+    # En producción: enviar por correo, no mostrar en pantalla.
+    return redirect("users_admin_list")
