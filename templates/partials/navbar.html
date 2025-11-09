@@ -22,7 +22,9 @@
       {# OTs: todos los operativos (ajusta a gusto) #}
       {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' 'MECANICO' 'ASISTENTE_REPUESTO' 'SUPERVISOR' as can_ver_ots %}
       {% if can_ver_ots %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'ot_lista' %}">OTs</a></li>
+      {% if request.user|has_role:"MECANICO" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'ot_lista' %}?mis=1">Mis OTs</a></li>
+      {% endif %}
       {% endif %}
 
       {# Ingresos: Recepcionista / Guardia / Jefe Taller #}

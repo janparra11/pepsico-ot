@@ -392,14 +392,32 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import OrdenTrabajo, EstadoOT, PrioridadOT
 
-@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER, Rol.MECANICO, Rol.ASISTENTE_REPUESTO, Rol.SUPERVISOR)
+from core.roles import Rol
+
+@login_required
 def ot_lista(request):
     q = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "")
-    activa = request.GET.get("activa", "1")  # 1=solo activas por defecto
+    activa = request.GET.get("activa", "1")
 
     qs = OrdenTrabajo.objects.all()
 
+    # 🔒 Restricciones por rol
+    rol = getattr(getattr(request.user, "perfil", None), "rol", None)
+
+    if rol == Rol.MECANICO:
+        # Solo OTs donde él está asignado
+        qs = qs.filter(mecanico_asignado=request.user)
+
+    elif rol == Rol.RECEPCIONISTA:
+        # Solo OTs que él registró (si se guardan con user)
+        qs = qs.filter(creado_por=request.user) if hasattr(OrdenTrabajo, "creado_por") else qs
+
+    elif rol == Rol.GUARDIA:
+        # Solo puede ver, nunca editar
+        qs = qs.filter(activa=True)  # no mostramos cerradas
+
+    # filtros normales
     if activa == "1":
         qs = qs.filter(activa=True)
 
@@ -409,12 +427,15 @@ def ot_lista(request):
     if q:
         qs = qs.filter(Q(folio__icontains=q) | Q(vehiculo__patente__icontains=q))
 
-    # 🔽 AQUÍ aplicas el orden por prioridad
     qs = qs.order_by("-prioridad", "fecha_ingreso")
 
     paginator = Paginator(qs, 10)
     page = request.GET.get("page")
     page_obj = paginator.get_page(page)
+
+    # Si entra con ?mis=1 forzamos filtro de mecánico
+    if request.GET.get("mis") == "1" and rol == Rol.MECANICO:
+        qs = qs.filter(mecanico_asignado=request.user)
 
     return render(request, "ot/ot_lista.html", {
         "page_obj": page_obj,
