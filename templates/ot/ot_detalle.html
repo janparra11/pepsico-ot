@@ -6,6 +6,12 @@
 <div class="bg-white p-4 rounded shadow-sm">
   <h1 class="h5 mb-3">OT {{ ot.folio }}</h1>
 
+  {% if request.user|has_role:"ASISTENTE_REPUESTO" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'inv_mov_salida' %}?ot={{ ot.id }}">
+      Agregar consumo de repuesto
+    </a>
+  {% endif %}
+
 <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
 
   <!-- Columna: Cambiar estado -->
@@ -321,3 +327,30 @@
   </ul>
 </div>
 {% endblock %}
+
+<h3 class="h6 mt-4">Consumo de repuestos</h3>
+<div class="bg-white rounded shadow-sm">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Repuesto</th>
+        <th class="text-end">Cantidad</th>
+        <th>Motivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in ot.movimientos_repuesto.all %}
+      <tr>
+        <td class="text-nowrap">{{ m.creado_en|date:"d-m-Y H:i" }}</td>
+        <td>{{ m.repuesto.codigo }} — {{ m.repuesto.descripcion }}</td>
+        <td class="text-end">{{ m.cantidad }}</td>
+        <td>{{ m.motivo|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="text-muted">Sin consumo asociado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+

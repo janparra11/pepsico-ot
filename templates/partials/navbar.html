@@ -19,6 +19,11 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'ot_dashboard' %}">Dashboard</a></li>
       {% endif %}
 
+      {% if request.user|has_role:"ASISTENTE_REPUESTO" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" or request.user|has_role:"SUPERVISOR" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'inv_repuesto_list' %}">Inventario</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'inv_mov_list' %}">Movimientos</a></li>
+      {% endif %}
+
       {# OTs: todos los operativos (ajusta a gusto) #}
       {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' 'MECANICO' 'ASISTENTE_REPUESTO' 'SUPERVISOR' as can_ver_ots %}
       {% if can_ver_ots %}

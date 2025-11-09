@@ -89,7 +89,15 @@ def mov_salida(request):
             except Exception as e:
                 messages.error(request, str(e))
     else:
-        form = MovimientoSalidaForm()
+        initial = {}
+        ot_id = request.GET.get("ot")
+        if ot_id:
+            try:
+                initial["ot"] = int(ot_id)
+            except:
+                pass
+        form = MovimientoSalidaForm(initial=initial)
+
     return render(request, "inventario/mov_form.html", {"form": form, "title": "Salida (consumo en OT)"})
 
 @login_required
