@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Movimientos{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+  <h1 class="h5 mb-0">Movimientos de stock</h1>
+  <div class="btn-group">
+    <a class="btn btn-outline-success btn-sm" href="{% url 'inv_mov_entrada' %}">Entrada</a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'inv_mov_salida' %}">Salida</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'inv_mov_ajuste' %}">Ajuste</a>
+  </div>
+</div>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-sm-6 col-md-4">
+    <input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por repuesto/motivo">
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <select class="form-select" name="tipo">
+      <option value="">Todos</option>
+      {% for v,l in TIPOS %}
+        <option value="{{ v }}" {% if tipo == v %}selected{% endif %}>{{ l }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-outline-secondary">Filtrar</button>
+  </div>
+</form>
+
+<div class="bg-white rounded shadow-sm">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr><th>Fecha</th><th>Repuesto</th><th>Tipo</th><th class="text-end">Cantidad</th><th>OT</th><th>Motivo</th><th>Usuario</th></tr>
+    </thead>
+    <tbody>
+      {% for m in items %}
+      <tr>
+        <td class="text-nowrap">{{ m.creado_en|date:"d-m-Y H:i" }}</td>
+        <td>{{ m.repuesto.codigo }} — {{ m.repuesto.descripcion }}</td>
+        <td>{{ m.get_tipo_display }}</td>
+        <td class="text-end">{{ m.cantidad }}</td>
+        <td>{% if m.ot %}<a href="{% url 'ot_detalle' m.ot.id %}">{{ m.ot.folio }}</a>{% else %}—{% endif %}</td>
+        <td>{{ m.motivo|default:"—" }}</td>
+        <td>{{ m.creado_por|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="text-muted">Sin movimientos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

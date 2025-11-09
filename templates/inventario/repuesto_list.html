@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Repuestos{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h5 mb-0">Repuestos</h1>
+  <a class="btn btn-primary btn-sm" href="{% url 'inv_repuesto_create' %}">Nuevo repuesto</a>
+</div>
+
+<form class="mb-3" method="get">
+  <div class="input-group">
+    <input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por código o descripción">
+    <button class="btn btn-outline-secondary">Buscar</button>
+  </div>
+</form>
+
+<div class="bg-white rounded shadow-sm">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr><th>Código</th><th>Descripción</th><th>Unidad</th><th>Stock</th><th>Mínimo</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for r in items %}
+      <tr class="{% if r.en_minimo %}table-warning{% endif %}">
+        <td>{{ r.codigo }}</td>
+        <td>{{ r.descripcion }}</td>
+        <td>{{ r.get_unidad_display }}</td>
+        <td>{{ r.stock_actual }}</td>
+        <td>{{ r.stock_minimo }}</td>
+        <td class="text-end">
+          <a class="btn btn-outline-secondary btn-sm" href="{% url 'inv_repuesto_edit' r.id %}">Editar</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-muted">Sin repuestos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

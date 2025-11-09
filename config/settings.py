@@ -21,10 +21,10 @@ INSTALLED_APPS = [
     # Apps del proyecto
     "taller",
     "ot",
-    "inventario",
     "reportes",
     "widget_tweaks",
     "core.apps.CoreConfig",
+    "inventario",
 ]
 
 MIDDLEWARE = [
