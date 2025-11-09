@@ -205,6 +205,7 @@ def ot_cambiar_estado(request, ot_id):
     return redirect("ot_detalle", ot_id=ot.id)
 
 # Vistas para iniciar/terminar pausa
+@require_roles(Rol.MECANICO)
 def pausa_iniciar(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
     if not ot.activa:
@@ -232,6 +233,7 @@ def pausa_iniciar(request, ot_id):
         messages.error(request, "Ocurrió un error al iniciar la pausa.")
     return redirect("ot_detalle", ot_id=ot.id)
 
+@require_roles(Rol.MECANICO)
 @require_POST
 def pausa_finalizar(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -259,6 +261,7 @@ def pausa_finalizar(request, ot_id):
         messages.error(request, "Ocurrió un error al finalizar la pausa.")
     return redirect("ot_detalle", ot_id=ot.id)
 
+@require_roles(Rol.RECEPCIONISTA, Rol.MECANICO, Rol.JEFE_TALLER)
 @require_POST
 def ot_subir_documento(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -298,7 +301,7 @@ def ot_subir_documento(request, ot_id):
         messages.error(request, "Ocurrió un error al subir el documento.")
     return redirect("ot_detalle", ot_id=ot.id)
 
-
+@require_roles(Rol.JEFE_TALLER)
 @require_POST
 def ot_eliminar_documento(request, ot_id, doc_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -325,6 +328,7 @@ def ot_eliminar_documento(request, ot_id, doc_id):
         messages.error(request, "No se pudo eliminar el documento.")
     return redirect("ot_detalle", ot_id=ot.id)
 
+@require_roles(Rol.JEFE_TALLER, Rol.SUPERVISOR)
 @require_POST
 def ot_cambiar_prioridad(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -356,7 +360,7 @@ def ot_cambiar_prioridad(request, ot_id):
         )
     return redirect("ot_detalle", ot_id=ot.id)
 
-
+@require_roles(Rol.JEFE_TALLER)
 @require_POST
 def vehiculo_cambiar_estado(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
@@ -388,6 +392,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import OrdenTrabajo, EstadoOT, PrioridadOT
 
+@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER, Rol.MECANICO, Rol.ASISTENTE_REPUESTO, Rol.SUPERVISOR)
 def ot_lista(request):
     q = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "")
@@ -420,6 +425,7 @@ def ot_lista(request):
         "prioridad_choices": PrioridadOT.choices,
     })
 
+@require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER)
 @login_required
 def dashboard(request):
     now = timezone.now()

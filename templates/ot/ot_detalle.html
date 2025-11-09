@@ -11,6 +11,7 @@
     <div class="card card-body shadow-sm control-card">
       <h2 class="h6 mb-3">Cambiar estado</h2>
 
+      {% if request.user|has_role:"MECANICO" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
       {% if ot.activa %}
         <form method="post" action="{% url 'ot_cambiar_estado' ot.id %}">
           {% csrf_token %}
@@ -25,17 +26,18 @@
           <button class="btn btn-primary w-100 btn-action">Aplicar</button>
         </form>
         <div class="form-text mt-2">Solo se permiten transiciones válidas.</div>
-
       {% else %}
         <!-- Aviso gris igual al de Pausa cuando OT está cerrada -->
         <div class="alert alert-secondary mb-0">
           La OT está <strong>cerrada</strong> ({{ ot.fecha_cierre }}). No admite cambios.
         </div>
       {% endif %}
+      {% endif %}
     </div>
   </div>
 
   <!-- Columna: Pausa -->
+  {% if request.user|has_role:"MECANICO" or request.user|has_role:"ADMIN" %}
   <div class="col">
     <div class="card card-body shadow-sm control-card">
       <h2 class="h6 mb-3">Pausa</h2>
@@ -80,7 +82,7 @@
       {% endif %}
     </div>
   </div>
-
+  {% endif %}
 </div>
 
 <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
@@ -173,6 +175,8 @@
 <h2 class="h6 mt-4">Documentos</h2>
 
 <div class="row g-3">
+  {% is_role 'RECEPCIONISTA' 'MECANICO' 'JEFE_TALLER' as can_docs %}
+  {% if can_docs %}
   <div class="col-12 col-md-5">
     <div class="card card-body shadow-sm">
       <h3 class="h6">Subir documento</h3>
@@ -193,6 +197,7 @@
       {% endif %}
     </div>
   </div>
+  {% endif %}
 
   <div class="col-12 col-md-7">
     <div class="card card-body shadow-sm">
@@ -218,7 +223,8 @@
                 <div class="small text-muted mb-2">
                   {{ d.tipo|default:"(sin tipo)" }} · {{ d.ts }}
                 </div>
-
+                
+                {% if request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
                 {% if ot.activa %}
                 <form method="post" action="{% url 'ot_eliminar_documento' ot.id d.id %}">
                   {% csrf_token %}
@@ -226,6 +232,7 @@
                 </form>
                 {% else %}
                 <div class="alert alert-secondary mb-0">OT cerrada · No se puede eliminar</div>
+                {% endif %}
                 {% endif %}
               </div>
             </div>
@@ -246,6 +253,8 @@
         <div class="fw-semibold">{{ ot.mecanico_asignado|default:"—" }}</div>
       </div>
       <div style="min-width:260px;">
+      {% load roles %}
+      {% if request.user|has_role:"JEFE_TALLER" or request.user|has_role:"SUPERVISOR" or request.user|has_role:"ADMIN" %}
         <form method="post" action="{% url 'ot_asignar_mecanico' ot.id %}">
           {% csrf_token %}
           <div class="input-group">
@@ -253,6 +262,7 @@
             <button class="btn btn-outline-primary">Asignar</button>
           </div>
         </form>
+      {% endif %}
       </div>
     </div>
   </div>

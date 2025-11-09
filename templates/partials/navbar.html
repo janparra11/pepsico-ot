@@ -5,13 +5,34 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+    {% load roles %}
+
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
+
+      {# Dashboard: Supervisor / Jefe de Taller / Admin #}
+      {% if request.user|has_role:"SUPERVISOR" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
         <li class="nav-item"><a class="nav-link" href="{% url 'ot_dashboard' %}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'core_agenda' %}">Agenda</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'ingreso_nuevo' %}">Ingresos</a></li>
+      {% endif %}
+
+      {# OTs: todos los operativos (ajusta a gusto) #}
+      {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' 'MECANICO' 'ASISTENTE_REPUESTO' 'SUPERVISOR' as can_ver_ots %}
+      {% if can_ver_ots %}
         <li class="nav-item"><a class="nav-link" href="{% url 'ot_lista' %}">OTs</a></li>
-      </ul>
+      {% endif %}
+
+      {# Ingresos: Recepcionista / Guardia / Jefe Taller #}
+      {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' as can_ingresar %}
+      {% if can_ingresar %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'ingreso_nuevo' %}">Ingresos</a></li>
+      {% endif %}
+
+      {# Agenda: prácticamente todos #}
+      {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' 'MECANICO' 'ASISTENTE_REPUESTO' 'SUPERVISOR' as can_agenda %}
+      {% if can_agenda %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'core_agenda' %}">Agenda</a></li>
+      {% endif %}
+    </ul>
 
       <ul class="navbar-nav ms-auto align-items-center">
         <!-- Notificaciones en barra azul -->

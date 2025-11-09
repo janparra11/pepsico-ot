@@ -7,7 +7,12 @@
     <h1 class="h5 mb-0">Bienvenido, {{ username }}</h1>
     <p class="text-muted small mb-0">{{ now|date:"j \\d\\e F \\d\\e Y" }}</p>
   </div>
-  <a class="btn btn-outline-secondary btn-sm align-self-start" href="{% url 'ot_dashboard' %}">Ver Dashboard</a>
+{% load roles %}
+
+{% is_role 'SUPERVISOR' 'JEFE_TALLER' 'ADMIN' as can_dashboard %}
+{% if can_dashboard %}
+  <a class="btn btn-outline-secondary" href="{% url 'ot_dashboard' %}">Ver Dashboard</a>
+{% endif %}
 </div>
 
 
@@ -56,7 +61,12 @@
           <h2 class="h6">Registrar ingreso</h2>
           <p class="text-muted small mb-3">Crear nueva OT.</p>
           <div class="mt-auto">
-            <a class="btn btn-primary w-100" href="{% url 'ingreso_nuevo' %}">Nuevo ingreso</a>
+          {% load roles %}
+
+          {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' as can_ingresar %}
+          {% if can_ingresar %}
+            <a class="btn btn-primary" href="{% url 'ingreso_nuevo' %}">Nuevo ingreso</a>
+          {% endif %}
           </div>
         </div>
       </div>
