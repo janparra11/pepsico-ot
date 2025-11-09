@@ -126,5 +126,5 @@ MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))  # 10 MB por defecto
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf"}
 
 LOGIN_REDIRECT_URL = "/"    # A dónde se redirige al iniciar sesión
-LOGOUT_REDIRECT_URL = "/"  # A dónde se redirige al cerrar sesión
+LOGOUT_REDIRECT_URL = "/login/"  # A dónde se redirige al cerrar sesión
 LOGIN_URL = "/login/"        # Página de inicio de sesión predeterminada

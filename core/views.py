@@ -332,3 +332,12 @@ def users_admin_reset_password(request, user_id):
     messages.success(request, f"Contraseña temporal de {u.username}: {temp_password}")
     # En producción: enviar por correo, no mostrar en pantalla.
     return redirect("users_admin_list")
+
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_with_message(request):
+    logout(request)
+    messages.success(request, "Sesión cerrada correctamente.")
+    return redirect("login")

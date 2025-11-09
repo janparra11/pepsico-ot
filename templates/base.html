@@ -64,6 +64,19 @@
   })();
   </script>
 
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      function tick(){
+        const d = new Date();
+        el.textContent = d.toLocaleString();
+      }
+      tick();
+      setInterval(tick, 1000);
+    });
+  </script>
+
 </body>
 </html>
 

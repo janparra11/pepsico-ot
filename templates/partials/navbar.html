@@ -42,6 +42,7 @@
 
       <ul class="navbar-nav ms-auto align-items-center">
         <!-- Notificaciones en barra azul -->
+      {% if request.user.is_authenticated %}
         <li class="nav-item dropdown me-3">
           <a class="nav-link dropdown-toggle position-relative text-light" href="#" id="notifDropdown"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,19 +83,29 @@
             {% endif %}
           </ul>
         </li>
-        <li class="nav-item me-3">
-          <span class="text-light small" id="clock"></span>
-        </li>
+        <!-- Reloj opcional -->
+        <li class="nav-item me-3"><span class="text-light small" id="clock"></span></li>
+        <!-- Menú de usuario -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown">
+          <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ request.user.username|capfirst }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li><a class="dropdown-item disabled">Rol: {{ request.user.perfil.get_rol_display|default:"(sin rol)" }}</a></li>
+            <li>
+              <span class="dropdown-item disabled">
+                Rol: {{ request.user.perfil.get_rol_display|default:"(sin rol)" }}
+              </span>
+            </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Salir</a></li>
           </ul>
         </li>
+      {% else %}
+        <!-- Solo cuando NO hay sesión -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
+        </li>
+      {% endif %}
       </ul>
     </div>
   </div>
