@@ -8,10 +8,13 @@ from datetime import timedelta
 from ot.models import OrdenTrabajo, PausaOT, EstadoOT
 from core.models import Notificacion
 
+from core.filters import filter_ots_for_user
+
 @login_required
 def home(request):
     user = request.user
     now = timezone.now()
+    ctx = {"now": now}
     hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
     hace_7 = now - timedelta(days=7)
 
@@ -61,6 +64,10 @@ def home(request):
         # Choices para render amigable
         "estado_choices_dict": dict(EstadoOT.choices),
     }
+
+    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
+    ctx["ultimas_ots"] = qs.order_by("-fecha_ingreso")[:5]
+
     return render(request, "core/home.html", ctx)
 
 def healthcheck(request):

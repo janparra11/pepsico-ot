@@ -391,7 +391,7 @@ def vehiculo_cambiar_estado(request, ot_id):
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import OrdenTrabajo, EstadoOT, PrioridadOT
-
+from core.filters import filter_ots_for_user
 from core.roles import Rol
 
 @login_required
@@ -399,6 +399,8 @@ def ot_lista(request):
     q = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "")
     activa = request.GET.get("activa", "1")
+
+    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
 
     qs = OrdenTrabajo.objects.all()
 
