@@ -9,7 +9,29 @@
       <div class="mb-3"><label class="form-label">Repuesto</label>{{ form.repuesto }}</div>
       <div class="mb-3"><label class="form-label">Cantidad</label>{{ form.cantidad }}</div>
       {% if form.ot %}<div class="mb-3"><label class="form-label">OT</label>{{ form.ot }}</div>{% endif %}
-      <div class="mb-3"><label class="form-label">Motivo</label>{{ form.motivo }}</div>
+      <div class="mb-3">
+        <label class="form-label">Motivo</label>
+        {{ form.motivo }}
+      </div>
+      {% if form.motivo_otro %}
+        <div class="mb-3" id="motivo-otro-wrap" style="display:none;">
+          <label class="form-label">Especifica el motivo</label>
+          {{ form.motivo_otro }}
+        </div>
+        <script>
+          (function(){
+            const sel = document.getElementById("id_motivo");
+            const wrap = document.getElementById("motivo-otro-wrap");
+            if (!sel || !wrap) return;
+            function toggle(){
+              wrap.style.display = (sel.value === "OTRO") ? "block" : "none";
+            }
+            toggle();
+            sel.addEventListener("change", toggle);
+          })();
+        </script>
+      {% endif %}
+
       <div class="d-flex gap-2">
         <button class="btn btn-primary">Guardar</button>
         <a class="btn btn-outline-secondary" href="{% url 'inv_mov_list' %}">Cancelar</a>

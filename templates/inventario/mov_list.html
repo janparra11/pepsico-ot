@@ -38,7 +38,7 @@
         <td class="text-nowrap">{{ m.creado_en|date:"d-m-Y H:i" }}</td>
         <td>{{ m.repuesto.codigo }} — {{ m.repuesto.descripcion }}</td>
         <td>{{ m.get_tipo_display }}</td>
-        <td class="text-end">{{ m.cantidad }}</td>
+        <td class="text-end">{{ m.cantidad|floatformat:"-2" }}</td>
         <td>{% if m.ot %}<a href="{% url 'ot_detalle' m.ot.id %}">{{ m.ot.folio }}</a>{% else %}—{% endif %}</td>
         <td>{{ m.motivo|default:"—" }}</td>
         <td>{{ m.creado_por|default:"—" }}</td>

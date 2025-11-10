@@ -24,8 +24,8 @@
         <td>{{ r.codigo }}</td>
         <td>{{ r.descripcion }}</td>
         <td>{{ r.get_unidad_display }}</td>
-        <td>{{ r.stock_actual }}</td>
-        <td>{{ r.stock_minimo }}</td>
+        <td>{{ r.stock_actual|floatformat:"-2" }}</td>
+        <td>{{ r.stock_minimo|floatformat:"-2" }}</td>
         <td class="text-end">
           <a class="btn btn-outline-secondary btn-sm" href="{% url 'inv_repuesto_edit' r.id %}">Editar</a>
         </td>
