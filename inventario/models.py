@@ -53,7 +53,8 @@ class MovimientoStock(models.Model):
     def clean(self):
         if self.cantidad is None or self.cantidad == 0:
             raise ValidationError("La cantidad debe ser distinta de 0.")
-        if self.tipo == self.SALIDA and not self.ot:
+        if self.tipo == self.SALIDA and not self.ot and self.motivo == "Consumo en OT":
+            raise ValidationError("Debe asociar la OT al consumo.")
             # política: forzamos asociar salida a una OT (puedes relajar esto si quieres)
             raise ValidationError("Las salidas deben asociarse a una OT.")
         if self.tipo == self.ENTRADA and self.ot:
