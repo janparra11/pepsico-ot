@@ -1,22 +1,25 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .roles import Rol
 
-class Rol(models.TextChoices):
-    GUARDA = "GUARDA", "Guardia"
-    RECEP = "RECEP", "Recepcionista"
-    MECANICO = "MEC", "Mecánico"
-    JEFE = "JEFE", "Jefe de Taller"
-    SUPERV = "SUP", "Supervisor"
+from django.utils import timezone
+from ot.models import OrdenTrabajo
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
-    rol = models.CharField(max_length=10, choices=Rol.choices)
+    rol = models.CharField(max_length=32, choices=Rol.choices, default=Rol.RECEPCIONISTA)
 
     def __str__(self):
-        return f"{self.user.username} · {self.rol}"
+        return f"{self.user.username} · {self.get_rol_display()}"
 
-from django.db import models
-from django.contrib.auth.models import User
+    @receiver(post_save, sender=User)
+    def ensure_perfil(sender, instance, created, **kwargs):
+        # Asegura que todo usuario tenga Perfil (evita 403 “fantasmas”)
+        if not hasattr(instance, "perfil"):
+            Perfil.objects.get_or_create(user=instance)
 
 class Notificacion(models.Model):
     titulo = models.CharField(max_length=140)
@@ -33,11 +36,6 @@ class Notificacion(models.Model):
 
     def __str__(self):
         return f"{self.titulo} · {'leída' if self.leida else 'no leída'}"
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from ot.models import OrdenTrabajo
 
 class EventoAgenda(models.Model):
     titulo = models.CharField(max_length=140)
@@ -56,13 +54,3 @@ class EventoAgenda(models.Model):
     def __str__(self):
         return self.titulo
 
-from django.db import models
-from django.contrib.auth.models import User
-from .roles import Rol
-
-class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
-    rol = models.CharField(max_length=32, choices=Rol.choices, default=Rol.RECEPCIONISTA)
-
-    def __str__(self):
-        return f"{self.user.username} · {self.get_rol_display()}"

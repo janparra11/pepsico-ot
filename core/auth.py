@@ -2,6 +2,8 @@ from functools import wraps
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from .roles import Rol
+from django.shortcuts import redirect
+from django.contrib import messages
 
 def require_roles(*roles):
     def decorator(viewfunc):
@@ -12,7 +14,8 @@ def require_roles(*roles):
             rol = getattr(perfil, "rol", None)
             if rol in roles or rol == Rol.ADMIN:
                 return viewfunc(request, *args, **kwargs)
-            raise PermissionDenied  # 403
+            messages.warning(request, "No tienes permisos para acceder a esta sección.")
+            return redirect("home")
         return _wrapped
     return decorator
 

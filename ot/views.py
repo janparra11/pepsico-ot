@@ -28,22 +28,18 @@ from .forms import AsignarMecanicoForm
 from core.auth import require_roles
 from core.roles import Rol
 
+from .forms import IngresoForm
+from taller.models import Vehiculo
+from core.models import EventoAgenda
+
+from django.core.paginator import Paginator
+from core.filters import filter_ots_for_user
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
     from uuid import uuid4
     return uuid4().hex[:8].upper()
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db import transaction
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-
-from .forms import IngresoForm
-from .models import OrdenTrabajo, HistorialEstadoOT, EstadoOT
-from taller.models import Vehiculo
-from core.models import EventoAgenda
 # Si tienes el helper notificar, importa así. Si no existe, puedes omitir el try/except más abajo.
 # from core.services import notificar
 
@@ -124,7 +120,6 @@ def ingreso_nuevo(request):
 
     return render(request, "ot/ingreso_nuevo.html", {"form": form})
 
-
 def ot_detalle(request, ot_id):
     ot = get_object_or_404(OrdenTrabajo, id=ot_id)
     historial = ot.historial.order_by("-inicio")
@@ -132,11 +127,22 @@ def ot_detalle(request, ot_id):
     estado_choices = ot._meta.get_field("estado_actual").choices
     pausa_abierta = ot.pausas.filter(fin__isnull=True).order_by("-inicio").first()
 
+    # 🔔 Alarma si la pausa abierta supera 30 min
+    if pausa_abierta:
+        limite = timezone.now() - timedelta(minutes=30)
+        if pausa_abierta.inicio < limite and request.user.is_authenticated:
+            notificar(
+                destinatario=request.user,
+                titulo=f"Alerta: Pausa prolongada en OT {ot.folio}",
+                mensaje=f"La pausa iniciada a las {pausa_abierta.inicio} superó los 30 minutos.",
+                url=f"/ot/{ot.id}/"
+            )
+
     doc_form = DocumentoForm()
     prioridad_form = PrioridadForm(initial={"prioridad": ot.prioridad})
     estado_veh_form = EstadoVehiculoForm(initial={"estado": ot.vehiculo.estado})
     evento_form = EventoOTForm()
-    eventos_ot = ot.eventos.order_by("-inicio")[:10] 
+    eventos_ot = ot.eventos.order_by("-inicio")[:10]
     asignar_mec_form = AsignarMecanicoForm(initial={"mecanico": ot.mecanico_asignado})
 
     return render(
@@ -149,35 +155,6 @@ def ot_detalle(request, ot_id):
             "eventos_ot": eventos_ot,
             "asignar_mec_form": asignar_mec_form,
         }
-    )
-
-
-
-    # alarma simple v1: si hay pausa abierta > 30 min, crear notificación (una por visita)
-    if pausa_abierta:
-        limite = timezone.now() - timedelta(minutes=30)  # ajusta a gusto
-        if pausa_abierta.inicio < limite and request.user.is_authenticated:
-            # Puedes mejorar: guardar un flag para no duplicar. Para v1, basta.
-            notificar(
-                destinatario=request.user,
-                titulo=f"Alerta: Pausa prolongada en OT {ot.folio}",
-                mensaje=f"La pausa iniciada a las {pausa_abierta.inicio} superó los 30 minutos.",
-                url=f"/ot/{ot.id}/"
-            )
-
-    doc_form = DocumentoForm()
-
-    return render(
-        request,
-        "ot/ot_detalle.html",
-        {
-            "ot": ot,
-            "historial": historial,
-            "pausas": pausas,
-            "estado_choices": estado_choices,
-            "pausa_abierta": pausa_abierta,
-            "doc_form": doc_form,  # ← nuevo
-        },
     )
 
 # Vista para cambiar estado
@@ -388,56 +365,45 @@ def vehiculo_cambiar_estado(request, ot_id):
         )
     return redirect("ot_detalle", ot_id=ot.id)
 
-from django.core.paginator import Paginator
-from django.db.models import Q
-from .models import OrdenTrabajo, EstadoOT, PrioridadOT
-from core.filters import filter_ots_for_user
-from core.roles import Rol
-
 @login_required
 def ot_lista(request):
     q = request.GET.get("q", "").strip()
     estado = request.GET.get("estado", "")
     activa = request.GET.get("activa", "1")
 
-    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
-
     qs = OrdenTrabajo.objects.all()
 
-    # 🔒 Restricciones por rol
+    # 🔒 Filtro por rol
     rol = getattr(getattr(request.user, "perfil", None), "rol", None)
 
     if rol == Rol.MECANICO:
-        # Solo OTs donde él está asignado
         qs = qs.filter(mecanico_asignado=request.user)
 
     elif rol == Rol.RECEPCIONISTA:
-        # Solo OTs que él registró (si se guardan con user)
         qs = qs.filter(creado_por=request.user) if hasattr(OrdenTrabajo, "creado_por") else qs
 
     elif rol == Rol.GUARDIA:
-        # Solo puede ver, nunca editar
-        qs = qs.filter(activa=True)  # no mostramos cerradas
+        qs = qs.filter(activa=True)  # ve sólo activas
 
-    # filtros normales
+    # Filtros básicos
     if activa == "1":
         qs = qs.filter(activa=True)
-
     if estado:
         qs = qs.filter(estado_actual=estado)
-
     if q:
         qs = qs.filter(Q(folio__icontains=q) | Q(vehiculo__patente__icontains=q))
 
+    # Orden
     qs = qs.order_by("-prioridad", "fecha_ingreso")
 
+    # 📌 Si viene ?mis=1 y es mecánico, reforzamos
+    if request.GET.get("mis") == "1" and rol == Rol.MECANICO:
+        qs = qs.filter(mecanico_asignado=request.user)
+
+    # Paginación AL FINAL
     paginator = Paginator(qs, 10)
     page = request.GET.get("page")
     page_obj = paginator.get_page(page)
-
-    # Si entra con ?mis=1 forzamos filtro de mecánico
-    if request.GET.get("mis") == "1" and rol == Rol.MECANICO:
-        qs = qs.filter(mecanico_asignado=request.user)
 
     return render(request, "ot/ot_lista.html", {
         "page_obj": page_obj,
@@ -543,9 +509,6 @@ def dashboard(request):
         "chart_motivos_data": json.dumps(motivos_data),
     }
     return render(request, "ot/dashboard.html", ctx)
-
-from core.models import EventoAgenda
-from .forms import EventoOTForm
 
 @require_POST
 def ot_agendar_evento(request, ot_id):
