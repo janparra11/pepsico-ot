@@ -2,52 +2,114 @@
 {% block title %}Detalle OT {{ ot.folio }}{% endblock %}
 {% block content %}
 
+<style>
+  .ficha-ot .fw-bold, .ficha-ot .fw-semibold { line-height: 1.5; }
+</style>
+<style>
+  .ficha-ot {
+    margin-bottom: 1.0rem; /* separa la ficha del siguiente bloque */
+  }
+</style>
+
 {% load roles %}
 <div class="bg-white p-4 rounded shadow-sm">
   <h1 class="h5 mb-3">OT {{ ot.folio }}</h1>
 
+  <div class="mb-3">
   {% if request.user|has_role:"ASISTENTE_REPUESTO" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
     <a class="btn btn-outline-primary btn-sm" href="{% url 'inv_mov_salida' %}?ot={{ ot.id }}">
       Agregar consumo de repuesto
     </a>
   {% endif %}
+  </div>
 
-<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+    <!-- === FICHA ÚNICA DE LA OT (resumen completo) === -->
+  <div class="card mb-5 border-0 shadow-sm">
+    <div class="card-body bg-white">
+      <h2 class="h6 text-muted mb-3">Ficha de la OT</h2>
+      <div class="row g-4 align-items-start ficha-ot">
 
-  <div class="row g-3 mb-3">
-    <div class="col-md-3">
-      <div class="card h-100"><div class="card-body">
-        <div class="text-muted small">Patente</div>
+    <!-- Patente -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Patente</div>
         <div class="fw-bold">{{ ot.vehiculo.patente }}</div>
-      </div></div>
+      </div>
     </div>
-    <div class="col-md-3">
-      <div class="card h-100"><div class="card-body">
-        <div class="text-muted small">Chofer</div>
+
+    <!-- Chofer -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Chofer</div>
         <div class="fw-bold">{{ ot.chofer|default:"—" }}</div>
-      </div></div>
+      </div>
     </div>
-    <div class="col-md-3">
-      <div class="card h-100"><div class="card-body">
-        <div class="text-muted small">Tipo</div>
-        <div class="fw-bold">
-          {# Si es FK, Django mostrará el __str__ del TipoVehiculo #}
-          {{ ot.vehiculo.tipo|default:"—" }}
-        </div>
-      </div></div>
+
+    <!-- Tipo de vehículo -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Tipo</div>
+        <div class="fw-bold">{{ ot.vehiculo.tipo|default:"—" }}</div>
+      </div>
     </div>
-    <div class="col-md-3">
-      <div class="card h-100"><div class="card-body">
-        <div class="text-muted small">Taller</div>
+
+    <!-- Taller -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Taller</div>
         <div class="fw-bold">{{ ot.taller.nombre }}</div>
-      </div></div>
+      </div>
+    </div>
+
+    <!-- Estado actual -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Estado actual</div>
+        <span class="badge text-bg-info">{{ ot.get_estado_actual_display }}</span>
+      </div>
+    </div>
+
+    <!-- Situación -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Situación</div>
+        {% if ot.activa %}
+          <span class="badge text-bg-success">Activa</span>
+        {% else %}
+          <span class="badge text-bg-secondary">Cerrada</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Ingreso -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Ingreso</div>
+        <div class="fw-semibold">{{ ot.fecha_ingreso|date:"d-m-Y H:i" }}</div>
+      </div>
+    </div>
+
+    <!-- Cierre (si existe) -->
+    {% if ot.fecha_cierre %}
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="p-3 border rounded bg-light-subtle h-100">
+        <div class="text-muted small mb-1">Cierre</div>
+        <div class="fw-semibold">{{ ot.fecha_cierre|date:"d-m-Y H:i" }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Observaciones -->
+    <div class="col-12">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="text-muted small mb-1">Observaciones (ingreso)</div>
+        <div>{{ historial.last.observaciones|default:"(sin observaciones)" }}</div>
+      </div>
     </div>
   </div>
-  <div class="card mb-3"><div class="card-body">
-  <div class="text-muted small">Observaciones (ingreso)</div>
-  <div>{{ ot.historial.last.observaciones|default:"(sin observaciones)" }}</div>
-  </div></div>
+  <!-- === /FICHA === -->
 
+<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
 
   <!-- Columna: Cambiar estado -->
   <div class="col">
@@ -330,14 +392,6 @@
   </div>
 
 </div>
-
-  <dl class="row">
-    <dt class="col-sm-3">Patente</dt><dd class="col-sm-9">{{ ot.vehiculo.patente }}</dd>
-    <dt class="col-sm-3">Taller</dt><dd class="col-sm-9">{{ ot.taller.nombre }}</dd>
-    <dt class="col-sm-3">Estado actual</dt><dd class="col-sm-9"><span class="badge bg-info">{{ ot.get_estado_actual_display }}</span></dd>
-    <dt class="col-sm-3">Activa</dt><dd class="col-sm-9">{{ ot.activa|yesno:"Sí,No" }}</dd>
-    <dt class="col-sm-3">Ingreso</dt><dd class="col-sm-9">{{ ot.fecha_ingreso }}</dd>
-  </dl>
 
   <h2 class="h6 mt-4">Historial</h2>
   <ul class="list-group mb-3">
