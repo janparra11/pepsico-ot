@@ -120,31 +120,20 @@
     <div class="col-12 col-lg-7">
       <div class="card border-0 shadow-sm">
         <div class="card-body">
-          <h2 class="h6 mb-3">Últimas OTs</h2>
-          <div class="table-responsive">
-            <table class="table table-sm align-middle">
-              <thead>
-                <tr>
-                  <th>Folio</th>
-                  <th>Estado</th>
-                  <th>Ingreso</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
+          <h5 class="mb-3">Últimas OTs</h5>
+          {% if ultimas_ots %}
+            <div class="list-group mb-4">
               {% for ot in ultimas_ots %}
-                <tr>
-                  <td>{{ ot.folio }}</td>
-                  <td><span class="badge text-bg-info">{{ estado_choices_dict|get_item:ot.estado_actual }}</span></td>
-                  <td>{{ ot.fecha_ingreso }}</td>
-                  <td><a class="btn btn-outline-primary btn-sm" href="{% url 'ot_detalle' ot.id %}">Abrir</a></td>
-                </tr>
-              {% empty %}
-                <tr><td colspan="4" class="text-muted">No hay OTs aún.</td></tr>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between"
+                  href="{% url 'ot_detalle' ot.id %}">
+                  <span>#{{ ot.folio }} · {{ ot.vehiculo.patente }} · {{ ot.get_estado_actual_display }}</span>
+                  <small class="text-muted">{{ ot.fecha_ingreso|date:"d/m/Y H:i" }}</small>
+                </a>
               {% endfor %}
-              </tbody>
-            </table>
-          </div>
+            </div>
+          {% else %}
+            <p class="text-muted">No hay OTs para tu perfil aún.</p>
+          {% endif %}
           <div class="text-end"><a href="{% url 'ot_lista' %}" class="btn btn-link btn-sm">Ver todas</a></div>
         </div>
       </div>

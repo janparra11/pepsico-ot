@@ -40,8 +40,30 @@ def generar_folio():
     from uuid import uuid4
     return uuid4().hex[:8].upper()
 
-# Si tienes el helper notificar, importa así. Si no existe, puedes omitir el try/except más abajo.
-# from core.services import notificar
+@login_required
+def home(request):
+    rol = getattr(getattr(request.user, "perfil", None), "rol", None)
+
+    qs = OrdenTrabajo.objects.all()
+
+    if rol == Rol.MECANICO:
+        qs = qs.filter(mecanico_asignado=request.user)
+    elif rol == Rol.RECEPCIONISTA and hasattr(OrdenTrabajo, "creado_por"):
+        qs = qs.filter(creado_por=request.user)
+    elif rol == Rol.GUARDIA:
+        qs = qs.filter(activa=True)
+
+    ultimas = qs.order_by("-fecha_ingreso")[:6]
+
+    ctx = {
+        "ultimas_ots": ultimas,
+        "rol": rol,
+        # opcional: muestra accesos rápidos según rol
+        "show_dashboard": rol in [Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN],
+        "show_inventario": rol in [Rol.ASISTENTE_REPUESTO, Rol.JEFE_TALLER, Rol.ADMIN, Rol.SUPERVISOR],
+        "show_ingresos": rol in [Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER],
+    }
+    return render(request, "core/home.html", ctx)
 
 @require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
 @login_required
