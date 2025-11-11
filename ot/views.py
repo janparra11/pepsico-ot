@@ -73,27 +73,36 @@ def ingreso_nuevo(request):
         if form.is_valid():
             patente = form.cleaned_data["patente"].strip().upper()
             chofer = (form.cleaned_data.get("chofer") or "").strip()
-            tipo   = form.cleaned_data.get("tipo")
+            tipo   = form.cleaned_data.get("tipo")          # puede ser obj o None
+            tipo_txt = (form.cleaned_data.get("tipo_texto") or "").strip()  # ← NUEVO
             taller = form.cleaned_data["taller"]
             obs    = (form.cleaned_data.get("observaciones") or "").strip()
 
             with transaction.atomic():
-                # Aseguramos creación/actualización del vehículo
                 veh, _ = Vehiculo.objects.select_for_update().get_or_create(
-                    patente=patente,
-                    defaults={"tipo": tipo}
+                    patente=patente
                 )
-                if tipo and veh.tipo_id != tipo.id:
-                    veh.tipo = tipo
-                    veh.save(update_fields=["tipo"])
 
-                # Regla: solo una OT ACTIVA por vehículo
+                # Resolver tipo: si hay catálogo, 'tipo' es ModelChoice; si no hay, usar texto
+                if tipo:  # catálogo
+                    if getattr(veh, "tipo_id", None) != getattr(tipo, "id", None):
+                        veh.tipo = tipo
+                        veh.save(update_fields=["tipo"])
+                elif tipo_txt:  # texto libre → intentar crear/usar un TipoVehiculo
+                    try:
+                        from taller.models import TipoVehiculo
+                        # Ajusta el nombre del campo según tu modelo (nombre / descripcion)
+                        tv, _ = TipoVehiculo.objects.get_or_create(nombre=tipo_txt)  # si tu campo es 'descripcion', cambia aquí
+                        veh.tipo = tv
+                        veh.save(update_fields=["tipo"])
+                    except Exception:
+                        # Si tu modelo no tiene ese campo o no quieres crear, simplemente lo ignoras
+                        pass
+
+                # Regla: una sola OT ACTIVA por vehículo
                 ot_activa = OrdenTrabajo.objects.filter(vehiculo=veh, activa=True).first()
                 if ot_activa:
-                    messages.warning(
-                        request,
-                        f"Ya existe una OT activa para {veh.patente} (OT {ot_activa.folio})."
-                    )
+                    messages.warning(request, f"Ya existe una OT activa para {veh.patente} (OT {ot_activa.folio}).")
                     return redirect("ot_detalle", ot_id=ot_activa.id)
 
                 # Crear OT
@@ -106,14 +115,21 @@ def ingreso_nuevo(request):
                     chofer=chofer,
                 )
 
-                # Primer registro de historial (usa obs del ingreso si corresponde)
+                # Historial inicial
                 HistorialEstadoOT.objects.create(
                     ot=ot,
                     estado=EstadoOT.INGRESADO,
                     observaciones=obs
                 )
 
-                # Evento en Agenda (ingreso)
+                # Evidencia (opcional) desde el formulario de ingreso  ← NUEVO
+                archivo = request.FILES.get("evidencia")
+                if archivo:
+                    doc = DocumentoOT(ot=ot, archivo=archivo, tipo="Evidencia ingreso", creado_por=request.user)
+                    doc.full_clean()
+                    doc.save()
+
+                # Evento de agenda
                 EventoAgenda.objects.create(
                     titulo=f"Ingreso OT {ot.folio}",
                     inicio=ot.fecha_ingreso,
@@ -121,7 +137,7 @@ def ingreso_nuevo(request):
                     asignado_a=request.user if request.user.is_authenticated else None
                 )
 
-                # Notificación opcional al usuario actual
+                # Notificación
                 try:
                     from core.services import notificar
                     if request.user.is_authenticated:
@@ -132,7 +148,6 @@ def ingreso_nuevo(request):
                             url=f"/ot/{ot.id}/"
                         )
                 except Exception:
-                    # Si no tienes `notificar`, o falla, seguimos sin romper el flujo
                     pass
 
             messages.success(request, f"OT {ot.folio} creada correctamente.")

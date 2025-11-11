@@ -27,7 +27,7 @@ class Repuesto(models.Model):
     @property
     def en_minimo(self):
         try:
-            return float(self.stock_actual) <= float(self.stock_minimo)
+            return (self.stock_actual or 0) <= (self.stock_minimo or 0)
         except Exception:
             return False
 

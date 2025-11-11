@@ -6,6 +6,22 @@
     <h1 class="h5 mb-4">{{ title }}</h1>
     <form method="post" novalidate>
       {% csrf_token %}
+
+      {% if form.errors or form.non_field_errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            {% for field, errors in form.errors.items %}
+              {% for e in errors %}
+                <li><strong>{{ field|capfirst }}:</strong> {{ e }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for e in form.non_field_errors %}
+              <li>{{ e }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
       <div class="mb-3"><label class="form-label">Repuesto</label>{{ form.repuesto }}</div>
       <div class="mb-3"><label class="form-label">Cantidad</label>{{ form.cantidad }}</div>
       {% if form.ot %}<div class="mb-3"><label class="form-label">OT</label>{{ form.ot }}</div>{% endif %}
