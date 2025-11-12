@@ -9,14 +9,20 @@
   <style>
     /* Misma altura visual para botones de acción en tarjetas */
     .btn-action { padding-top: .6rem; padding-bottom: .6rem; }
+
+    /* Ancho mínimo coherente para CTAs principales */
+    .btn-wide   { min-width: 140px; }
+
     /* Tarjetas pareja de controles con misma altura */
     .control-card { min-height: 100%; }
 
+    .navbar { padding-top: 0.8rem; padding-bottom: 0.8rem; }
+
     /* 🔹 Reloj con dígitos estables */
     #clock {
-      font-variant-numeric: tabular-nums; /* todos los dígitos con igual ancho */
-      font-family: monospace;             /* fuente monoespaciada */
-      min-width: 10ch;                    /* espacio reservado para “12:00:00 AM” */
+      font-variant-numeric: tabular-nums;
+      font-family: monospace;
+      min-width: 10ch;
       display: inline-block;
       text-align: right;
     }

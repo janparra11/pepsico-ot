@@ -205,7 +205,7 @@
             </select>
           </div>
           <!-- Botón de ancho completo y misma altura -->
-          <button class="btn btn-primary w-100 btn-action">Aplicar</button>
+          <button class="btn btn-primary w-100 btn-action btn-wide">Aplicar</button>
         </form>
         <div class="form-text mt-2">Solo se permiten transiciones válidas.</div>
       {% else %}
@@ -236,7 +236,7 @@
             {% csrf_token %}
             <input type="hidden" name="confirmar" value="on"/>
             <!-- Botón del mismo tamaño -->
-            <button class="btn btn-danger w-100 btn-action">Finalizar pausa</button>
+            <button class="btn btn-danger w-100 btn-action btn-wide">Finalizar pausa</button>
           </form>
         {% else %}
           <div class="alert alert-secondary mb-0">
@@ -252,7 +252,7 @@
               <input name="motivo" class="form-control" placeholder="Motivo (ej. Espera de repuesto)" required />
             </div>
             <!-- Botón del mismo tamaño -->
-            <button class="btn btn-warning w-100 btn-action">Iniciar pausa</button>
+            <button class="btn btn-warning w-100 btn-action btn-wide">Iniciar pausa</button>
           </form>
           <div class="form-text mt-2">Solo puede haber una pausa abierta a la vez.</div>
         {% else %}
@@ -280,7 +280,7 @@
           <div class="mb-2">
             {{ prioridad_form.prioridad }}
           </div>
-          <button class="btn btn-primary w-100 py-2">Actualizar prioridad</button>
+          <button class="btn btn-primary w-100 btn-action btn-wide">Actualizar prioridad</button>
         </form>
       {% else %}
         <div class="alert alert-secondary mb-0">
@@ -306,7 +306,7 @@
         <div class="mb-2">
           {{ estado_veh_form.estado }}
         </div>
-        <button class="btn btn-outline-primary w-100 py-2" {% if not ot.activa %}disabled{% endif %}>
+        <button class="btn btn-outline-primary w-100 btn-action btn-wide" {% if not ot.activa %}disabled{% endif %}>
           Actualizar estado de vehículo
         </button>
       </form>
@@ -327,7 +327,7 @@
     {% csrf_token %}
     <div class="mb-2">{{ evento_form.titulo }}</div>
     <div class="mb-2">{{ evento_form.fecha }}</div>
-    <button class="btn btn-primary w-100">Agendar</button>
+    <button class="btn btn-primary w-100 btn-action btn-wide">Agendar</button>
   </form>
 </div>
 
@@ -372,7 +372,7 @@
         <div class="mb-2">
           {{ doc_form.tipo }}
         </div>
-        <button class="btn btn-success w-100 py-2">Subir</button>
+        <button class="btn btn-success w-100 btn-action btn-wide">Subir</button>
       </form>
       {% else %}
       <div class="alert alert-secondary mb-0">La OT está cerrada. No se pueden subir documentos.</div>
@@ -410,7 +410,7 @@
                 {% if ot.activa %}
                 <form method="post" action="{% url 'ot_eliminar_documento' ot.id d.id %}">
                   {% csrf_token %}
-                  <button class="btn btn-outline-danger btn-sm w-100">Eliminar</button>
+                  <button class="btn btn-outline-danger btn-sm w-100 btn-action">Eliminar</button>
                 </form>
                 {% else %}
                 <div class="alert alert-secondary mb-0">OT cerrada · No se puede eliminar</div>
