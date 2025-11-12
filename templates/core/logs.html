@@ -4,8 +4,20 @@
 <div class="bg-white p-4 rounded shadow-sm">
   <h1 class="h5 mb-3">Bitácora y sesiones</h1>
 
+
+  
   <!-- Filtros -->
   <form class="row g-2 mb-3" method="get">
+    <div class="col-12 col-md-2">
+      <label class="form-label small">Rango rápido</label>
+      <select name="rango" class="form-select" onchange="this.form.submit()">
+        <option value="">(Personalizado)</option>
+        <option value="hoy"  {% if filtros.rango == 'hoy' %}selected{% endif %}>Hoy</option>
+        <option value="ult7" {% if filtros.rango == 'ult7' %}selected{% endif %}>Últimos 7 días</option>
+        <option value="mes"  {% if filtros.rango == 'mes' %}selected{% endif %}>Este mes</option>
+      </select>
+    </div>
+
     <div class="col-6 col-md-2">
       <label class="form-label small">Desde</label>
       <input type="date" name="fini" class="form-control" value="{{ filtros.fini }}">
