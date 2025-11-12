@@ -10,6 +10,51 @@ from core.roles import Rol
 from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
 
+def _to_naive(dt):
+    if not dt:
+        return ""
+    # pasa a hora local y quita tzinfo (Excel no soporta tz)
+    return timezone.localtime(dt).replace(tzinfo=None)
+
+def _stats_dashboard(qs_ot):
+    # KPI abiertas/cerradas
+    abiertas = qs_ot.filter(activa=True).count()
+    cerradas = qs_ot.filter(activa=False).count()
+
+    # tiempo promedio (solo cerradas con fecha_cierre)
+    horas = []
+    for ot in qs_ot.filter(activa=False, fecha_cierre__isnull=False).only("fecha_ingreso", "fecha_cierre"):
+        diff = (ot.fecha_cierre - ot.fecha_ingreso).total_seconds() / 3600.0
+        if diff >= 0:
+            horas.append(diff)
+    t_promedio = round(sum(horas) / len(horas), 2) if horas else 0.0
+
+    # Top repuestos (si tienes 'cantidad' usa Sum; si no, usa Count)
+    from inventario.models import MovimientoStock
+    agg = Sum("cantidad") if "cantidad" in [f.name for f in MovimientoStock._meta.get_fields()] else Count("id")
+    top_repuestos = (
+        MovimientoStock.objects
+        .filter(tipo=MovimientoStock.SALIDA)
+        .values("repuesto__codigo", "repuesto__descripcion")
+        .annotate(total=agg)
+        .order_by("-total")[:10]
+    )
+
+    # Top vehículos
+    top_vehiculos = (
+        qs_ot.values("vehiculo__patente")
+        .annotate(total=Count("id"))
+        .order_by("-total")[:10]
+    )
+
+    return {
+        "kpi_abiertas": abiertas,
+        "kpi_cerradas": cerradas,
+        "kpi_tiempo_prom": t_promedio,
+        "top_repuestos": top_repuestos,
+        "top_vehiculos": top_vehiculos,
+    }
+
 # --- Filtros utilitarios ---
 def _parse_filters(request):
     # yyyy-mm-dd
@@ -38,6 +83,8 @@ def _parse_filters(request):
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
+    
+    stats = _stats_dashboard(qs_ot)
 
     # Totales
     abiertas = qs_ot.filter(activa=True).count()
@@ -108,33 +155,63 @@ def export_excel(request):
     from openpyxl import Workbook
     from openpyxl.utils import get_column_letter
 
-    def _naive(dt):
-        if not dt:
-            return ""
-        # Convierte a zona local y elimina tzinfo
-        return timezone.localtime(dt).replace(tzinfo=None)
+    qs_ot, filtros = _parse_filters(request)
+    stats = _stats_dashboard(qs_ot)
 
-    qs_ot, _ = _parse_filters(request)
     wb = Workbook()
+
+    # Hoja 1: Resumen
     ws = wb.active
-    ws.title = "Reporte OTs"
+    ws.title = "Resumen"
+    ws.append(["Reporte de Órdenes de Trabajo"])
+    ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
+    ws.append([])
 
+    ws.append(["Filtros"])
+    ws.append(["Desde", filtros["fini"] or "(todos)"])
+    ws.append(["Hasta", filtros["ffin"] or "(todos)"])
+    ws.append(["Estado", filtros["estado"] or "(todos)"])
+    ws.append(["Taller", filtros["taller"] or "(todos)"])
+    ws.append(["Mecánico", filtros["mecanico"] or "(todos)"])
+    ws.append([])
+
+    ws.append(["KPIs"])
+    ws.append(["OTs abiertas", stats["kpi_abiertas"]])
+    ws.append(["OTs cerradas", stats["kpi_cerradas"]])
+    ws.append(["Tiempo prom. reparación (h)", stats["kpi_tiempo_prom"]])
+
+    # Hoja 2: OTs (detalle)
+    ws2 = wb.create_sheet("OTs")
     headers = ["Folio", "Patente", "Estado", "Taller", "Ingreso", "Cierre", "Activa"]
-    ws.append(headers)
-
+    ws2.append(headers)
     for ot in qs_ot.select_related("vehiculo", "taller"):
-        ws.append([
+        ws2.append([
             ot.folio,
             getattr(ot.vehiculo, "patente", ""),
             ot.get_estado_actual_display(),
             getattr(ot.taller, "nombre", ""),
-            _naive(ot.fecha_ingreso),
-            _naive(ot.fecha_cierre),
-            "Sí" if ot.activa else "No",
+            _to_naive(ot.fecha_ingreso),
+            _to_naive(ot.fecha_cierre),
+            "Sí" if ot.activa else "No"
         ])
+    for i in range(1, len(headers)+1):
+        ws2.column_dimensions[get_column_letter(i)].width = 20
 
-    for i, _ in enumerate(headers, start=1):
-        ws.column_dimensions[get_column_letter(i)].width = 18
+    # Hoja 3: Top Repuestos
+    ws3 = wb.create_sheet("Top Repuestos")
+    ws3.append(["Código", "Descripción", "Total"])
+    for r in stats["top_repuestos"]:
+        ws3.append([r["repuesto__codigo"], r["repuesto__descripcion"], r["total"]])
+    for i in range(1, 4):
+        ws3.column_dimensions[get_column_letter(i)].width = 25
+
+    # Hoja 4: Top Vehículos
+    ws4 = wb.create_sheet("Top Vehículos")
+    ws4.append(["Patente", "OTs"])
+    for v in stats["top_vehiculos"]:
+        ws4.append([v["vehiculo__patente"], v["total"]])
+    ws4.column_dimensions["A"].width = 20
+    ws4.column_dimensions["B"].width = 10
 
     resp = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -151,30 +228,50 @@ def export_pdf(request):
     from reportlab.pdfgen import canvas
     from reportlab.lib.units import cm
 
-    qs_ot, _ = _parse_filters(request)
+    qs_ot, filtros = _parse_filters(request)
+    stats = _stats_dashboard(qs_ot)
 
     resp = HttpResponse(content_type="application/pdf")
     resp["Content-Disposition"] = 'attachment; filename="reporte_ots.pdf"'
     c = canvas.Canvas(resp, pagesize=A4)
     w, h = A4
-
     y = h - 2*cm
+
     c.setFont("Helvetica-Bold", 12)
     c.drawString(2*cm, y, "Reporte de Órdenes de Trabajo")
     y -= 0.7*cm
-
     c.setFont("Helvetica", 10)
-    c.drawString(2*cm, y, f"Total: {qs_ot.count()}  ·  Generado: {timezone.now().strftime('%d-%m-%Y %H:%M')}")
-    y -= 1.0*cm
+    c.drawString(2*cm, y, f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}")
+    y -= 0.6*cm
 
-    c.setFont("Helvetica", 9)
-    for ot in qs_ot.select_related("vehiculo", "taller")[:40]:
-        linea = f"{ot.folio} · {getattr(ot.vehiculo,'patente','')} · {ot.get_estado_actual_display()} · {getattr(ot.taller,'nombre','')} · {ot.fecha_ingreso.strftime('%d-%m-%Y %H:%M')}"
-        c.drawString(2*cm, y, linea[:110])
-        y -= 0.55*cm
-        if y < 2*cm:
-            c.showPage(); y = h - 2*cm
-            c.setFont("Helvetica", 9)
+    # Filtros
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Filtros:"); c.setFont("Helvetica", 10)
+    y -= 0.5*cm
+    c.drawString(2*cm, y, f"Desde: {filtros['fini'] or '(todos)'}   Hasta: {filtros['ffin'] or '(todos)'}")
+    y -= 0.5*cm
+    c.drawString(2*cm, y, f"Estado: {filtros['estado'] or '(todos)'}   Taller: {filtros['taller'] or '(todos)'}   Mecánico: {filtros['mecanico'] or '(todos)'}")
+    y -= 0.8*cm
+
+    # KPIs
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "KPIs:"); c.setFont("Helvetica", 10)
+    y -= 0.5*cm
+    c.drawString(2*cm, y, f"OTs abiertas: {stats['kpi_abiertas']}   OTs cerradas: {stats['kpi_cerradas']}   Tiempo prom: {stats['kpi_tiempo_prom']} h")
+    y -= 0.8*cm
+
+    # Top Repuestos
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Repuestos:"); c.setFont("Helvetica", 9)
+    y -= 0.5*cm
+    for r in stats["top_repuestos"]:
+        linea = f"{r['repuesto__codigo']} - {r['repuesto__descripcion']} ({r['total']})"
+        c.drawString(2*cm, y, linea[:110]); y -= 0.45*cm
+        if y < 2*cm: c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+
+    y -= 0.3*cm
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
+    y -= 0.5*cm
+    for v in stats["top_vehiculos"]:
+        c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
+        if y < 2*cm: c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     c.showPage()
     c.save()
