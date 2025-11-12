@@ -25,8 +25,14 @@ def _to_naive(dt):
     # pasa a hora local y quita tzinfo (Excel no soporta tz)
     return timezone.localtime(dt).replace(tzinfo=None)
 
-def _stats_dashboard(qs_ot):
-    """Calcula KPIs, top repuestos y top vehículos con claves uniformes."""
+def _stats_dashboard(qs_ot, global_top_veh=False):
+    """
+    Calcula KPIs y tops.
+    - Top repuestos siempre usa clave 'total' (Sum(cantidad) o Count(id)).
+    - Top vehículos:
+        * Si global_top_veh=True -> ignora filtros (histórico).
+        * Si global_top_veh=False -> respeta filtros (qs_ot).
+    """
     # KPI abiertas/cerradas
     abiertas = qs_ot.filter(activa=True).count()
     cerradas = qs_ot.filter(activa=False).count()
@@ -39,21 +45,22 @@ def _stats_dashboard(qs_ot):
             horas.append(diff)
     t_promedio = round(sum(horas) / len(horas), 2) if horas else 0.0
 
-    # Top repuestos (si tienes 'cantidad' usa Sum; si no, Count)
+    # Top repuestos (si tienes 'cantidad' usa Sum; si no, Count) -> SIEMPRE 'total'
     fields = [f.name for f in MovimientoStock._meta.get_fields()]
-    agg = Sum("cantidad") if "cantidad" in fields else Count("id")
+    agg = Sum("cantidad", default=0) if "cantidad" in fields else Count("id")
     top_repuestos = (
         MovimientoStock.objects
         .filter(tipo=MovimientoStock.SALIDA)
         .values("repuesto__codigo", "repuesto__descripcion")
-        .annotate(total=agg)                 # <--- SIEMPRE 'total'
+        .annotate(total=agg)
         .order_by("-total")
     )
 
-    # Top vehículos (por OTs)
+    # Top vehículos (por OTs) -> 'total'
+    base_veh = OrdenTrabajo.objects.all() if global_top_veh else qs_ot
     top_vehiculos = (
-        qs_ot.values("vehiculo__patente")
-        .annotate(total=Count("id"))         # <--- SIEMPRE 'total'
+        base_veh.values("vehiculo__patente")
+        .annotate(total=Count("id"))
         .order_by("-total")
     )
 
@@ -96,7 +103,8 @@ def _parse_filters(request):
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot)
+    # En pantalla: Top vehículos respetando filtros
+    stats = _stats_dashboard(qs_ot, global_top_veh=False)
     cfg = Config.get_solo()
 
     # Paginaciones (Top 20 por página)
@@ -139,7 +147,7 @@ def dashboard_reportes(request):
         "top_vehiculos": top_vehiculos_page,
         "ots_page": ots_page,
     }
-    # ojo con el path del template
+    # ojo con el path del template (carpeta reportes/)
     return render(request, "reportes_dashboard.html", ctx)
 
 
@@ -151,7 +159,8 @@ def export_excel(request):
     from openpyxl.utils import get_column_letter
 
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot)
+    # Para Excel mantenemos ambos tops filtrados (puedes cambiar a gusto)
+    stats = _stats_dashboard(qs_ot, global_top_veh=False)
     cfg = Config.get_solo()
 
     wb = Workbook()
@@ -203,7 +212,7 @@ def export_excel(request):
     # Hoja 3: Top Repuestos
     ws3 = wb.create_sheet("Top Repuestos")
     ws3.append(["Código", "Descripción", "Total"])
-    for r in stats["top_repuestos"][:50]:
+    for r in list(stats["top_repuestos"])[:50]:
         ws3.append([r["repuesto__codigo"], r["repuesto__descripcion"], r["total"]])
     ws3.column_dimensions["A"].width = 20
     ws3.column_dimensions["B"].width = 35
@@ -212,7 +221,7 @@ def export_excel(request):
     # Hoja 4: Top Vehículos
     ws4 = wb.create_sheet("Top Vehículos")
     ws4.append(["Patente", "OTs"])
-    for v in stats["top_vehiculos"][:50]:
+    for v in list(stats["top_vehiculos"])[:50]:
         ws4.append([v["vehiculo__patente"], v["total"]])
     ws4.column_dimensions["A"].width = 20
     ws4.column_dimensions["B"].width = 10
@@ -234,7 +243,8 @@ def export_pdf(request):
     from reportlab.lib.units import cm
 
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot)
+    # En PDF: Top vehículos GLOBAL (histórico) para evitar demasiados "1"
+    stats = _stats_dashboard(qs_ot, global_top_veh=True)
     cfg = Config.get_solo()
 
     resp = HttpResponse(content_type="application/pdf")
@@ -265,19 +275,20 @@ def export_pdf(request):
     c.drawString(2*cm, y, f"OTs abiertas: {stats['kpi_abiertas']}   OTs cerradas: {stats['kpi_cerradas']}   Tiempo prom: {stats['kpi_tiempo_prom']} h")
     y -= 0.8*cm
 
-    # Top Repuestos
+    # Top Repuestos (filtrado actual)
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Repuestos:"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for r in stats["top_repuestos"][:10]:
+    for r in list(stats["top_repuestos"])[:10]:
         linea = f"{r['repuesto__codigo']} - {r['repuesto__descripcion']} ({r['total']})"
         c.drawString(2*cm, y, linea[:110]); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     y -= 0.3*cm
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
+    # Top Vehículos (global)
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos (histórico):"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for v in stats["top_vehiculos"][:10]:
+    for v in list(stats["top_vehiculos"])[:10]:
         c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
