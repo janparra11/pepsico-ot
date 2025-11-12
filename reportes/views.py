@@ -18,6 +18,16 @@ from openpyxl.formatting.rule import DataBarRule
 
 from django.db.models import Count, Q, Sum, Avg, F, ExpressionWrapper, DurationField
 
+# para resolver rutas de estáticos
+from django.contrib.staticfiles import finders
+
+def _static_logo_path():
+    """
+    Devuelve la ruta absoluta del logo si existe en staticfiles.
+    Cambia el nombre si usas otro archivo.
+    """
+    return finders.find("img/logo_pepsico.png")
+
 # ---------- utilidades ----------
 def _nombre_archivo_reporte(request, base, filtros=None):
     hoy = timezone.localdate().strftime("%Y%m%d")
@@ -39,13 +49,11 @@ def _to_naive(dt):
     # pasa a hora local y quita tzinfo (Excel no soporta tz)
     return timezone.localtime(dt).replace(tzinfo=None)
 
-def _stats_dashboard(qs_ot, global_top_veh=False):
+def _stats_dashboard(qs_ot, global_top_veh=False, veh_metric="ots"):
     """
     Calcula KPIs y tops.
-    - Top repuestos siempre usa clave 'total' (Sum(cantidad) o Count(id)).
-    - Top vehículos:
-        * Si global_top_veh=True -> ignora filtros (histórico).
-        * Si global_top_veh=False -> respeta filtros (qs_ot).
+    - Top repuestos: clave 'total' (Sum(cantidad) o Count(id)).
+    - Top vehículos: según 'veh_metric' ('ots' o 'cerradas') y si respeta filtros.
     """
     # KPI abiertas/cerradas
     abiertas = qs_ot.filter(activa=True).count()
@@ -59,7 +67,7 @@ def _stats_dashboard(qs_ot, global_top_veh=False):
             horas.append(diff)
     t_promedio = round(sum(horas) / len(horas), 2) if horas else 0.0
 
-    # Top repuestos (si tienes 'cantidad' usa Sum; si no, Count) -> SIEMPRE 'total'
+    # Top repuestos
     fields = [f.name for f in MovimientoStock._meta.get_fields()]
     agg = Sum("cantidad", default=0) if "cantidad" in fields else Count("id")
     top_repuestos = (
@@ -70,8 +78,10 @@ def _stats_dashboard(qs_ot, global_top_veh=False):
         .order_by("-total")
     )
 
-    # Top vehículos (por OTs) -> 'total'
+    # Top vehículos (por OTs)
     base_veh = OrdenTrabajo.objects.all() if global_top_veh else qs_ot
+    if veh_metric == "cerradas":
+        base_veh = base_veh.filter(activa=False)
     top_vehiculos = (
         base_veh.values("vehiculo__patente")
         .annotate(total=Count("id"))
@@ -95,6 +105,7 @@ def _parse_filters(request):
     taller = (request.GET.get("taller") or "").strip()
     mecanico_id = (request.GET.get("mecanico") or "").strip()
     rango = (request.GET.get("rango") or "").strip()  # <- nuevo
+    veh_metric = (request.GET.get("veh_metric") or "ots").strip()  # <- NUEVO ('ots' | 'cerradas')
 
     # Aplica "rango rápido" si viene sin fechas manuales
     today = timezone.localdate()
@@ -123,7 +134,7 @@ def _parse_filters(request):
 
     return qs_ot, {
         "fini": f_ini, "ffin": f_fin, "estado": estado, "taller": taller,
-        "mecanico": mecanico_id, "rango": rango
+        "mecanico": mecanico_id, "rango": rango, "veh_metric": veh_metric
     }
 
 # ---------- vistas ----------
@@ -131,8 +142,7 @@ def _parse_filters(request):
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
-    # En pantalla: Top vehículos respetando filtros
-    stats = _stats_dashboard(qs_ot, global_top_veh=False)
+    stats = _stats_dashboard(qs_ot, global_top_veh=False, veh_metric=filtros.get("veh_metric") or "ots")
     cfg = Config.get_solo()
 
     # Paginaciones (Top 20 por página)
@@ -187,7 +197,7 @@ def export_excel(request):
     from openpyxl.utils import get_column_letter
 
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot)
+    stats = _stats_dashboard(qs_ot, veh_metric=filtros.get("veh_metric") or "ots")
     cfg = Config.get_solo()
 
     wb = Workbook()
@@ -195,6 +205,18 @@ def export_excel(request):
     # Hoja 1: Resumen
     ws = wb.active
     ws.title = "Resumen"
+
+    # --- LOGO en Excel (opcional si existe) ---
+    try:
+        from openpyxl.drawing.image import Image as XLImage
+        _logo = _static_logo_path()
+        if _logo:
+            img = XLImage(_logo)
+            # celdas A1 (ajusta tamaño si quieres)
+            ws.add_image(img, "A1")
+    except Exception:
+        pass
+
     ws.append([f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"])
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
     ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
@@ -276,7 +298,8 @@ def export_excel(request):
     )
 
     # Hoja 4: Top Vehículos
-    ws4 = wb.create_sheet("Top Vehículos")
+    hoja_veh = "Top Vehículos (OTs)" if (filtros.get("veh_metric") or "ots") == "ots" else "Top Vehículos (Cerradas)"
+    ws4 = wb.create_sheet(hoja_veh)
     ws4.append(["Patente", "OTs"])
     for v in stats["top_vehiculos"][:50]:
         ws4.append([v["vehiculo__patente"], v["total"]])
@@ -416,7 +439,7 @@ def export_pdf(request):
     from reportlab.lib.units import cm
 
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot)
+    stats = _stats_dashboard(qs_ot, veh_metric=filtros.get("veh_metric") or "ots")
     cfg = Config.get_solo()
 
     resp = HttpResponse(content_type="application/pdf")
@@ -425,6 +448,16 @@ def export_pdf(request):
     c = canvas.Canvas(resp, pagesize=A4)
     w, h = A4
     y = h - 2*cm
+
+    # --- LOGO en PDF (opcional si existe) ---
+    try:
+        _logo = _static_logo_path()
+        if _logo:
+            # ancho/alto aproximados; ajusta si tu PNG es muy grande/pequeño
+            c.drawImage(_logo, 2*cm, y-1.2*cm, width=120, height=36, preserveAspectRatio=True, mask='auto')
+            y -= 0.3*cm  # pequeño espacio extra bajo el logo
+    except Exception:
+        pass
 
     c.setFont("Helvetica-Bold", 12)
     c.drawString(2*cm, y, f"{cfg.nombre_taller} · Reporte de Órdenes de Trabajo")
@@ -452,13 +485,14 @@ def export_pdf(request):
     y -= 0.8*cm
 
     # Top Repuestos
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Repuestos:"); c.setFont("Helvetica", 9)
+    titulo_top_veh = "Top 10 Vehículos (OTs)" if (filtros.get("veh_metric") or "ots") == "ots" else "Top 10 Vehículos (OTs cerradas)"
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, titulo_top_veh); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for r in stats["top_repuestos"][:10]:
-        linea = f"{r['repuesto__codigo']} - {r['repuesto__descripcion']} ({r['total']})"
-        c.drawString(2*cm, y, linea[:110]); y -= 0.45*cm
+    for v in stats["top_vehiculos"][:10]:
+        c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+
 
     y -= 0.3*cm
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
