@@ -16,6 +16,7 @@ from django.db.models import Count, Avg
 from django.db.models import DurationField, ExpressionWrapper, F
 from openpyxl.formatting.rule import DataBarRule
 
+from django.db.models import Count, Q, Sum, Avg, F, ExpressionWrapper, DurationField
 
 # ---------- utilidades ----------
 def _nombre_archivo_reporte(request, base, filtros=None):
@@ -85,31 +86,27 @@ def _stats_dashboard(qs_ot, global_top_veh=False):
         "top_vehiculos": top_vehiculos,
     }
 
-
 # --- Filtros utilitarios ---
 def _parse_filters(request):
     # yyyy-mm-dd
     f_ini = (request.GET.get("fini") or "").strip()
     f_fin = (request.GET.get("ffin") or "").strip()
-    rango = (request.GET.get("rango") or "").strip()  # 'hoy' | 'ult7' | 'mes' | ''
-
-    # si NO vienen fechas manuales, aplicamos rango rápido
-    if not f_ini and not f_fin and rango:
-        hoy = timezone.localdate()
-        if rango == "hoy":
-            f_ini = hoy.isoformat()
-            f_fin = hoy.isoformat()
-        elif rango == "ult7":
-            f_ini = (hoy - timezone.timedelta(days=6)).isoformat()
-            f_fin = hoy.isoformat()
-        elif rango == "mes":
-            primero_mes = hoy.replace(day=1)
-            f_ini = primero_mes.isoformat()
-            f_fin = hoy.isoformat()
-
     estado = (request.GET.get("estado") or "").strip()
     taller = (request.GET.get("taller") or "").strip()
     mecanico_id = (request.GET.get("mecanico") or "").strip()
+    rango = (request.GET.get("rango") or "").strip()  # <- nuevo
+
+    # Aplica "rango rápido" si viene sin fechas manuales
+    today = timezone.localdate()
+    if rango and not (f_ini or f_fin):
+        if rango == "hoy":
+            f_ini = f_fin = today.strftime("%Y-%m-%d")
+        elif rango == "ult7":
+            f_ini = (today - timedelta(days=6)).strftime("%Y-%m-%d")
+            f_fin = today.strftime("%Y-%m-%d")
+        elif rango == "mes":
+            f_ini = today.replace(day=1).strftime("%Y-%m-%d")
+            f_fin = today.strftime("%Y-%m-%d")
 
     qs_ot = OrdenTrabajo.objects.all()
 
@@ -124,12 +121,10 @@ def _parse_filters(request):
     if mecanico_id:
         qs_ot = qs_ot.filter(mecanico_asignado_id=mecanico_id)
 
-    filtros = {
-        "fini": f_ini, "ffin": f_fin, "rango": rango,
-        "estado": estado, "taller": taller, "mecanico": mecanico_id
+    return qs_ot, {
+        "fini": f_ini, "ffin": f_fin, "estado": estado, "taller": taller,
+        "mecanico": mecanico_id, "rango": rango
     }
-    return qs_ot, filtros
-
 
 # ---------- vistas ----------
 @login_required
@@ -474,27 +469,69 @@ def export_pdf(request):
         for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
     }
 
-    # Título sección
-    y -= 0.3*cm
-    c.setFont("Helvetica-Bold", 10)
-    c.drawString(2*cm, y, "Resumen por taller:")
+    # ===== NUEVA PÁGINA =====
+    c.showPage()
+    y = h - 2*cm
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(2*cm, y, "Resumen por taller")
+    y -= 0.8*cm
+    c.setFont("Helvetica", 9)
+
+    cerradas_ok = qs_ot.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+    agg_base = qs_ot.values("taller__nombre").annotate(
+        total_ots=Count("id"),
+        abiertas=Count("id", filter=Q(activa=True)),
+        cerradas=Count("id", filter=Q(activa=False)),
+    ).order_by("taller__nombre")
+
+    dur_prom_map = {
+        (r["taller__nombre"] or "—"): (r["avg_dur"].total_seconds() / 3600.0) if r["avg_dur"] else 0.0
+        for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
+    }
+
+    # Cabecera de columnas
+    c.setFont("Helvetica-Bold", 9)
+    c.drawString(2*cm, y, "Taller")
+    c.drawString(9*cm, y, "Totales")
+    c.drawString(12*cm, y, "Abiertas")
+    c.drawString(14*cm, y, "Cerradas")
+    c.drawString(16*cm, y, "Tiempo prom. (h)")
     y -= 0.5*cm
     c.setFont("Helvetica", 9)
 
     for row in agg_base:
         nombre = row["taller__nombre"] or "—"
-        linea = (
-            f"{nombre}:  Totales={row['total_ots']}  |  "
-            f"Abiertas={row['abiertas']}  |  Cerradas={row['cerradas']}  |  "
-            f"Tiempo prom={round(dur_prom_map.get(nombre, 0.0), 2)} h"
-        )
-        c.drawString(2*cm, y, linea[:120])
-        y -= 0.5*cm
+        t = row["total_ots"]; a = row["abiertas"]; crr = row["cerradas"]
+        prom = round(dur_prom_map.get(nombre, 0.0), 2)
+
+        c.drawString(2*cm, y, str(nombre)[:30])
+        c.drawRightString(11*cm, y, str(t))
+        c.drawRightString(13*cm, y, str(a))
+        c.drawRightString(15*cm, y, str(crr))
+        c.drawRightString(19*cm, y, f"{prom:.2f}")
+        y -= 0.45*cm
+
         if y < 2*cm:
             c.showPage()
             y = h - 2*cm
+            c.setFont("Helvetica-Bold", 9)
+            c.drawString(2*cm, y, "Taller")
+            c.drawString(9*cm, y, "Totales")
+            c.drawString(12*cm, y, "Abiertas")
+            c.drawString(14*cm, y, "Cerradas")
+            c.drawString(16*cm, y, "T. prom (h)")
+            y -= 0.5*cm
             c.setFont("Helvetica", 9)
 
+    # Finaliza PDF
     c.showPage()
     c.save()
     AuditLog.objects.create(app="REPORTES", action="EXPORT_PDF", user=request.user, extra=str(request.GET.dict()))

@@ -8,10 +8,10 @@
   <!-- Filtros -->
   <form class="row g-2 mb-3" method="get">
 
-    <div class="col-12 col-md-2">
+    <div class="col-12 col-md-3">
       <label class="form-label small">Rango rápido</label>
-      <select name="rango" class="form-select" onchange="this.form.submit()">
-        <option value="">(Personalizado)</option>
+      <select name="rango" id="filtro-rango" class="form-select">
+        <option value="" {% if not filtros.rango %}selected{% endif %}>(Personalizado)</option>
         <option value="hoy"  {% if filtros.rango == 'hoy' %}selected{% endif %}>Hoy</option>
         <option value="ult7" {% if filtros.rango == 'ult7' %}selected{% endif %}>Últimos 7 días</option>
         <option value="mes"  {% if filtros.rango == 'mes' %}selected{% endif %}>Este mes</option>
@@ -185,4 +185,32 @@
     </div>
 
 </div>
+
+<!-- Script: autocompletar fechas al cambiar el rango rápido -->
+<script>
+document.getElementById('filtro-rango')?.addEventListener('change', function () {
+  const rango = this.value;
+  const fini = document.querySelector('input[name="fini"]');
+  const ffin = document.querySelector('input[name="ffin"]');
+  const d = new Date();
+  function fmt(x){ return x.toISOString().slice(0,10); }
+
+  if (!fini || !ffin) return;
+
+  if (rango === 'hoy') {
+    const t = fmt(d);
+    fini.value = t; ffin.value = t;
+  } else if (rango === 'ult7') {
+    const d2 = new Date(d); d2.setDate(d.getDate() - 6);
+    fini.value = fmt(d2); ffin.value = fmt(d);
+  } else if (rango === 'mes') {
+    const d2 = new Date(d.getFullYear(), d.getMonth(), 1);
+    fini.value = fmt(d2); ffin.value = fmt(d);
+  } else {
+    // personalizado: limpia las fechas
+    fini.value = ""; ffin.value = "";
+  }
+});
+</script>
+
 {% endblock %}
