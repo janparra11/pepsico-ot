@@ -24,6 +24,9 @@ from django.http import JsonResponse, Http404
 from django.utils.html import escape
 import json
 
+from datetime import datetime, time as dtime
+from django.contrib.auth import get_user_model
+
 @login_required
 @require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
 def config_view(request):
@@ -172,3 +175,80 @@ def _parse_log_filters(request):
         qs = qs.filter(Q(object_repr__icontains=qtxt) | Q(extra__icontains=qtxt))
 
     return qs, {"fini": fini, "ffin": ffin, "app": app, "action": act, "user": uid, "q": qtxt}
+
+def _parse_date_aware(s, end=False):
+    """Convierte 'YYYY-MM-DD' en datetime TZ-aware (inicio o fin del día)."""
+    if not s:
+        return None
+    try:
+        d = datetime.strptime(s, "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    dt = datetime.combine(d, dtime.max if end else dtime.min)
+    return timezone.make_aware(dt)
+
+def _logs_queryset_from_request(request):
+    """Replica exactamente los filtros de la vista de bitácora."""
+    qs = AuditLog.objects.select_related("user").all().order_by("-ts")
+
+    fini = (request.GET.get("fini") or "").strip()
+    ffin = (request.GET.get("ffin") or "").strip()
+    app  = (request.GET.get("app")  or "").strip()
+    act  = (request.GET.get("action") or "").strip()
+    uid  = (request.GET.get("user") or "").strip()
+    obj  = (request.GET.get("obj") or "").strip()
+    ext  = (request.GET.get("extra") or "").strip()
+    q    = (request.GET.get("q") or "").strip()
+
+    dt_ini = _parse_date_aware(fini, end=False)
+    dt_fin = _parse_date_aware(ffin, end=True)
+    if dt_ini:
+        qs = qs.filter(ts__gte=dt_ini)
+    if dt_fin:
+        qs = qs.filter(ts__lte=dt_fin)
+    if app:
+        qs = qs.filter(app__iexact=app)
+    if act:
+        qs = qs.filter(action__iexact=act)
+    if uid:
+        qs = qs.filter(user_id=uid)
+    if obj:
+        qs = qs.filter(object_repr__icontains=obj)
+    if ext:
+        qs = qs.filter(extra__icontains=ext)
+    if q:
+        qs = qs.filter(Q(object_repr__icontains=q) | Q(extra__icontains=q))
+
+    return qs
+
+@login_required
+@require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
+def export_logs_csv(request):
+    """Descarga CSV con los registros filtrados de la bitácora."""
+    qs = _logs_queryset_from_request(request)
+
+    # Nombre de archivo con fecha
+    hoy = timezone.localdate().strftime("%Y%m%d")
+    fname = f"logs_{hoy}.csv"
+
+    # Respuesta CSV (BOM para Excel en Windows)
+    resp = HttpResponse(content_type="text/csv; charset=utf-8")
+    resp["Content-Disposition"] = f'attachment; filename="{fname}"'
+    resp.write("\ufeff")  # BOM UTF-8
+
+    writer = csv.writer(resp)
+    writer.writerow(["Fecha", "App", "Acción", "Usuario", "Objeto", "Extra"])
+
+    # Si quieres, limita un máximo (por ejemplo 50k filas):
+    for log in qs.iterator(chunk_size=2000):
+        ts_local = timezone.localtime(log.ts).strftime("%Y-%m-%d %H:%M")
+        writer.writerow([
+            ts_local,
+            log.app or "",
+            log.action or "",
+            getattr(log.user, "username", "") or "",
+            log.object_repr or "",
+            (log.extra or "").replace("\n", " ").strip(),
+        ])
+
+    return resp
