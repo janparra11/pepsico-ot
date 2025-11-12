@@ -20,6 +20,12 @@
       <input class="form-control" name="contacto" value="{{ cfg.contacto }}">
     </div>
 
+    <div class="col-12 col-md-2">
+      <label class="form-label">SLA (horas)</label>
+      <input type="number" min="1" step="1" name="sla_horas"
+            class="form-control" value="{{ cfg.sla_horas }}">
+    </div>
+
     <div class="col-12 d-flex gap-2">
       <button class="btn btn-primary">Guardar</button>
 

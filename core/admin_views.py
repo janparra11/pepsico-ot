@@ -28,21 +28,25 @@ from datetime import datetime, time as dtime
 from django.contrib.auth import get_user_model
 
 @login_required
-@require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
+@require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def config_view(request):
     cfg = Config.get_solo()
     if request.method == "POST":
-        cfg.nombre_taller = request.POST.get("nombre_taller", cfg.nombre_taller).strip()
-        cfg.horario = request.POST.get("horario", cfg.horario).strip()
-        cfg.contacto = request.POST.get("contacto", cfg.contacto).strip()
+        cfg.nombre_taller = request.POST.get("nombre_taller", cfg.nombre_taller)
+        cfg.horario = request.POST.get("horario", cfg.horario)
+        cfg.contacto = request.POST.get("contacto", cfg.contacto)
+        # NEW: SLA
+        try:
+            cfg.sla_horas = int(request.POST.get("sla_horas") or cfg.sla_horas)
+        except (TypeError, ValueError):
+            pass
         cfg.save()
-        messages.success(request, "Configuración actualizada.")
-        AuditLog.objects.create(
-            app="CORE", action="UPDATE_CONFIG", user=request.user, object_repr=cfg.nombre_taller
-        )
+        AuditLog.objects.create(app="CONFIG", action="UPDATE", user=request.user,
+                                object_repr="Config", extra=f"sla_horas={cfg.sla_horas}")
+        messages.success(request, "Configuración actualizada")
         return redirect("core_config")
-    return render(request, "core/config.html", {"cfg": cfg})
 
+    return render(request, "core/config.html", {"cfg": cfg})
 
 @login_required
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)

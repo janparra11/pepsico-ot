@@ -103,6 +103,25 @@
         <div class="small text-muted">{{ sla_dentro }}/{{ sla_total }} dentro de SLA</div>
       </div>
     </div>
+
+    <div class="col-12 col-md-3">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">Tiempo prom. reparación</div>
+        <div class="display-6">{{ kpi_tiempo_prom|floatformat:"-2" }} h</div>
+      </div>
+    </div>
+
+    <!-- NEW: KPI Vencidas -->
+    <div class="col-12 col-md-3">
+      <div class="p-3 border rounded {% if kpi_vencidas > 0 %}bg-danger-subtle{% else %}bg-light-subtle{% endif %}">
+        <div class="small text-muted">OTs vencidas (SLA {{ cfg.sla_horas }} h)</div>
+        <div class="display-6">
+          <span class="{% if kpi_vencidas > 0 %}text-danger{% endif %}">
+            {{ kpi_vencidas|intcomma }}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
     <div class="row g-4 mb-4 align-items-stretch">
@@ -216,7 +235,12 @@
                     <tbody>
                     {% for ot in ots_page %}
                         <tr>
-                        <td class="text-nowrap">{{ ot.folio }}</td>
+                        <td class="text-nowrap">
+                          {% if ot.id in ots_vencidas_ids %}
+                            <span class="badge rounded-pill text-bg-danger me-1">SLA</span>
+                          {% endif %}
+                          {{ ot.folio }}
+                        </td>
                         <td class="text-nowrap">{{ ot.vehiculo.patente }}</td>
                         <td>{{ ot.get_estado_actual_display }}</td>
                         <td>{{ ot.taller.nombre }}</td>

@@ -59,6 +59,7 @@ class Config(models.Model):
     horario = models.CharField(max_length=120, blank=True, default="")
     contacto = models.CharField(max_length=120, blank=True, default="")
     updated_at = models.DateTimeField(auto_now=True)
+    sla_horas = models.PositiveIntegerField(default=72, help_text="Horas de SLA para cierre de OT")
 
     class Meta:
         verbose_name = "Configuración"
@@ -69,9 +70,8 @@ class Config(models.Model):
 
     @classmethod
     def get_solo(cls):
-        obj, _ = cls.objects.get_or_create(id=1)
+        obj, _ = cls.objects.get_or_create(pk=1)
         return obj
-
 
 class AuditLog(models.Model):
     app = models.CharField(max_length=40)          # <-- max_length correcto
