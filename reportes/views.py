@@ -257,6 +257,17 @@ def export_excel(request):
     for cell in ws3["C"][1:]:
         cell.number_format = "#,##0.##"
 
+    # --- después de dar formato a la columna C ---
+    if ws3.max_row > 1:  # hay datos
+        ws3.conditional_formatting.add(
+            f"C2:C{ws3.max_row}",
+            DataBarRule(
+                start_type="num", start_value=0,
+                end_type="max", end_value=None,
+                color="638EC6"  # azul suave
+            )
+        )
+
     # Aplica barra de datos a los totales (desde la fila 2 hasta la última)
     last_row_r = ws3.max_row
     ws3.conditional_formatting.add(
@@ -273,6 +284,16 @@ def export_excel(request):
     ws4.column_dimensions["B"].width = 10
     for cell in ws4["B"][1:]:
         cell.number_format = "#,##0"
+
+    if ws4.max_row > 1:
+        ws4.conditional_formatting.add(
+            f"B2:B{ws4.max_row}",
+            DataBarRule(
+                start_type="num", start_value=0,
+                end_type="max", end_value=None,
+                color="95C76F"  # verde suave
+            )
+        )
 
     last_row_v = ws4.max_row
     ws4.conditional_formatting.add(
@@ -326,7 +347,7 @@ def export_excel(request):
     for cell in ws5["C"][2:]:
         cell.number_format = "#,##0.00"
     
-    # --- Hoja 6: Resumen por taller ---
+    # --- Hoja X: Resumen por taller ---
     # Promedio de duración solo sobre OTs cerradas válidas (sin negativas)
     cerradas_ok = qs_ot.filter(
         activa=False,
@@ -469,7 +490,7 @@ def export_pdf(request):
         for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
     }
 
-    # ===== NUEVA PÁGINA =====
+    # ===== Resumen por taller =====
     c.showPage()
     y = h - 2*cm
 
