@@ -14,6 +14,7 @@ from inventario.models import MovimientoStock
 from django.db.models.functions import TruncDate
 from django.db.models import Count, Avg
 from django.db.models import DurationField, ExpressionWrapper, F
+from openpyxl.formatting.rule import DataBarRule
 
 
 # ---------- utilidades ----------
@@ -261,6 +262,13 @@ def export_excel(request):
     for cell in ws3["C"][1:]:
         cell.number_format = "#,##0.##"
 
+    # Aplica barra de datos a los totales (desde la fila 2 hasta la última)
+    last_row_r = ws3.max_row
+    ws3.conditional_formatting.add(
+        f"C2:C{last_row_r}",
+        DataBarRule(start_type="min", end_type="max", color="638EC6", showValue="None")  # color opcional
+    )
+
     # Hoja 4: Top Vehículos
     ws4 = wb.create_sheet("Top Vehículos")
     ws4.append(["Patente", "OTs"])
@@ -270,6 +278,12 @@ def export_excel(request):
     ws4.column_dimensions["B"].width = 10
     for cell in ws4["B"][1:]:
         cell.number_format = "#,##0"
+
+    last_row_v = ws4.max_row
+    ws4.conditional_formatting.add(
+        f"B2:B{last_row_v}",
+        DataBarRule(start_type="min", end_type="max", color="95C76F", showValue="None")
+    )
 
     # === Hoja 5: Resumen por estado ===
     from django.db.models import DurationField, ExpressionWrapper, F, Avg
@@ -437,6 +451,49 @@ def export_pdf(request):
         c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+
+    # Solo OTs cerradas válidas (evita duración negativa)
+    cerradas_ok = qs_ot.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+    # Totales por taller
+    agg_base = qs_ot.values("taller__nombre").annotate(
+        total_ots=Count("id"),
+        abiertas=Count("id", filter=Q(activa=True)),
+        cerradas=Count("id", filter=Q(activa=False)),
+    ).order_by("taller__nombre")
+
+    # Promedio de duración (horas) por taller solo con cerradas válidas
+    dur_prom_map = {
+        (r["taller__nombre"] or "—"): (r["avg_dur"].total_seconds() / 3600.0) if r["avg_dur"] else 0.0
+        for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
+    }
+
+    # Título sección
+    y -= 0.3*cm
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(2*cm, y, "Resumen por taller:")
+    y -= 0.5*cm
+    c.setFont("Helvetica", 9)
+
+    for row in agg_base:
+        nombre = row["taller__nombre"] or "—"
+        linea = (
+            f"{nombre}:  Totales={row['total_ots']}  |  "
+            f"Abiertas={row['abiertas']}  |  Cerradas={row['cerradas']}  |  "
+            f"Tiempo prom={round(dur_prom_map.get(nombre, 0.0), 2)} h"
+        )
+        c.drawString(2*cm, y, linea[:120])
+        y -= 0.5*cm
+        if y < 2*cm:
+            c.showPage()
+            y = h - 2*cm
+            c.setFont("Helvetica", 9)
 
     c.showPage()
     c.save()
