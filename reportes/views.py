@@ -11,6 +11,9 @@ from core.roles import Rol
 from core.models import AuditLog, Config
 from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
+from django.db.models.functions import TruncDate
+from django.db.models import Count, Avg
+from django.db.models import DurationField, ExpressionWrapper, F
 
 
 # ---------- utilidades ----------
@@ -87,24 +90,28 @@ def _parse_filters(request):
     # yyyy-mm-dd
     f_ini = (request.GET.get("fini") or "").strip()
     f_fin = (request.GET.get("ffin") or "").strip()
+    rango = (request.GET.get("rango") or "").strip()  # 'hoy' | 'ult7' | 'mes' | ''
+
+    # si NO vienen fechas manuales, aplicamos rango rápido
+    if not f_ini and not f_fin and rango:
+        hoy = timezone.localdate()
+        if rango == "hoy":
+            f_ini = hoy.isoformat()
+            f_fin = hoy.isoformat()
+        elif rango == "ult7":
+            f_ini = (hoy - timezone.timedelta(days=6)).isoformat()
+            f_fin = hoy.isoformat()
+        elif rango == "mes":
+            primero_mes = hoy.replace(day=1)
+            f_ini = primero_mes.isoformat()
+            f_fin = hoy.isoformat()
+
     estado = (request.GET.get("estado") or "").strip()
     taller = (request.GET.get("taller") or "").strip()
     mecanico_id = (request.GET.get("mecanico") or "").strip()
-    rango = (request.GET.get("rango") or "").strip() 
-
-    # si viene un rango rápido, lo traducimos a fechas
-    if rango:
-        hoy = timezone.localdate()
-        if rango == "hoy":
-            f_ini = f_fin = hoy.isoformat()
-        elif rango == "ult7":
-            f_ini = (hoy - timedelta(days=7)).isoformat()
-            f_fin = hoy.isoformat()
-        elif rango == "mes":
-            f_ini = hoy.replace(day=1).isoformat()
-            f_fin = hoy.isoformat()
 
     qs_ot = OrdenTrabajo.objects.all()
+
     if f_ini:
         qs_ot = qs_ot.filter(fecha_ingreso__date__gte=f_ini)
     if f_fin:
@@ -116,10 +123,11 @@ def _parse_filters(request):
     if mecanico_id:
         qs_ot = qs_ot.filter(mecanico_asignado_id=mecanico_id)
 
-    return qs_ot, {
-        "fini": f_ini, "ffin": f_fin, "estado": estado,
-        "taller": taller, "mecanico": mecanico_id, "rango": rango  # <--- NUEVO
+    filtros = {
+        "fini": f_ini, "ffin": f_fin, "rango": rango,
+        "estado": estado, "taller": taller, "mecanico": mecanico_id
     }
+    return qs_ot, filtros
 
 
 # ---------- vistas ----------
@@ -263,8 +271,56 @@ def export_excel(request):
     for cell in ws4["B"][1:]:
         cell.number_format = "#,##0"
 
+    # === Hoja 5: Resumen por estado ===
+    from django.db.models import DurationField, ExpressionWrapper, F, Avg
+
+    ws5 = wb.create_sheet("Resumen por estado")
+    ws5.append(["Estado", "OTs", "Tiempo prom. (h)"])
+
+    # Solo OTs cerradas con fechas válidas; calculamos duración como timedelta
+    cerradas = qs_ot.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso")
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+    # Agrupamos por estado_actual (usa SIEMPRE la clave 'total' y una media de dur_td)
+    resumen = (
+        cerradas.values("estado_actual")
+        .annotate(total=Count("id"), prom_td=Avg("dur_td"))
+        .order_by("estado_actual")
+    )
+
+    # Mapeo para mostrar el label del estado
+    estado_map = dict(EstadoOT.choices)
+
+    for r in resumen:
+        # prom_td es timedelta o None
+        if r["prom_td"] is None:
+            prom_h = ""
+        else:
+            prom_h = round(r["prom_td"].total_seconds() / 3600.0, 2)
+        ws5.append([
+            estado_map.get(r["estado_actual"], r["estado_actual"]),
+            r["total"],
+            prom_h
+        ])
+
+    # Anchos y formatos
+    ws5.column_dimensions["A"].width = 28
+    ws5.column_dimensions["B"].width = 10
+    ws5.column_dimensions["C"].width = 18
+    for cell in ws5["B"][2:]:
+        cell.number_format = "#,##0"
+    for cell in ws5["C"][2:]:
+        cell.number_format = "#,##0.00"
+    
+
     # nombre con rango/fechas
-    fname = _nombre_archivo_reporte(request, "reporte_ots", filtros) + ".xlsx"
+    fname = _nombre_archivo_reporte(request, "reporte_ots") + ".xlsx"
+
     resp = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     wb.save(resp)
