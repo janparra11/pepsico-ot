@@ -317,6 +317,55 @@ def export_excel(request):
     for cell in ws5["C"][2:]:
         cell.number_format = "#,##0.00"
     
+    # --- Hoja 6: Resumen por taller ---
+    # Promedio de duración solo sobre OTs cerradas válidas (sin negativas)
+    cerradas_ok = qs_ot.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+    # Agregados por taller
+    agg_base = qs_ot.values("taller__nombre").annotate(
+        total_ots=Count("id"),
+        abiertas=Count("id", filter=Q(activa=True)),
+        cerradas=Count("id", filter=Q(activa=False)),
+    ).order_by("taller__nombre")
+
+    # Promedio de duración (timedelta) por taller, lo convertimos a horas
+    dur_prom_map = {
+        r["taller__nombre"] or "—": (r["avg_dur"].total_seconds() / 3600.0) if r["avg_dur"] else 0.0
+        for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
+    }
+
+    wsT = wb.create_sheet("Resumen por taller")
+    wsT.append(["Taller", "OTs totales", "Abiertas", "Cerradas", "Tiempo prom. (h)"])
+
+    for row in agg_base:
+        nombre = row["taller__nombre"] or "—"
+        wsT.append([
+            nombre,
+            row["total_ots"],
+            row["abiertas"],
+            row["cerradas"],
+            round(dur_prom_map.get(nombre, 0.0), 2),
+        ])
+
+    # Anchos + formatos
+    from openpyxl.utils import get_column_letter as _gcl
+    for i, w in enumerate([30, 14, 12, 12, 18], start=1):
+        wsT.column_dimensions[_gcl(i)].width = w
+
+    for cell in wsT["B"][1:]:
+        cell.number_format = "#,##0"
+    for cell in wsT["C"][1:]:
+        cell.number_format = "#,##0"
+    for cell in wsT["D"][1:]:
+        cell.number_format = "#,##0"
+    for cell in wsT["E"][1:]:
+        cell.number_format = "0.00"
 
     # nombre con rango/fechas
     fname = _nombre_archivo_reporte(request, "reporte_ots") + ".xlsx"
