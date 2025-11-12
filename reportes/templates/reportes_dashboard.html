@@ -72,22 +72,28 @@
 
   <!-- KPIs -->
   <div class="row g-3 mb-3">
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
       <div class="p-3 border rounded bg-light-subtle">
         <div class="small text-muted">OTs abiertas</div>
         <div class="display-6">{{ kpi_abiertas|intcomma }}</div>
       </div>
     </div>
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
       <div class="p-3 border rounded bg-light-subtle">
         <div class="small text-muted">OTs cerradas</div>
         <div class="display-6">{{ kpi_cerradas|intcomma }}</div>
       </div>
     </div>
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
       <div class="p-3 border rounded bg-light-subtle">
-        <div class="small text-muted">Tiempo prom. reparación</div>
+        <div class="small text-muted">Tiempo prom. reparación (pantalla)</div>
         <div class="display-6">{{ kpi_tiempo_prom|floatformat:"-2" }} h</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">MTTR (cerradas válidas)</div>
+        <div class="display-6">{{ kpi_mttr|floatformat:"-2" }} h</div>
       </div>
     </div>
   </div>
@@ -114,6 +120,32 @@
                   </tr>
                 {% empty %}
                   <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card card-body">
+            <h2 class="h6 mb-3">MTTR por mecánico (Top 10)</h2>
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Mecánico</th>
+                  <th class="text-end">MTTR (h)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user, h in mttr_mecanicos %}
+                  <tr>
+                    <td>{{ user }}</td>
+                    <td class="text-end">
+                      {% if h %}{{ h|floatformat:"-2" }}{% else %}—{% endif %}
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
                 {% endfor %}
               </tbody>
             </table>

@@ -24,4 +24,5 @@ urlpatterns = [
     path("config/", admin_views.config_view, name="core_config"),
     path("logs/", admin_views.logs_view, name="core_logs"),
     path("backup/media.zip", admin_views.backup_media_zip, name="core_backup_media"),
+    path("core/logs/<int:pk>/", admin_views.logs_detail, name="core_logs_detail"),
 ]

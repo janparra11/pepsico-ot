@@ -20,6 +20,10 @@ import os, io, zipfile
 from django.http import HttpResponse
 import csv
 
+from django.http import JsonResponse, Http404
+from django.utils.html import escape
+import json
+
 @login_required
 @require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
 def config_view(request):
@@ -85,6 +89,35 @@ def logs_view(request):
     }
     return render(request, "core/logs.html", ctx)
 
+@login_required
+@require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
+def logs_detail(request, pk: int):
+    try:
+        l = AuditLog.objects.select_related("user").get(pk=pk)
+    except AuditLog.DoesNotExist:
+        raise Http404("Log no encontrado")
+
+    # intenta parsear extra como JSON; si no, devuélvelo como texto
+    extra_raw = l.extra or ""
+    extra_json = None
+    if extra_raw:
+        try:
+            extra_json = json.loads(extra_raw)
+        except Exception:
+            extra_json = None
+
+    data = {
+        "id": l.id,
+        "ts": l.ts.strftime("%Y-%m-%d %H:%M:%S"),
+        "app": l.app,
+        "action": l.action,
+        "user": getattr(l.user, "username", None),
+        "object_repr": l.object_repr,
+        "extra_is_json": extra_json is not None,
+        "extra_json": extra_json,           # el front lo mostrará pretty
+        "extra_text": extra_raw if extra_json is None else None,
+    }
+    return JsonResponse(data)
 
 @login_required
 @require_roles(Rol.ADMIN)

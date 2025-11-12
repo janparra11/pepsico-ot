@@ -18,6 +18,8 @@ from openpyxl.formatting.rule import DataBarRule
 
 from django.db.models import Count, Q, Sum, Avg, F, ExpressionWrapper, DurationField, Max
 
+from django.db.models import DurationField, ExpressionWrapper, F, Avg
+
 # para resolver rutas de estáticos
 from django.contrib.staticfiles import finders
 
@@ -143,6 +145,8 @@ def _parse_filters(request):
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
     stats = _stats_dashboard(qs_ot, global_top_veh=False, veh_metric=filtros.get("veh_metric") or "ots")
+    mttr_h = _mttr_horas(qs_ot)
+    mttr_mecanicos = _mttr_por_mecanico(qs_ot, limit=10)
     cfg = Config.get_solo()
 
     # Paginaciones (Top 20 por página)
@@ -184,6 +188,8 @@ def dashboard_reportes(request):
         "top_repuestos": top_repuestos_page,
         "top_vehiculos": top_vehiculos_page,
         "ots_page": ots_page,
+        "kpi_mttr": mttr_h,
+        "mttr_mecanicos": mttr_mecanicos,
     }
     # ojo con el path del template (carpeta reportes/)
     return render(request, "reportes_dashboard.html", ctx)
@@ -401,6 +407,25 @@ def export_excel(request):
         cell.number_format = "#,##0"
     for cell in ws5["C"][2:]:
         cell.number_format = "#,##0.00"
+
+    # === Hoja: MTTR por mecánico ===
+    wsM = wb.create_sheet("MTTR por mecánico")
+
+    # MTTR general (encabezado)
+    wsM.append([f"MTTR general (h):", _mttr_horas(qs_ot)])
+    wsM.append([])
+
+    # Detalle por mecánico
+    wsM.append(["Mecánico", "MTTR (h)"])
+    for user, h in _mttr_por_mecanico(qs_ot, limit=100):
+        wsM.append([user, h if h is not None else ""])
+
+    from openpyxl.utils import get_column_letter
+    wsM.column_dimensions["A"].width = 28
+    wsM.column_dimensions["B"].width = 14
+    for cell in wsM["B"][3:]:
+        if isinstance(cell.value, (int, float)):
+            cell.number_format = "0.00"
     
     # --- Hoja X: Resumen por taller ---
     # Promedio de duración solo sobre OTs cerradas válidas (sin negativas)
@@ -722,3 +747,36 @@ def export_pdf(request):
     AuditLog.objects.create(app="REPORTES", action="EXPORT_PDF", user=request.user, extra=str(request.GET.dict()))
     return resp
 
+def _mttr_horas(qs):
+    """MTTR general en horas (solo OTs cerradas con fechas válidas)."""
+    qs_ok = qs.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+    val = qs_ok.aggregate(prom=Avg("dur_td"))["prom"]
+    return round(val.total_seconds()/3600.0, 2) if val else 0.0
+
+def _mttr_por_mecanico(qs, limit=10):
+    """Lista de tuplas (usuario, horas) ordenadas asc (mejor MTTR primero)."""
+    qs_ok = qs.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+        mecanico_asignado__isnull=False,
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+    data = (
+        qs_ok.values("mecanico_asignado__username")
+             .annotate(prom=Avg("dur_td"))
+             .order_by("prom")[:limit]
+    )
+    out = []
+    for r in data:
+        h = r["prom"].total_seconds()/3600.0 if r["prom"] else None
+        out.append((r["mecanico_asignado__username"] or "—", round(h, 2) if h is not None else None))
+    return out
