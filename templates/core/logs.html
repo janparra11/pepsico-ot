@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load roles %}
+{% block title %}Bitácora y Sesiones{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Bitácora y sesiones</h1>
+
+  <h2 class="h6">Eventos recientes</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr><th>Fecha</th><th>App</th><th>Acción</th><th>Usuario</th><th>Objeto</th><th>Extra</th></tr>
+      </thead>
+      <tbody>
+        {% for l in logs %}
+          <tr>
+            <td class="text-nowrap">{{ l.ts|date:"d-m-Y H:i" }}</td>
+            <td>{{ l.app }}</td>
+            <td>{{ l.action }}</td>
+            <td>{{ l.user|default:"—" }}</td>
+            <td>{{ l.object_repr|default:"—" }}</td>
+            <td class="small text-muted">{{ l.extra|default:"" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-muted">Sin eventos.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="h6">Sesiones (login/logout)</h2>
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>IP</th><th>Agente</th></tr>
+      </thead>
+      <tbody>
+        {% for s in sessions %}
+          <tr>
+            <td class="text-nowrap">{{ s.ts|date:"d-m-Y H:i" }}</td>
+            <td>{{ s.user }}</td>
+            <td>{{ s.get_action_display }}</td>
+            <td>{{ s.ip|default:"—" }}</td>
+            <td class="small text-muted">{{ s.ua|default:"" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-muted">Sin sesiones.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

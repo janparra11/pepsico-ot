@@ -14,6 +14,7 @@ urlpatterns = [
     path("logout/", logout_with_message, name="logout"),
     path("inventario/", include("inventario.urls")),
     path("reportes/", include("reportes.urls")),
+    path("core/", include("core.urls")),
 ]
 
 if settings.DEBUG:

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import admin_views
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -20,4 +21,7 @@ urlpatterns = [
     path("usuarios/<int:user_id>/rol/", views.users_admin_set_role, name="users_admin_set_role"),
     path("usuarios/<int:user_id>/activar/", views.users_admin_toggle_active, name="users_admin_toggle_active"),
     path("usuarios/<int:user_id>/reset-pass/", views.users_admin_reset_password, name="users_admin_reset_password"),
+    path("config/", admin_views.config_view, name="core_config"),
+    path("logs/", admin_views.logs_view, name="core_logs"),
+    path("backup/media.zip", admin_views.backup_media_zip, name="core_backup_media"),
 ]

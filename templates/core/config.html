@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load roles %}
+{% block title %}Configuración del Taller{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Configuración del Taller</h1>
+
+  <form method="post" class="row g-3">
+    {% csrf_token %}
+    <div class="col-12 col-md-6">
+      <label class="form-label">Nombre del taller</label>
+      <input class="form-control" name="nombre_taller" value="{{ cfg.nombre_taller }}">
+    </div>
+    <div class="col-12 col-md-3">
+      <label class="form-label">Horario</label>
+      <input class="form-control" name="horario" value="{{ cfg.horario }}">
+    </div>
+    <div class="col-12 col-md-3">
+      <label class="form-label">Contacto</label>
+      <input class="form-control" name="contacto" value="{{ cfg.contacto }}">
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary">Guardar</button>
+
+      <a class="btn btn-outline-secondary" href="{% url 'core_logs' %}">Ver bitácora</a>
+
+      {% if request.user|has_role:"ADMIN" %}
+        <a class="btn btn-outline-dark" href="{% url 'core_backup_media' %}">Respaldar media.zip</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}
