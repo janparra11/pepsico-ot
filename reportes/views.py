@@ -9,6 +9,12 @@ from core.auth import require_roles
 from core.roles import Rol
 from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
+from django.core.paginator import Paginator
+
+def _nombre_archivo_reporte(request, base):
+    hoy = timezone.localdate().strftime("%Y%m%d")
+    estado = (request.GET.get("estado") or "todos").lower()
+    return f"{base}_{hoy}_{estado}"
 
 def _to_naive(dt):
     if not dt:
@@ -83,7 +89,7 @@ def _parse_filters(request):
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
-    
+
     stats = _stats_dashboard(qs_ot)
 
     # Totales
@@ -101,22 +107,24 @@ def dashboard_reportes(request):
 
     # Repuestos más usados
     # Preferimos sumar la "cantidad" si tu modelo la tiene (Decimal/Float). Si no, cae en conteo.
-    try:
+    # ¿El modelo tiene campo 'cantidad'?
+    tiene_cantidad = any(getattr(f, "name", None) == "cantidad" for f in MovimientoStock._meta.get_fields())
+
+    if tiene_cantidad:
         top_repuestos = (
             MovimientoStock.objects
             .filter(tipo=MovimientoStock.SALIDA)
             .values("repuesto__codigo", "repuesto__descripcion")
-            .annotate(movs=Count("id"), cantidad_total=Sum("cantidad"))
-            .order_by("-cantidad_total", "-movs")[:10]
+            .annotate(cantidad_total=Sum("cantidad"))
+            .order_by("-cantidad_total")
         )
-    except Exception:
-        # Fallback si no existe el campo cantidad
+    else:
         top_repuestos = (
             MovimientoStock.objects
             .filter(tipo=MovimientoStock.SALIDA)
             .values("repuesto__codigo", "repuesto__descripcion")
-            .annotate(movs=Count("id"))
-            .order_by("-movs")[:10]
+            .annotate(cantidad_total=Count("id"))
+            .order_by("-cantidad_total")
         )
 
     # Vehículos más frecuentes (por OTs)
@@ -125,6 +133,19 @@ def dashboard_reportes(request):
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
+
+    # Top 20 por página
+    page_r = request.GET.get("page_r") or 1
+    page_v = request.GET.get("page_v") or 1
+
+    rep_paginator = Paginator(top_repuestos, 20)
+    veh_paginator = Paginator(
+        qs_ot.values("vehiculo__patente").annotate(total=Count("id")).order_by("-total"),
+        20
+    )
+
+    top_repuestos_page = rep_paginator.get_page(page_r)
+    top_vehiculos_page = veh_paginator.get_page(page_v)
 
     # Listas auxiliares para selects
     from taller.models import Taller
@@ -144,6 +165,9 @@ def dashboard_reportes(request):
 
         "top_repuestos": top_repuestos,
         "top_vehiculos": top_vehiculos,
+
+        "top_repuestos": top_repuestos_page,
+        "top_vehiculos": top_vehiculos_page,
     }
     return render(request, "reportes_dashboard.html", ctx)
 
@@ -194,8 +218,22 @@ def export_excel(request):
             _to_naive(ot.fecha_cierre),
             "Sí" if ot.activa else "No"
         ])
-    for i in range(1, len(headers)+1):
-        ws2.column_dimensions[get_column_letter(i)].width = 20
+        
+    for ot in qs_ot.select_related("vehiculo", "taller").only(
+        "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
+        "vehiculo__patente", "taller__nombre"
+    ):
+        # normaliza fechas (Excel no soporta tz)
+        fi = ot.fecha_ingreso.replace(tzinfo=None) if ot.fecha_ingreso else ""
+        fc = ot.fecha_cierre.replace(tzinfo=None) if ot.fecha_cierre else ""
+        ws.append([
+            ot.folio,
+            getattr(ot.vehiculo, "patente", ""),
+            ot.get_estado_actual_display(),
+            getattr(ot.taller, "nombre", ""),
+            fi, fc,
+            "Sí" if ot.activa else "No"
+        ])
 
     # Hoja 3: Top Repuestos
     ws3 = wb.create_sheet("Top Repuestos")
@@ -213,10 +251,9 @@ def export_excel(request):
     ws4.column_dimensions["A"].width = 20
     ws4.column_dimensions["B"].width = 10
 
-    resp = HttpResponse(
-        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    resp["Content-Disposition"] = 'attachment; filename="reporte_ots.xlsx"'
+    fname = _nombre_archivo_reporte(request, "reporte_ots") + ".xlsx"
+    resp = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     wb.save(resp)
     return resp
 
@@ -232,7 +269,8 @@ def export_pdf(request):
     stats = _stats_dashboard(qs_ot)
 
     resp = HttpResponse(content_type="application/pdf")
-    resp["Content-Disposition"] = 'attachment; filename="reporte_ots.pdf"'
+    fname = _nombre_archivo_reporte(request, "reporte_ots") + ".pdf"
+    resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     c = canvas.Canvas(resp, pagesize=A4)
     w, h = A4
     y = h - 2*cm

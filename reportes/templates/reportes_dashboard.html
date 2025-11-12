@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block title %}Reportes y Supervisión{% endblock %}
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
@@ -54,63 +55,93 @@
     <div class="col-12 col-md-4">
       <div class="p-3 border rounded bg-light-subtle">
         <div class="small text-muted">OTs abiertas</div>
-        <div class="display-6">{{ kpi_abiertas }}</div>
+        <div class="display-6">{{ kpi_abiertas|intcomma }}</div>
       </div>
     </div>
     <div class="col-12 col-md-4">
       <div class="p-3 border rounded bg-light-subtle">
         <div class="small text-muted">OTs cerradas</div>
-        <div class="display-6">{{ kpi_cerradas }}</div>
+        <div class="display-6">{{ kpi_cerradas|intcomma }}</div>
       </div>
     </div>
     <div class="col-12 col-md-4">
       <div class="p-3 border rounded bg-light-subtle">
         <div class="small text-muted">Tiempo prom. reparación</div>
-        <div class="display-6">{{ kpi_tiempo_prom }} h</div>
+        <div class="display-6">{{ kpi_tiempo_prom|floatformat:"-2" }} h</div>
       </div>
     </div>
   </div>
 
   <!-- Tablas -->
-  <div class="row g-3">
-    <div class="col-12 col-lg-6">
-      <div class="card card-body">
-        <h2 class="h6 mb-3">Top 10 repuestos más usados</h2>
-        <table class="table table-sm align-middle mb-0">
-          <thead><tr><th>Código</th><th>Descripción</th><th class="text-end">Movs</th></tr></thead>
-          <tbody>
-            {% for r in top_repuestos %}
-              <tr>
-                <td>{{ r.repuesto__codigo }}</td>
-                <td>{{ r.repuesto__descripcion }}</td>
-                <td class="text-end">{{ r.movs }}</td>
-              </tr>
-            {% empty %}
-              <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <table class="table table-sm align-middle mb-0">
+    <thead><tr><th>Código</th><th>Descripción</th><th class="text-end">Cant.</th></tr></thead>
+    <tbody>
+        {% for r in top_repuestos %}
+        <tr>
+            <td>{{ r.repuesto__codigo }}</td>
+            <td>{{ r.repuesto__descripcion }}</td>
+            <td class="text-end">{{ r.cantidad_total|floatformat:"-2"|intcomma }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
+        {% endfor %}
+    </tbody>
+    </table>
 
-    <div class="col-12 col-lg-6">
-      <div class="card card-body">
-        <h2 class="h6 mb-3">Top 10 vehículos más frecuentes</h2>
-        <table class="table table-sm align-middle mb-0">
-          <thead><tr><th>Patente</th><th class="text-end">OTs</th></tr></thead>
-          <tbody>
-            {% for v in top_vehiculos %}
-              <tr>
-                <td>{{ v.vehiculo__patente }}</td>
-                <td class="text-end">{{ v.total }}</td>
-              </tr>
-            {% empty %}
-              <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+    {% if top_repuestos.paginator.num_pages > 1 %}
+    <nav class="mt-2">
+        <ul class="pagination pagination-sm mb-0">
+        {% if top_repuestos.has_previous %}
+            <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_r={{ top_repuestos.previous_page_number }}">«</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">
+            Página {{ top_repuestos.number }} de {{ top_repuestos.paginator.num_pages }}
+        </span></li>
+        {% if top_repuestos.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_r={{ top_repuestos.next_page_number }}">»</a>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+
+    <table class="table table-sm align-middle mb-0">
+    <thead><tr><th>Patente</th><th class="text-end">OTs</th></tr></thead>
+    <tbody>
+        {% for v in top_vehiculos %}
+        <tr>
+            <td>{{ v.vehiculo__patente }}</td>
+            <td class="text-end">{{ v.total|intcomma }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    {% if top_vehiculos.paginator.num_pages > 1 %}
+    <nav class="mt-2">
+        <ul class="pagination pagination-sm mb-0">
+        {% if top_vehiculos.has_previous %}
+            <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_v={{ top_vehiculos.previous_page_number }}">«</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">
+            Página {{ top_vehiculos.number }} de {{ top_vehiculos.paginator.num_pages }}
+        </span></li>
+        {% if top_vehiculos.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_v={{ top_vehiculos.next_page_number }}">»</a>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
 </div>
 {% endblock %}
