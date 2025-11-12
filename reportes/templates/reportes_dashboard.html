@@ -96,6 +96,13 @@
         <div class="display-6">{{ kpi_mttr|floatformat:"-2" }} h</div>
       </div>
     </div>
+    <div class="col-12 col-md-3">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">SLA (≤ {{ sla_objetivo }} h)</div>
+        <div class="display-6">{{ sla_pct }}%</div>
+        <div class="small text-muted">{{ sla_dentro }}/{{ sla_total }} dentro de SLA</div>
+      </div>
+    </div>
   </div>
 
     <div class="row g-4 mb-4 align-items-stretch">
@@ -146,6 +153,38 @@
                   </tr>
                 {% empty %}
                   <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card card-body">
+            <h2 class="h6 mb-3">SLA por mecánico (≤ {{ sla_objetivo }} h)</h2>
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Mecánico</th>
+                  <th class="text-end">Cerradas</th>
+                  <th class="text-end">Dentro SLA</th>
+                  <th class="text-end">Cumplimiento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user, t, d, p in sla_mecanicos %}
+                  <tr>
+                    <td>{{ user }}</td>
+                    <td class="text-end">{{ t }}</td>
+                    <td class="text-end">{{ d }}</td>
+                    <td class="text-end">
+                      <span class="badge {% if p >= 90 %}text-bg-success{% elif p >= 70 %}text-bg-warning{% else %}text-bg-danger{% endif %}">
+                        {{ p }}%
+                      </span>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="4" class="text-muted">Sin datos.</td></tr>
                 {% endfor %}
               </tbody>
             </table>

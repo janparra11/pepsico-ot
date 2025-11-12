@@ -145,6 +145,9 @@ def _parse_filters(request):
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
     stats = _stats_dashboard(qs_ot, global_top_veh=False, veh_metric=filtros.get("veh_metric") or "ots")
+    objetivo_h = _sla_objetivo_horas()
+    sla_total, sla_dentro, sla_pct = _sla_resumen(qs_ot, objetivo_h)
+    sla_mecanicos = _sla_por_mecanico(qs_ot, objetivo_h, limit=10)
     mttr_h = _mttr_horas(qs_ot)
     mttr_mecanicos = _mttr_por_mecanico(qs_ot, limit=10)
     cfg = Config.get_solo()
@@ -190,6 +193,11 @@ def dashboard_reportes(request):
         "ots_page": ots_page,
         "kpi_mttr": mttr_h,
         "mttr_mecanicos": mttr_mecanicos,
+        "sla_objetivo": objetivo_h,
+        "sla_total": sla_total,
+        "sla_dentro": sla_dentro,
+        "sla_pct": sla_pct,
+        "sla_mecanicos": sla_mecanicos,
     }
     # ojo con el path del template (carpeta reportes/)
     return render(request, "reportes_dashboard.html", ctx)
@@ -476,6 +484,30 @@ def export_excel(request):
         cell.number_format = "#,##0"
     for cell in wsT["E"][1:]:
         cell.number_format = "0.00"
+
+    # === Hoja: SLA ===
+    wsS = wb.create_sheet("SLA")
+    obj_h = _sla_objetivo_horas()
+    tot, din, pct = _sla_resumen(qs_ot, obj_h)
+
+    wsS.append([f"Objetivo SLA (h)", obj_h])
+    wsS.append([f"OTs cerradas válidas", tot])
+    wsS.append([f"Cumplen SLA", din])
+    wsS.append([f"Cumplimiento (%)", pct])
+    wsS.append([])
+
+    wsS.append(["Mecánico", "OTs cerradas", "Dentro SLA", "Cumplimiento (%)"])
+    for user, t, d, p in _sla_por_mecanico(qs_ot, obj_h, limit=100):
+        wsS.append([user, t, d, p])
+
+    # Anchos y formato
+    wsS.column_dimensions["A"].width = 28
+    for col in ("B","C","D"):
+        wsS.column_dimensions[col].width = 18
+
+    for cell in wsS["D"][7:]:  # desde la tabla
+        if isinstance(cell.value, (int, float)):
+            cell.number_format = "0.0"
 
     # nombre con rango/fechas
     fname = _nombre_archivo_reporte(request, "reporte_ots") + ".xlsx"
@@ -779,4 +811,51 @@ def _mttr_por_mecanico(qs, limit=10):
     for r in data:
         h = r["prom"].total_seconds()/3600.0 if r["prom"] else None
         out.append((r["mecanico_asignado__username"] or "—", round(h, 2) if h is not None else None))
+    return out
+
+def _sla_objetivo_horas():
+    """Lee objetivo SLA desde Config si existe el campo; si no, usa 48h."""
+    try:
+        cfg = Config.get_solo()
+        return getattr(cfg, "sla_objetivo_horas", 48)
+    except Exception:
+        return 48
+
+def _cerradas_validas(qs):
+    """OTs cerradas con fechas válidas (sin duración negativa)."""
+    return qs.filter(
+        activa=False,
+        fecha_cierre__isnull=False,
+        fecha_cierre__gte=F("fecha_ingreso"),
+    ).annotate(
+        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
+    )
+
+def _sla_resumen(qs, objetivo_h):
+    """Devuelve (total_cerradas, dentro_sla, pct)."""
+    cerr = _cerradas_validas(qs)
+    total = cerr.count()
+    if not total:
+        return (0, 0, 0.0)
+    dentro = cerr.filter(dur_td__lte=timedelta(hours=objetivo_h)).count()
+    pct = round(dentro * 100.0 / total, 1)
+    return (total, dentro, pct)
+
+def _sla_por_mecanico(qs, objetivo_h, limit=20):
+    """Lista [(mecánico, total, dentro, pct)] ordenada desc por pct."""
+    cerr = _cerradas_validas(qs).filter(mecanico_asignado__isnull=False)
+    base = (
+        cerr.values("mecanico_asignado__username")
+            .annotate(
+                total=Count("id"),
+                dentro=Count("id", filter=Q(dur_td__lte=timedelta(hours=objetivo_h)))
+            )
+            .order_by("-dentro", "-total")
+    )
+    out = []
+    for r in base[:limit]:
+        t = r["total"] or 0
+        d = r["dentro"] or 0
+        pct = round(d * 100.0 / t, 1) if t else 0.0
+        out.append((r["mecanico_asignado__username"] or "—", t, d, pct))
     return out
