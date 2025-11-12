@@ -15,4 +15,5 @@ urlpatterns = [
     path("dashboard/", views.dashboard, name="ot_dashboard"),
     path("ot/<int:ot_id>/agendar/", views.ot_agendar_evento, name="ot_agendar_evento"),
     path("ot/<int:ot_id>/asignar-mecanico/", views.ot_asignar_mecanico, name="ot_asignar_mecanico"),
+    path("ot/<int:ot_id>/compromiso/", views.ot_actualizar_compromiso, name="ot_actualizar_compromiso"),
 ]

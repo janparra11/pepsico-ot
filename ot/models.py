@@ -7,7 +7,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q, UniqueConstraint
-
+from datetime import timedelta
 
 class EstadoOT(models.TextChoices):
     INGRESADO   = "ING", "Ingresado"
@@ -60,15 +60,21 @@ class OrdenTrabajo(models.Model):
             descuento += (fin - pausa_abierta.inicio).total_seconds()
         return max(0.0, total - descuento)
 
+    @property
     def duracion_horas(self):
-        return round(self.duracion_segundos() / 3600.0, 2)
+        fin = self.fecha_cierre or timezone.now()
+        if not self.fecha_ingreso:
+            return 0
+        secs = (fin - self.fecha_ingreso).total_seconds()
+        return round(max(secs, 0) / 3600.0, 2)
 
+    @property
     def esta_atrasada(self):
-        """True si tiene fecha_compromiso y la excede (usando cierre o ahora)."""
         if not self.fecha_compromiso:
             return False
-        fin = self.fecha_cierre or self.fecha_ingreso.tzinfo.localize(__import__('datetime').datetime.now())
-        return fin > self.fecha_compromiso
+        # si está activa, compara “ahora” vs compromiso; si está cerrada, compara fecha_cierre
+        base = self.fecha_cierre or timezone.now()
+        return base > self.fecha_compromiso
 
     class Meta:
         constraints = [

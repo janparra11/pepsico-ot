@@ -584,4 +584,40 @@ def ot_asignar_mecanico(request, ot_id):
         messages.error(request, "Formulario inválido al asignar mecánico.")
     return redirect("ot_detalle", ot_id=ot.id)
 
+@require_roles(Rol.JEFE_TALLER, Rol.SUPERVISOR, Rol.ADMIN)
+@require_POST
+def ot_actualizar_compromiso(request, ot_id):
+    ot = get_object_or_404(OrdenTrabajo, id=ot_id)
+    valor = (request.POST.get("fecha_compromiso") or "").strip()
 
+    if not valor:
+        ot.fecha_compromiso = None
+        ot.save(update_fields=["fecha_compromiso"])
+        messages.success(request, "Compromiso eliminado.")
+        return redirect("ot_detalle", ot_id=ot.id)
+
+    # viene como datetime-local: "YYYY-MM-DDTHH:MM"
+    try:
+        # parseo robusto
+        from datetime import datetime
+        dt = datetime.strptime(valor, "%Y-%m-%dT%H:%M")
+        # ojo: si usas zona, podrías localizar con timezone.make_aware
+        from django.utils import timezone
+        dt = timezone.make_aware(dt, timezone.get_current_timezone())
+        ot.fecha_compromiso = dt
+        ot.save(update_fields=["fecha_compromiso"])
+        messages.success(request, "Compromiso actualizado.")
+        # (Opcional) notificar
+        try:
+            from core.services import notificar
+            notificar(
+                destinatario=request.user,
+                titulo=f"OT {ot.folio}: compromiso actualizado",
+                mensaje=f"Nuevo compromiso: {ot.fecha_compromiso}.",
+                url=f"/ot/{ot.id}/",
+            )
+        except Exception:
+            pass
+    except Exception:
+        messages.error(request, "Fecha/hora inválida. Usa el selector de fecha y hora.")
+    return redirect("ot_detalle", ot_id=ot.id)

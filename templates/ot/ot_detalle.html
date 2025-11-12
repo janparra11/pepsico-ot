@@ -106,6 +106,83 @@
         <div>{{ historial.last.observaciones|default:"(sin observaciones)" }}</div>
       </div>
     </div>
+
+    <!-- Mecánico asignado -->
+    <div class="col-12">
+      <div class="p-2 border rounded bg-light-subtle">
+        <div class="text-muted small">Mecánico asignado</div>
+        {% if request.user|has_role:"JEFE_TALLER" or request.user|has_role:"SUPERVISOR" or request.user|has_role:"ADMIN" %}
+          <form method="post" action="{% url 'ot_asignar_mecanico' ot.id %}" class="d-flex gap-2">
+            {% csrf_token %}
+            <div class="flex-grow-1" style="min-width:180px;">{{ asignar_mec_form.mecanico }}</div>
+            <button class="btn btn-outline-primary btn-sm">Asignar</button>
+          </form>
+          <div class="small text-muted mt-1">Actual: <span class="fw-semibold">{{ ot.mecanico_asignado|default:"—" }}</span></div>
+        {% else %}
+          <div class="fw-semibold">{{ ot.mecanico_asignado|default:"—" }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <!-- Gestión de tiempo -->
+    <div class="col-12">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-muted mb-0">Gestión de tiempo</h6>
+          {% if ot.esta_atrasada %}
+            <span class="badge text-bg-danger">ATRASADA</span>
+          {% else %}
+            <span class="badge text-bg-success">OK</span>
+          {% endif %}
+        </div>
+
+        {% if request.user|has_role:"JEFE_TALLER" or request.user|has_role:"SUPERVISOR" or request.user|has_role:"ADMIN" %}
+          <!-- Vista editable -->
+          <form method="post" action="{% url 'ot_actualizar_compromiso' ot.id %}" class="row g-3 align-items-end">
+            {% csrf_token %}
+
+            <!-- Duración -->
+            <div class="col-6 col-md-3">
+              <div class="text-muted small mb-1">Duración total</div>
+              <div class="fw-semibold">{{ ot.duracion_horas }} h</div>
+            </div>
+
+            <!-- Fecha compromiso -->
+            <div class="col-12 col-md-6">
+              <label class="form-label small mb-1 text-muted">Fecha compromiso</label>
+              <input
+                type="datetime-local"
+                name="fecha_compromiso"
+                class="form-control form-control-sm"
+                value="{% if ot.fecha_compromiso %}{{ ot.fecha_compromiso|date:'Y-m-d\\TH:i' }}{% endif %}">
+            </div>
+
+            <!-- Botones -->
+            <div class="col-6 col-md-3 d-flex gap-2 justify-content-end">
+              <button class="btn btn-primary btn-sm">Guardar</button>
+              {% if ot.fecha_compromiso %}
+                <button class="btn btn-outline-danger btn-sm" name="fecha_compromiso" value="">Quitar</button>
+              {% endif %}
+            </div>
+          </form>
+
+        {% else %}
+          <!-- Vista solo lectura -->
+          <div class="row g-2">
+            <div class="col-12 col-md-4">
+              <div class="text-muted small">Duración total</div>
+              <div class="fw-semibold">{{ ot.duracion_horas }} h</div>
+            </div>
+
+            <div class="col-12 col-md-5">
+              <div class="text-muted small">Compromiso</div>
+              <div class="fw-semibold">
+                {% if ot.fecha_compromiso %}{{ ot.fecha_compromiso|date:"d-m-Y H:i" }}{% else %}—{% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>  
   </div>
   <!-- === /FICHA === -->
 
@@ -350,47 +427,6 @@
       {% endif %}
     </div>
   </div>
-
-  <div class="card card-body shadow-sm mb-3">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <div class="small text-muted">Mecánico asignado</div>
-        <div class="fw-semibold">{{ ot.mecanico_asignado|default:"—" }}</div>
-      </div>
-      <div style="min-width:260px;">
-      {% load roles %}
-      {% if request.user|has_role:"JEFE_TALLER" or request.user|has_role:"SUPERVISOR" or request.user|has_role:"ADMIN" %}
-        <form method="post" action="{% url 'ot_asignar_mecanico' ot.id %}">
-          {% csrf_token %}
-          <div class="input-group">
-            {{ asignar_mec_form.mecanico }}
-            <button class="btn btn-outline-primary">Asignar</button>
-          </div>
-        </form>
-      {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <div class="card card-body shadow-sm mb-3">
-    <div class="row text-center">
-      <div class="col">
-        <div class="small text-muted">Duración total</div>
-        <div class="fw-semibold">{{ ot.duracion_horas }} h</div>
-      </div>
-      <div class="col">
-        <div class="small text-muted">Compromiso</div>
-        <div class="fw-semibold">{{ ot.fecha_compromiso|default:"—" }}</div>
-      </div>
-      <div class="col">
-        <div class="small text-muted">Atraso</div>
-        <span class="badge {% if ot.esta_atrasada %}text-bg-danger{% else %}text-bg-success{% endif %}">
-          {% if ot.esta_atrasada %}ATRASADA{% else %}OK{% endif %}
-        </span>
-      </div>
-    </div>
-  </div>
-
 </div>
 
   <h2 class="h6 mt-4">Historial</h2>
