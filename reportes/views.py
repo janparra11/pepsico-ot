@@ -14,10 +14,19 @@ from inventario.models import MovimientoStock
 
 
 # ---------- utilidades ----------
-def _nombre_archivo_reporte(request, base):
+def _nombre_archivo_reporte(request, base, filtros=None):
     hoy = timezone.localdate().strftime("%Y%m%d")
     estado = (request.GET.get("estado") or "todos").lower()
-    return f"{base}_{hoy}_{estado}"
+    extra = ""
+    if filtros:
+        fi = (filtros.get("fini") or "").replace("-", "")
+        ff = (filtros.get("ffin") or "").replace("-", "")
+        if fi or ff:
+            extra += f"_{fi or 'all'}-{ff or 'all'}"
+        rango = filtros.get("rango") or ""
+        if rango:
+            extra += f"_{rango}"
+    return f"{base}_{hoy}_{estado}{extra}"
 
 def _to_naive(dt):
     if not dt:
@@ -174,8 +183,7 @@ def export_excel(request):
     from openpyxl.utils import get_column_letter
 
     qs_ot, filtros = _parse_filters(request)
-    # Para Excel mantenemos ambos tops filtrados (puedes cambiar a gusto)
-    stats = _stats_dashboard(qs_ot, global_top_veh=False)
+    stats = _stats_dashboard(qs_ot)
     cfg = Config.get_solo()
 
     wb = Workbook()
@@ -190,6 +198,9 @@ def export_excel(request):
     ws.append([])
 
     ws.append(["Filtros"])
+    # Si hay rango rápido, muéstralo
+    if filtros.get("rango"):
+        ws.append(["Rango rápido", {"hoy":"Hoy","ult7":"Últimos 7 días","mes":"Este mes"}.get(filtros["rango"], filtros["rango"])])
     ws.append(["Desde", filtros["fini"] or "(todos)"])
     ws.append(["Hasta", filtros["ffin"] or "(todos)"])
     ws.append(["Estado", filtros["estado"] or "(todos)"])
@@ -221,27 +232,39 @@ def export_excel(request):
             "Sí" if ot.activa else "No"
         ])
 
+    # anchos + formato de fecha
     for i in range(1, len(headers) + 1):
         ws2.column_dimensions[get_column_letter(i)].width = 18
+    # Formato fecha/hora ISO
+    for row in ws2.iter_rows(min_row=2, min_col=5, max_col=6):
+        for cell in row:
+            if cell.value:
+                cell.number_format = "yyyy-mm-dd hh:mm"
 
     # Hoja 3: Top Repuestos
     ws3 = wb.create_sheet("Top Repuestos")
     ws3.append(["Código", "Descripción", "Total"])
-    for r in list(stats["top_repuestos"])[:50]:
+    for r in stats["top_repuestos"][:50]:
         ws3.append([r["repuesto__codigo"], r["repuesto__descripcion"], r["total"]])
     ws3.column_dimensions["A"].width = 20
     ws3.column_dimensions["B"].width = 35
-    ws3.column_dimensions["C"].width = 12
+    ws3.column_dimensions["C"].width = 14
+    # formato con miles y hasta 2 decimales
+    for cell in ws3["C"][1:]:
+        cell.number_format = "#,##0.##"
 
     # Hoja 4: Top Vehículos
     ws4 = wb.create_sheet("Top Vehículos")
     ws4.append(["Patente", "OTs"])
-    for v in list(stats["top_vehiculos"])[:50]:
+    for v in stats["top_vehiculos"][:50]:
         ws4.append([v["vehiculo__patente"], v["total"]])
     ws4.column_dimensions["A"].width = 20
     ws4.column_dimensions["B"].width = 10
+    for cell in ws4["B"][1:]:
+        cell.number_format = "#,##0"
 
-    fname = _nombre_archivo_reporte(request, "reporte_ots") + ".xlsx"
+    # nombre con rango/fechas
+    fname = _nombre_archivo_reporte(request, "reporte_ots", filtros) + ".xlsx"
     resp = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     wb.save(resp)
@@ -258,12 +281,11 @@ def export_pdf(request):
     from reportlab.lib.units import cm
 
     qs_ot, filtros = _parse_filters(request)
-    # En PDF: Top vehículos GLOBAL (histórico) para evitar demasiados "1"
-    stats = _stats_dashboard(qs_ot, global_top_veh=True)
+    stats = _stats_dashboard(qs_ot)
     cfg = Config.get_solo()
 
     resp = HttpResponse(content_type="application/pdf")
-    fname = _nombre_archivo_reporte(request, "reporte_ots") + ".pdf"
+    fname = _nombre_archivo_reporte(request, "reporte_ots", filtros) + ".pdf"
     resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     c = canvas.Canvas(resp, pagesize=A4)
     w, h = A4
@@ -279,6 +301,10 @@ def export_pdf(request):
     # Filtros
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Filtros:"); c.setFont("Helvetica", 10)
     y -= 0.5*cm
+    if filtros.get("rango"):
+        etiqueta = {"hoy":"Hoy","ult7":"Últimos 7 días","mes":"Este mes"}.get(filtros["rango"], filtros["rango"])
+        c.drawString(2*cm, y, f"Rango rápido: {etiqueta}")
+        y -= 0.5*cm
     c.drawString(2*cm, y, f"Desde: {filtros['fini'] or '(todos)'}   Hasta: {filtros['ffin'] or '(todos)'}")
     y -= 0.5*cm
     c.drawString(2*cm, y, f"Estado: {filtros['estado'] or '(todos)'}   Taller: {filtros['taller'] or '(todos)'}   Mecánico: {filtros['mecanico'] or '(todos)'}")
@@ -290,20 +316,19 @@ def export_pdf(request):
     c.drawString(2*cm, y, f"OTs abiertas: {stats['kpi_abiertas']}   OTs cerradas: {stats['kpi_cerradas']}   Tiempo prom: {stats['kpi_tiempo_prom']} h")
     y -= 0.8*cm
 
-    # Top Repuestos (filtrado actual)
+    # Top Repuestos
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Repuestos:"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for r in list(stats["top_repuestos"])[:10]:
+    for r in stats["top_repuestos"][:10]:
         linea = f"{r['repuesto__codigo']} - {r['repuesto__descripcion']} ({r['total']})"
         c.drawString(2*cm, y, linea[:110]); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     y -= 0.3*cm
-    # Top Vehículos (global)
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos (histórico):"); c.setFont("Helvetica", 9)
+    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for v in list(stats["top_vehiculos"])[:10]:
+    for v in stats["top_vehiculos"][:10]:
         c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
         if y < 2*cm:
             c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
