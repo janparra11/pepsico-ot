@@ -4,15 +4,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Count, Q, Sum
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from core.auth import require_roles
 from core.roles import Rol
+from core.models import AuditLog, Config
 from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
-from django.core.paginator import Paginator
 
-from core.models import AuditLog
 
+# ---------- utilidades ----------
 def _nombre_archivo_reporte(request, base):
     hoy = timezone.localdate().strftime("%Y%m%d")
     estado = (request.GET.get("estado") or "todos").lower()
@@ -25,6 +26,7 @@ def _to_naive(dt):
     return timezone.localtime(dt).replace(tzinfo=None)
 
 def _stats_dashboard(qs_ot):
+    """Calcula KPIs, top repuestos y top vehículos con claves uniformes."""
     # KPI abiertas/cerradas
     abiertas = qs_ot.filter(activa=True).count()
     cerradas = qs_ot.filter(activa=False).count()
@@ -37,22 +39,22 @@ def _stats_dashboard(qs_ot):
             horas.append(diff)
     t_promedio = round(sum(horas) / len(horas), 2) if horas else 0.0
 
-    # Top repuestos (si tienes 'cantidad' usa Sum; si no, usa Count)
-    from inventario.models import MovimientoStock
-    agg = Sum("cantidad") if "cantidad" in [f.name for f in MovimientoStock._meta.get_fields()] else Count("id")
+    # Top repuestos (si tienes 'cantidad' usa Sum; si no, Count)
+    fields = [f.name for f in MovimientoStock._meta.get_fields()]
+    agg = Sum("cantidad") if "cantidad" in fields else Count("id")
     top_repuestos = (
         MovimientoStock.objects
         .filter(tipo=MovimientoStock.SALIDA)
         .values("repuesto__codigo", "repuesto__descripcion")
-        .annotate(total=agg)
-        .order_by("-total")[:10]
+        .annotate(total=agg)                 # <--- SIEMPRE 'total'
+        .order_by("-total")
     )
 
-    # Top vehículos
+    # Top vehículos (por OTs)
     top_vehiculos = (
         qs_ot.values("vehiculo__patente")
-        .annotate(total=Count("id"))
-        .order_by("-total")[:10]
+        .annotate(total=Count("id"))         # <--- SIEMPRE 'total'
+        .order_by("-total")
     )
 
     return {
@@ -62,6 +64,7 @@ def _stats_dashboard(qs_ot):
         "top_repuestos": top_repuestos,
         "top_vehiculos": top_vehiculos,
     }
+
 
 # --- Filtros utilitarios ---
 def _parse_filters(request):
@@ -87,74 +90,30 @@ def _parse_filters(request):
 
     return qs_ot, {"fini": f_ini, "ffin": f_fin, "estado": estado, "taller": taller, "mecanico": mecanico_id}
 
+
+# ---------- vistas ----------
 @login_required
 @require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def dashboard_reportes(request):
     qs_ot, filtros = _parse_filters(request)
-
     stats = _stats_dashboard(qs_ot)
+    cfg = Config.get_solo()
 
-    # Totales
-    abiertas = qs_ot.filter(activa=True).count()
-    cerradas = qs_ot.filter(activa=False).count()
-
-    # Tiempo promedio de reparación (solo cerradas con fecha_cierre válida)
-    cerradas_qs = qs_ot.filter(activa=False, fecha_cierre__isnull=False).only("fecha_ingreso", "fecha_cierre")
-    horas = []
-    for ot in cerradas_qs:
-        diff = (ot.fecha_cierre - ot.fecha_ingreso).total_seconds() / 3600.0
-        if diff >= 0:
-            horas.append(diff)
-    t_promedio = round(sum(horas) / len(horas), 2) if horas else 0.0
-
-    # Repuestos más usados
-    # Preferimos sumar la "cantidad" si tu modelo la tiene (Decimal/Float). Si no, cae en conteo.
-    # ¿El modelo tiene campo 'cantidad'?
-    tiene_cantidad = any(getattr(f, "name", None) == "cantidad" for f in MovimientoStock._meta.get_fields())
-
-    if tiene_cantidad:
-        top_repuestos = (
-            MovimientoStock.objects
-            .filter(tipo=MovimientoStock.SALIDA)
-            .values("repuesto__codigo", "repuesto__descripcion")
-            .annotate(cantidad_total=Sum("cantidad"))
-            .order_by("-cantidad_total")
-        )
-    else:
-        top_repuestos = (
-            MovimientoStock.objects
-            .filter(tipo=MovimientoStock.SALIDA)
-            .values("repuesto__codigo", "repuesto__descripcion")
-            .annotate(cantidad_total=Count("id"))
-            .order_by("-cantidad_total")
-        )
-
-    # Vehículos más frecuentes (por OTs)
-    top_vehiculos = (
-        qs_ot.values("vehiculo__patente")
-        .annotate(total=Count("id"))
-        .order_by("-total")[:10]
-    )
-
-    # Top 20 por página
+    # Paginaciones (Top 20 por página)
     page_r = request.GET.get("page_r") or 1
     page_v = request.GET.get("page_v") or 1
+    page_o = request.GET.get("page_o") or 1
 
-    rep_paginator = Paginator(top_repuestos, 20)
-    veh_paginator = Paginator(
-        qs_ot.values("vehiculo__patente").annotate(total=Count("id")).order_by("-total"),
-        20
-    )
+    rep_paginator = Paginator(stats["top_repuestos"], 20)
+    veh_paginator = Paginator(stats["top_vehiculos"], 20)
 
     top_repuestos_page = rep_paginator.get_page(page_r)
     top_vehiculos_page = veh_paginator.get_page(page_v)
 
-    page_o = request.GET.get("page_o") or 1
     ots_qs = qs_ot.select_related("vehiculo", "taller").only(
         "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
         "vehiculo__patente", "taller__nombre"
     ).order_by("-fecha_ingreso")
-
     ots_paginator = Paginator(ots_qs, 15)
     ots_page = ots_paginator.get_page(page_o)
 
@@ -165,22 +124,22 @@ def dashboard_reportes(request):
     mecanicos = User.objects.filter(is_active=True).order_by("username")
 
     ctx = {
+        "cfg": cfg,  # nombre del taller para encabezados
         "filtros": filtros,
         "estados": EstadoOT.choices,
         "talleres": talleres,
         "mecanicos": mecanicos,
 
-        "kpi_abiertas": abiertas,
-        "kpi_cerradas": cerradas,
-        "kpi_tiempo_prom": t_promedio,
+        "kpi_abiertas": stats["kpi_abiertas"],
+        "kpi_cerradas": stats["kpi_cerradas"],
+        "kpi_tiempo_prom": stats["kpi_tiempo_prom"],
 
-        "top_repuestos": top_repuestos,
-        "top_vehiculos": top_vehiculos,
-
+        # paginados
         "top_repuestos": top_repuestos_page,
         "top_vehiculos": top_vehiculos_page,
         "ots_page": ots_page,
     }
+    # ojo con el path del template
     return render(request, "reportes_dashboard.html", ctx)
 
 
@@ -193,14 +152,17 @@ def export_excel(request):
 
     qs_ot, filtros = _parse_filters(request)
     stats = _stats_dashboard(qs_ot)
+    cfg = Config.get_solo()
 
     wb = Workbook()
 
     # Hoja 1: Resumen
     ws = wb.active
     ws.title = "Resumen"
-    ws.append(["Reporte de Órdenes de Trabajo"])
+    ws.append([f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"])
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
     ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
     ws.append([])
 
     ws.append(["Filtros"])
@@ -220,7 +182,11 @@ def export_excel(request):
     ws2 = wb.create_sheet("OTs")
     headers = ["Folio", "Patente", "Estado", "Taller", "Ingreso", "Cierre", "Activa"]
     ws2.append(headers)
-    for ot in qs_ot.select_related("vehiculo", "taller"):
+
+    for ot in qs_ot.select_related("vehiculo", "taller").only(
+        "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
+        "vehiculo__patente", "taller__nombre"
+    ):
         ws2.append([
             ot.folio,
             getattr(ot.vehiculo, "patente", ""),
@@ -231,34 +197,22 @@ def export_excel(request):
             "Sí" if ot.activa else "No"
         ])
 
-    for ot in qs_ot.select_related("vehiculo", "taller").only(
-        "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
-        "vehiculo__patente", "taller__nombre"
-    ):
-        # normaliza fechas (Excel no soporta tz)
-        fi = ot.fecha_ingreso.replace(tzinfo=None) if ot.fecha_ingreso else ""
-        fc = ot.fecha_cierre.replace(tzinfo=None) if ot.fecha_cierre else ""
-        ws.append([
-            ot.folio,
-            getattr(ot.vehiculo, "patente", ""),
-            ot.get_estado_actual_display(),
-            getattr(ot.taller, "nombre", ""),
-            fi, fc,
-            "Sí" if ot.activa else "No"
-        ])
+    for i in range(1, len(headers) + 1):
+        ws2.column_dimensions[get_column_letter(i)].width = 18
 
     # Hoja 3: Top Repuestos
     ws3 = wb.create_sheet("Top Repuestos")
     ws3.append(["Código", "Descripción", "Total"])
-    for r in stats["top_repuestos"]:
+    for r in stats["top_repuestos"][:50]:
         ws3.append([r["repuesto__codigo"], r["repuesto__descripcion"], r["total"]])
-    for i in range(1, 4):
-        ws3.column_dimensions[get_column_letter(i)].width = 25
+    ws3.column_dimensions["A"].width = 20
+    ws3.column_dimensions["B"].width = 35
+    ws3.column_dimensions["C"].width = 12
 
     # Hoja 4: Top Vehículos
     ws4 = wb.create_sheet("Top Vehículos")
     ws4.append(["Patente", "OTs"])
-    for v in stats["top_vehiculos"]:
+    for v in stats["top_vehiculos"][:50]:
         ws4.append([v["vehiculo__patente"], v["total"]])
     ws4.column_dimensions["A"].width = 20
     ws4.column_dimensions["B"].width = 10
@@ -269,7 +223,6 @@ def export_excel(request):
     wb.save(resp)
 
     AuditLog.objects.create(app="REPORTES", action="EXPORT_EXCEL", user=request.user, extra=str(request.GET.dict()))
-
     return resp
 
 
@@ -282,6 +235,7 @@ def export_pdf(request):
 
     qs_ot, filtros = _parse_filters(request)
     stats = _stats_dashboard(qs_ot)
+    cfg = Config.get_solo()
 
     resp = HttpResponse(content_type="application/pdf")
     fname = _nombre_archivo_reporte(request, "reporte_ots") + ".pdf"
@@ -291,7 +245,7 @@ def export_pdf(request):
     y = h - 2*cm
 
     c.setFont("Helvetica-Bold", 12)
-    c.drawString(2*cm, y, "Reporte de Órdenes de Trabajo")
+    c.drawString(2*cm, y, f"{cfg.nombre_taller} · Reporte de Órdenes de Trabajo")
     y -= 0.7*cm
     c.setFont("Helvetica", 10)
     c.drawString(2*cm, y, f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}")
@@ -314,21 +268,21 @@ def export_pdf(request):
     # Top Repuestos
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Repuestos:"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for r in stats["top_repuestos"]:
+    for r in stats["top_repuestos"][:10]:
         linea = f"{r['repuesto__codigo']} - {r['repuesto__descripcion']} ({r['total']})"
         c.drawString(2*cm, y, linea[:110]); y -= 0.45*cm
-        if y < 2*cm: c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+        if y < 2*cm:
+            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     y -= 0.3*cm
     c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
     y -= 0.5*cm
-    for v in stats["top_vehiculos"]:
+    for v in stats["top_vehiculos"][:10]:
         c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
-        if y < 2*cm: c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+        if y < 2*cm:
+            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     c.showPage()
     c.save()
-
     AuditLog.objects.create(app="REPORTES", action="EXPORT_PDF", user=request.user, extra=str(request.GET.dict()))
-
     return resp

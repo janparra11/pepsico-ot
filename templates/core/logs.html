@@ -1,18 +1,64 @@
 {% extends "base.html" %}
-{% load roles %}
 {% block title %}Bitácora y Sesiones{% endblock %}
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
   <h1 class="h5 mb-3">Bitácora y sesiones</h1>
 
+  <!-- Filtros -->
+  <form class="row g-2 mb-3" method="get">
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Desde</label>
+      <input type="date" name="fini" class="form-control" value="{{ filtros.fini }}">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Hasta</label>
+      <input type="date" name="ffin" class="form-control" value="{{ filtros.ffin }}">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">App</label>
+      <select name="app" class="form-select">
+        <option value="">(Todas)</option>
+        {% for a in apps %}
+          <option value="{{ a }}" {% if filtros.app == a %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Acción</label>
+      <select name="action" class="form-select">
+        <option value="">(Todas)</option>
+        {% for a in actions %}
+          <option value="{{ a }}" {% if filtros.action == a %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Usuario</label>
+      <select name="user" class="form-select">
+        <option value="">(Todos)</option>
+        {% for u in users %}
+          <option value="{{ u.id }}" {% if filtros.user|add:'0' == u.id|add:'0' %}selected{% endif %}>{{ u.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Texto</label>
+      <input type="text" name="q" class="form-control" value="{{ filtros.q }}" placeholder="objeto o extra...">
+    </div>
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary">Filtrar</button>
+      <a class="btn btn-outline-secondary" href="?">Limpiar</a>
+    </div>
+  </form>
+
   <h2 class="h6">Eventos recientes</h2>
-  <div class="table-responsive mb-4">
+  <div class="table-responsive mb-2">
     <table class="table table-sm align-middle">
       <thead>
         <tr><th>Fecha</th><th>App</th><th>Acción</th><th>Usuario</th><th>Objeto</th><th>Extra</th></tr>
       </thead>
       <tbody>
-        {% for l in logs %}
+        {% for l in logs_page.object_list %}
           <tr>
             <td class="text-nowrap">{{ l.ts|date:"d-m-Y H:i" }}</td>
             <td>{{ l.app }}</td>
@@ -28,7 +74,37 @@
     </table>
   </div>
 
-  <h2 class="h6">Sesiones (login/logout)</h2>
+  <!-- Paginador simple -->
+  {% if logs_page.paginator.num_pages > 1 %}
+  <nav aria-label="Paginación">
+    <ul class="pagination pagination-sm">
+      {% if logs_page.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ logs_page.previous_page_number }}">«</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">«</span></li>
+      {% endif %}
+
+      <li class="page-item disabled">
+        <span class="page-link">
+          Página {{ logs_page.number }} / {{ logs_page.paginator.num_pages }}
+        </span>
+      </li>
+
+      {% if logs_page.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ logs_page.next_page_number }}">»</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">»</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+
+
+  <h2 class="h6 mt-4">Sesiones (login/logout)</h2>
   <div class="table-responsive">
     <table class="table table-sm align-middle">
       <thead>
