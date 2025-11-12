@@ -147,6 +147,15 @@ def dashboard_reportes(request):
     top_repuestos_page = rep_paginator.get_page(page_r)
     top_vehiculos_page = veh_paginator.get_page(page_v)
 
+    page_o = request.GET.get("page_o") or 1
+    ots_qs = qs_ot.select_related("vehiculo", "taller").only(
+        "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
+        "vehiculo__patente", "taller__nombre"
+    ).order_by("-fecha_ingreso")
+
+    ots_paginator = Paginator(ots_qs, 15)
+    ots_page = ots_paginator.get_page(page_o)
+
     # Listas auxiliares para selects
     from taller.models import Taller
     from django.contrib.auth.models import User
@@ -168,6 +177,7 @@ def dashboard_reportes(request):
 
         "top_repuestos": top_repuestos_page,
         "top_vehiculos": top_vehiculos_page,
+        "ots_page": ots_page,
     }
     return render(request, "reportes_dashboard.html", ctx)
 
@@ -218,7 +228,7 @@ def export_excel(request):
             _to_naive(ot.fecha_cierre),
             "Sí" if ot.activa else "No"
         ])
-        
+
     for ot in qs_ot.select_related("vehiculo", "taller").only(
         "folio", "estado_actual", "activa", "fecha_ingreso", "fecha_cierre",
         "vehiculo__patente", "taller__nombre"

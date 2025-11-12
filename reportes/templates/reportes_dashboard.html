@@ -72,76 +72,132 @@
     </div>
   </div>
 
-  <!-- Tablas -->
-    <table class="table table-sm align-middle mb-0">
-    <thead><tr><th>Código</th><th>Descripción</th><th class="text-end">Cant.</th></tr></thead>
-    <tbody>
-        {% for r in top_repuestos %}
-        <tr>
-            <td>{{ r.repuesto__codigo }}</td>
-            <td>{{ r.repuesto__descripcion }}</td>
-            <td class="text-end">{{ r.cantidad_total|floatformat:"-2"|intcomma }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
-        {% endfor %}
-    </tbody>
-    </table>
+    <div class="row g-4 mb-4 align-items-stretch">
+        <!-- === Sección: Tops === -->
+        <div class="row g-4 mb-4">
+        <!-- Top Repuestos -->
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm h-100">
+            <div class="card-header py-2">
+                <strong>Top {{ top_repuestos.paginator.per_page|default:20 }} repuestos por consumo</strong>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                    <th style="width:28%">Código</th>
+                    <th>Descripción</th>
+                    <th class="text-end" style="width:18%">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in top_repuestos %}
+                    <tr>
+                        <td class="text-nowrap">{{ r.repuesto__codigo }}</td>
+                        <td>{{ r.repuesto__descripcion }}</td>
+                        <td class="text-end">{{ r.cantidad_total|floatformat:"-2"|intcomma }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            {% if top_repuestos.paginator.num_pages > 1 %}
+            <div class="card-footer py-2">
+                <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    {% if top_repuestos.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v='|cut:'page_o=' }}&page_r={{ top_repuestos.previous_page_number }}">«</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                    <span class="page-link">Página {{ top_repuestos.number }} de {{ top_repuestos.paginator.num_pages }}</span>
+                    </li>
+                    {% if top_repuestos.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v='|cut:'page_o=' }}&page_r={{ top_repuestos.next_page_number }}">»</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                </nav>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+        <!-- === Sección: OTs filtradas === -->
+        <div class="row g-4 mt-3">
+        <div class="col-12">
+            <div class="card shadow-sm w-100">
+            <div class="card-header py-2">
+                <strong>OTs filtradas ({{ ots_page.paginator.count|intcomma }})</strong>
+            </div>
 
-    {% if top_repuestos.paginator.num_pages > 1 %}
-    <nav class="mt-2">
-        <ul class="pagination pagination-sm mb-0">
-        {% if top_repuestos.has_previous %}
-            <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_r={{ top_repuestos.previous_page_number }}">«</a>
-            </li>
-        {% endif %}
-        <li class="page-item disabled"><span class="page-link">
-            Página {{ top_repuestos.number }} de {{ top_repuestos.paginator.num_pages }}
-        </span></li>
-        {% if top_repuestos.has_next %}
-            <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_r={{ top_repuestos.next_page_number }}">»</a>
-            </li>
-        {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+            <div class="card-body p-0">
+                <div class="table-responsive">  {# evita que el contenido “empuje” el borde #}
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Folio</th>
+                        <th>Patente</th>
+                        <th>Estado</th>
+                        <th>Taller</th>
+                        <th>Ingreso</th>
+                        <th>Cierre</th>
+                        <th>Activa</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ot in ots_page %}
+                        <tr>
+                        <td class="text-nowrap">{{ ot.folio }}</td>
+                        <td class="text-nowrap">{{ ot.vehiculo.patente }}</td>
+                        <td>{{ ot.get_estado_actual_display }}</td>
+                        <td>{{ ot.taller.nombre }}</td>
+                        <td class="text-nowrap">{{ ot.fecha_ingreso|date:"d-m-Y H:i" }}</td>
+                        <td class="text-nowrap">{% if ot.fecha_cierre %}{{ ot.fecha_cierre|date:"d-m-Y H:i" }}{% else %}—{% endif %}</td>
+                        <td>
+                            {% if ot.activa %}
+                            <span class="badge text-bg-success">Sí</span>
+                            {% else %}
+                            <span class="badge text-bg-secondary">No</span>
+                            {% endif %}
+                        </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="7" class="text-muted">Sin OTs para los filtros seleccionados.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
 
-
-    <table class="table table-sm align-middle mb-0">
-    <thead><tr><th>Patente</th><th class="text-end">OTs</th></tr></thead>
-    <tbody>
-        {% for v in top_vehiculos %}
-        <tr>
-            <td>{{ v.vehiculo__patente }}</td>
-            <td class="text-end">{{ v.total|intcomma }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
-        {% endfor %}
-    </tbody>
-    </table>
-
-    {% if top_vehiculos.paginator.num_pages > 1 %}
-    <nav class="mt-2">
-        <ul class="pagination pagination-sm mb-0">
-        {% if top_vehiculos.has_previous %}
-            <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_v={{ top_vehiculos.previous_page_number }}">«</a>
-            </li>
-        {% endif %}
-        <li class="page-item disabled"><span class="page-link">
-            Página {{ top_vehiculos.number }} de {{ top_vehiculos.paginator.num_pages }}
-        </span></li>
-        {% if top_vehiculos.has_next %}
-            <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v=' }}&page_v={{ top_vehiculos.next_page_number }}">»</a>
-            </li>
-        {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+            {% if ots_page.paginator.num_pages > 1 %}
+            <div class="card-footer py-2">
+                <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    {% if ots_page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v='|cut:'page_o=' }}&page_o={{ ots_page.previous_page_number }}">«</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                    <span class="page-link">Página {{ ots_page.number }} de {{ ots_page.paginator.num_pages }}</span>
+                    </li>
+                    {% if ots_page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ request.GET.urlencode|cut:'page_r='|cut:'page_v='|cut:'page_o=' }}&page_o={{ ots_page.next_page_number }}">»</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                </nav>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+        </div>
+    </div>
 
 </div>
 {% endblock %}

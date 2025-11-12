@@ -18,6 +18,13 @@
 
     .navbar { padding-top: 0.8rem; padding-bottom: 0.8rem; }
 
+    /* Cards con tablas: corrige bordes y respiración */
+    .card .table { margin-bottom: 0; }
+    .card .table thead th { border-top: 0; }
+    .card .table tbody tr:last-child td { border-bottom: 0; }
+    .card .table-responsive { border-radius: .375rem; overflow: hidden; } /* redondeo continuo */
+
+
     /* 🔹 Reloj con dígitos estables */
     #clock {
       font-variant-numeric: tabular-nums;
