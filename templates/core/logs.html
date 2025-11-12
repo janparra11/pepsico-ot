@@ -53,6 +53,16 @@
         {% endfor %}
       </select>
     </div>
+
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Objeto contiene</label>
+      <input type="text" name="objq" class="form-control" value="{{ filtros.objq }}">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Extra contiene</label>
+      <input type="text" name="exq" class="form-control" value="{{ filtros.exq }}">
+    </div>
+
     <div class="col-6 col-md-2">
       <label class="form-label small">Texto</label>
       <input type="text" name="q" class="form-control" value="{{ filtros.q }}" placeholder="objeto o extra...">
@@ -60,6 +70,7 @@
     <div class="col-12 d-flex gap-2">
       <button class="btn btn-primary">Filtrar</button>
       <a class="btn btn-outline-secondary" href="?">Limpiar</a>
+      <a class="btn btn-outline-success" href="?{{ request.GET.urlencode }}&export=csv">Exportar CSV</a>
     </div>
   </form>
 

@@ -14,13 +14,17 @@ except Exception:
 
 from core.models import AuditLog
 
+from core.middleware import get_current_user
+
 # -------- helpers --------
 def _get_user_from_instance(instance):
-    """
-    Usa actualizado_por o creado_por si existen en tu modelo; si no, retorna None.
-    """
+    # prioridad 1: usuario en el thread local (request.actual)
+    u = get_current_user()
+    if u and not isinstance(u, AnonymousUser):
+        return u
+    # fallback: campos del modelo si existen
     u = getattr(instance, "actualizado_por", None) or getattr(instance, "creado_por", None)
-    return (u if u and not isinstance(u, AnonymousUser) else None)
+    return u if u and not isinstance(u, AnonymousUser) else None
 
 def _ot_repr(ot: OrdenTrabajo):
     folio = getattr(ot, "folio", "") or ""

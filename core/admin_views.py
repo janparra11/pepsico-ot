@@ -17,6 +17,9 @@ from django.contrib.auth.models import User
 
 import os, io, zipfile
 
+from django.http import HttpResponse
+import csv
+
 @login_required
 @require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
 def config_view(request):
@@ -35,11 +38,52 @@ def config_view(request):
 
 
 @login_required
-@require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
+@require_roles(Rol.SUPERVISOR, Rol.JEFE_TALLER, Rol.ADMIN)
 def logs_view(request):
-    logs = AuditLog.objects.select_related("user")[:200]
-    sessions = SessionLog.objects.select_related("user")[:200]
-    return render(request, "core/logs.html", {"logs": logs, "sessions": sessions})
+    fini = (request.GET.get("fini") or "").strip()
+    ffin = (request.GET.get("ffin") or "").strip()
+    app  = (request.GET.get("app")  or "").strip()
+    act  = (request.GET.get("action") or "").strip()
+    usr  = (request.GET.get("user") or "").strip()
+    objq = (request.GET.get("objq") or "").strip()   # NUEVO: objeto contiene
+    exq  = (request.GET.get("exq")  or "").strip()   # NUEVO: extra contiene
+
+    qs = AuditLog.objects.all().select_related("user").order_by("-ts")
+
+    if fini: qs = qs.filter(ts__date__gte=fini)
+    if ffin: qs = qs.filter(ts__date__lte=ffin)
+    if app:  qs = qs.filter(app=app)
+    if act:  qs = qs.filter(action=act)
+    if usr:  qs = qs.filter(user_id=usr)
+    if objq: qs = qs.filter(object_repr__icontains=objq)
+    if exq:  qs = qs.filter(extra__icontains=exq)  # útil aunque sea JSON texto
+
+    # Export CSV rápido
+    if request.GET.get("export") == "csv":
+        resp = HttpResponse(content_type="text/csv; charset=utf-8-sig")
+        resp["Content-Disposition"] = "attachment; filename=logs.csv"
+        w = csv.writer(resp)
+        w.writerow(["ts","app","action","user","object","extra"])
+        for l in qs[:50000]:
+            w.writerow([l.ts, l.app, l.action, getattr(l.user, "username", ""), l.object_repr, l.extra])
+        return resp
+
+    # paginar
+    from django.core.paginator import Paginator
+    page = request.GET.get("page") or 1
+    logs_page = Paginator(qs, 50).get_page(page)
+
+    # combos
+    users = User.objects.filter(is_active=True).order_by("username")
+    apps = AuditLog.objects.values_list("app", flat=True).distinct().order_by("app")
+    actions = AuditLog.objects.values_list("action", flat=True).distinct().order_by("action")
+
+    ctx = {
+        "logs_page": logs_page,
+        "users": users, "apps": apps, "actions": actions,
+        "filtros": {"fini":fini, "ffin":ffin, "app":app, "action":act, "user":usr, "objq":objq, "exq":exq},
+    }
+    return render(request, "core/logs.html", ctx)
 
 
 @login_required
@@ -70,21 +114,6 @@ def backup_media_zip(request):
     AuditLog.objects.create(app="CORE", action="EXPORT_MEDIA", user=request.user)
     return FileResponse(mem, as_attachment=True, filename="media_backup.zip")
 
-# core/admin_views.py
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import FileResponse
-from django.conf import settings
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.contrib.auth.models import User
-
-from .models import Config, AuditLog, SessionLog
-from core.auth import require_roles
-from core.roles import Rol
-import os, io, zipfile
-
 
 def _parse_log_filters(request):
     fini = (request.GET.get("fini") or "").strip()   # yyyy-mm-dd
@@ -110,67 +139,3 @@ def _parse_log_filters(request):
         qs = qs.filter(Q(object_repr__icontains=qtxt) | Q(extra__icontains=qtxt))
 
     return qs, {"fini": fini, "ffin": ffin, "app": app, "action": act, "user": uid, "q": qtxt}
-
-
-@login_required
-@require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
-def logs_view(request):
-    qs = AuditLog.objects.select_related("user").all()
-
-    fini = (request.GET.get("fini") or "").strip()
-    ffin = (request.GET.get("ffin") or "").strip()
-    app = (request.GET.get("app") or "").strip()
-    action = (request.GET.get("action") or "").strip()
-    user_id = (request.GET.get("user") or "").strip()
-    q = (request.GET.get("q") or "").strip()
-    rango = (request.GET.get("rango") or "").strip()  # <--- NUEVO
-
-    # Rango rápido → setea fini/ffin
-    if rango:
-        hoy = timezone.localdate()
-        if rango == "hoy":
-            fini = ffin = hoy.isoformat()
-        elif rango == "ult7":
-            fini = (hoy - timedelta(days=7)).isoformat()
-            ffin = hoy.isoformat()
-        elif rango == "mes":
-            fini = hoy.replace(day=1).isoformat()
-            ffin = hoy.isoformat()
-
-    if fini:
-        qs = qs.filter(ts__date__gte=fini)
-    if ffin:
-        qs = qs.filter(ts__date__lte=ffin)
-    if app:
-        qs = qs.filter(app__iexact=app)
-    if action:
-        qs = qs.filter(action__iexact=action)
-    if user_id:
-        qs = qs.filter(user_id=user_id)
-    if q:
-        qs = qs.filter(Q(object_repr__icontains=q) | Q(extra__icontains=q))
-
-    qs = qs.order_by("-ts")
-
-    # listas auxiliares
-    users = User.objects.filter(is_active=True).order_by("username").only("id", "username")
-    apps = (AuditLog.objects.order_by().values_list("app", flat=True).distinct())
-    actions = (AuditLog.objects.order_by().values_list("action", flat=True).distinct())
-
-    # paginar
-    page = int(request.GET.get("page") or 1)
-    paginator = Paginator(qs, 50)
-    logs_page = paginator.get_page(page)
-
-    ctx = {
-        "logs_page": logs_page,
-        "sessions": SessionLog.objects.select_related("user")[:200],
-        "users": users,
-        "apps": apps,
-        "actions": actions,
-        "filtros": {
-            "fini": fini, "ffin": ffin, "app": app, "action": action,
-            "user": user_id, "q": q, "rango": rango,  # <--- NUEVO
-        },
-    }
-    return render(request, "core/logs.html", ctx)
