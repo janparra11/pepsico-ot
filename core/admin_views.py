@@ -9,6 +9,12 @@ from .models import Config, AuditLog, SessionLog
 from core.auth import require_roles
 from core.roles import Rol
 
+from datetime import timedelta
+from django.utils import timezone
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.auth.models import User
+
 import os, io, zipfile
 
 @login_required
@@ -109,28 +115,62 @@ def _parse_log_filters(request):
 @login_required
 @require_roles(Rol.ADMIN, Rol.JEFE_TALLER, Rol.SUPERVISOR)
 def logs_view(request):
-    # filtros para AuditLog
-    qs, filtros = _parse_log_filters(request)
+    qs = AuditLog.objects.select_related("user").all()
 
-    # opciones para selects (apps y actions más recientes)
-    apps = list(AuditLog.objects.order_by().values_list("app", flat=True).distinct())
-    actions = list(AuditLog.objects.order_by().values_list("action", flat=True).distinct())
+    fini = (request.GET.get("fini") or "").strip()
+    ffin = (request.GET.get("ffin") or "").strip()
+    app = (request.GET.get("app") or "").strip()
+    action = (request.GET.get("action") or "").strip()
+    user_id = (request.GET.get("user") or "").strip()
+    q = (request.GET.get("q") or "").strip()
+    rango = (request.GET.get("rango") or "").strip()  # <--- NUEVO
+
+    # Rango rápido → setea fini/ffin
+    if rango:
+        hoy = timezone.localdate()
+        if rango == "hoy":
+            fini = ffin = hoy.isoformat()
+        elif rango == "ult7":
+            fini = (hoy - timedelta(days=7)).isoformat()
+            ffin = hoy.isoformat()
+        elif rango == "mes":
+            fini = hoy.replace(day=1).isoformat()
+            ffin = hoy.isoformat()
+
+    if fini:
+        qs = qs.filter(ts__date__gte=fini)
+    if ffin:
+        qs = qs.filter(ts__date__lte=ffin)
+    if app:
+        qs = qs.filter(app__iexact=app)
+    if action:
+        qs = qs.filter(action__iexact=action)
+    if user_id:
+        qs = qs.filter(user_id=user_id)
+    if q:
+        qs = qs.filter(Q(object_repr__icontains=q) | Q(extra__icontains=q))
+
+    qs = qs.order_by("-ts")
+
+    # listas auxiliares
     users = User.objects.filter(is_active=True).order_by("username").only("id", "username")
+    apps = (AuditLog.objects.order_by().values_list("app", flat=True).distinct())
+    actions = (AuditLog.objects.order_by().values_list("action", flat=True).distinct())
 
-    # paginar audit log
-    page = int(request.GET.get("page", 1) or 1)
+    # paginar
+    page = int(request.GET.get("page") or 1)
     paginator = Paginator(qs, 50)
-    page_obj = paginator.get_page(page)
-
-    # sesiones (simple: últimas 200, se podrían paginar aparte si quieres)
-    sessions = SessionLog.objects.select_related("user")[:200]
+    logs_page = paginator.get_page(page)
 
     ctx = {
-        "logs_page": page_obj,   # página de AuditLog
-        "sessions": sessions,    # últimas sesiones
+        "logs_page": logs_page,
+        "sessions": SessionLog.objects.select_related("user")[:200],
+        "users": users,
         "apps": apps,
         "actions": actions,
-        "users": users,
-        "filtros": filtros,
+        "filtros": {
+            "fini": fini, "ffin": ffin, "app": app, "action": action,
+            "user": user_id, "q": q, "rango": rango,  # <--- NUEVO
+        },
     }
     return render(request, "core/logs.html", ctx)
