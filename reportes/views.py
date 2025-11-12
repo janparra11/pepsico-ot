@@ -76,14 +76,26 @@ def _stats_dashboard(qs_ot, global_top_veh=False):
 # --- Filtros utilitarios ---
 def _parse_filters(request):
     # yyyy-mm-dd
-    f_ini = request.GET.get("fini", "").strip()
-    f_fin = request.GET.get("ffin", "").strip()
-    estado = request.GET.get("estado", "").strip()
-    taller = request.GET.get("taller", "").strip()
-    mecanico_id = request.GET.get("mecanico", "").strip()
+    f_ini = (request.GET.get("fini") or "").strip()
+    f_fin = (request.GET.get("ffin") or "").strip()
+    estado = (request.GET.get("estado") or "").strip()
+    taller = (request.GET.get("taller") or "").strip()
+    mecanico_id = (request.GET.get("mecanico") or "").strip()
+    rango = (request.GET.get("rango") or "").strip() 
+
+    # si viene un rango rápido, lo traducimos a fechas
+    if rango:
+        hoy = timezone.localdate()
+        if rango == "hoy":
+            f_ini = f_fin = hoy.isoformat()
+        elif rango == "ult7":
+            f_ini = (hoy - timedelta(days=7)).isoformat()
+            f_fin = hoy.isoformat()
+        elif rango == "mes":
+            f_ini = hoy.replace(day=1).isoformat()
+            f_fin = hoy.isoformat()
 
     qs_ot = OrdenTrabajo.objects.all()
-
     if f_ini:
         qs_ot = qs_ot.filter(fecha_ingreso__date__gte=f_ini)
     if f_fin:
@@ -95,7 +107,10 @@ def _parse_filters(request):
     if mecanico_id:
         qs_ot = qs_ot.filter(mecanico_asignado_id=mecanico_id)
 
-    return qs_ot, {"fini": f_ini, "ffin": f_fin, "estado": estado, "taller": taller, "mecanico": mecanico_id}
+    return qs_ot, {
+        "fini": f_ini, "ffin": f_fin, "estado": estado,
+        "taller": taller, "mecanico": mecanico_id, "rango": rango  # <--- NUEVO
+    }
 
 
 # ---------- vistas ----------
