@@ -1,6 +1,8 @@
 from django.apps import AppConfig
 
-
 class OtConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ot'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "ot"
+
+    def ready(self):
+        from . import signals  # noqa

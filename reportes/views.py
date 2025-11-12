@@ -11,6 +11,8 @@ from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
 from django.core.paginator import Paginator
 
+from core.models import AuditLog
+
 def _nombre_archivo_reporte(request, base):
     hoy = timezone.localdate().strftime("%Y%m%d")
     estado = (request.GET.get("estado") or "todos").lower()
@@ -265,6 +267,9 @@ def export_excel(request):
     resp = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     wb.save(resp)
+
+    AuditLog.objects.create(app="REPORTES", action="EXPORT_EXCEL", user=request.user, extra=str(request.GET.dict()))
+
     return resp
 
 
@@ -323,4 +328,7 @@ def export_pdf(request):
 
     c.showPage()
     c.save()
+
+    AuditLog.objects.create(app="REPORTES", action="EXPORT_PDF", user=request.user, extra=str(request.GET.dict()))
+
     return resp

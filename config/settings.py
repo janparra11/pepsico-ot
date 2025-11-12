@@ -21,11 +21,11 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # Apps del proyecto
     "taller",
-    "ot",
+    "ot.apps.OtConfig",
     "reportes",
     "widget_tweaks",
     "core.apps.CoreConfig",
-    "inventario",
+    "inventario.apps.InventarioConfig",
 ]
 
 MIDDLEWARE = [
