@@ -4,6 +4,13 @@
 <div class="bg-white p-4 rounded shadow-sm">
   <h1 class="h5 mb-3">Dashboard</h1>
 
+  {% load roles %}
+  {% if request.user|has_role:"SUPERVISOR" or request.user|has_role:"JEFE_TALLER" or request.user|has_role:"ADMIN" %}
+    <div class="text-end mb-3">
+      <a class="btn btn-outline-primary" href="{% url 'reportes_dashboard' %}">Generar Reporte</a>
+    </div>
+  {% endif %}
+
   <!-- KPIs -->
   <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
     <div class="col">

@@ -13,6 +13,7 @@ urlpatterns = [
     path("login/",  auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("logout/", logout_with_message, name="logout"),
     path("inventario/", include("inventario.urls")),
+    path("reportes/", include("reportes.urls")),
 ]
 
 if settings.DEBUG:

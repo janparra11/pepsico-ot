@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Reportes y Supervisión{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Reportes y Supervisión</h1>
+
+  <!-- Filtros -->
+  <form class="row g-2 mb-3" method="get">
+    <div class="col-6 col-md-3">
+      <label class="form-label small">Desde</label>
+      <input type="date" name="fini" class="form-control" value="{{ filtros.fini }}">
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label small">Hasta</label>
+      <input type="date" name="ffin" class="form-control" value="{{ filtros.ffin }}">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Estado</label>
+      <select name="estado" class="form-select">
+        <option value="">(Todos)</option>
+        {% for val,label in estados %}
+          <option value="{{ val }}" {% if filtros.estado == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small">Taller</label>
+      <select name="taller" class="form-select">
+        <option value="">(Todos)</option>
+        {% for t in talleres %}
+          <option value="{{ t.id }}" {% if filtros.taller|add:'0' == t.id|add:'0' %}selected{% endif %}>{{ t.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-2">
+      <label class="form-label small">Mecánico</label>
+      <select name="mecanico" class="form-select">
+        <option value="">(Todos)</option>
+        {% for u in mecanicos %}
+          <option value="{{ u.id }}" {% if filtros.mecanico|add:'0' == u.id|add:'0' %}selected{% endif %}>{{ u.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary btn-action btn-wide">Filtrar</button>
+      <a class="btn btn-outline-secondary" href="?">Limpiar</a>
+      <a class="btn btn-success ms-auto" href="{% url 'reportes_export_excel' %}?{{ request.GET.urlencode }}">Exportar Excel</a>
+      <a class="btn btn-outline-dark" href="{% url 'reportes_export_pdf' %}?{{ request.GET.urlencode }}">Exportar PDF</a>
+    </div>
+  </form>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">OTs abiertas</div>
+        <div class="display-6">{{ kpi_abiertas }}</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">OTs cerradas</div>
+        <div class="display-6">{{ kpi_cerradas }}</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="p-3 border rounded bg-light-subtle">
+        <div class="small text-muted">Tiempo prom. reparación</div>
+        <div class="display-6">{{ kpi_tiempo_prom }} h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tablas -->
+  <div class="row g-3">
+    <div class="col-12 col-lg-6">
+      <div class="card card-body">
+        <h2 class="h6 mb-3">Top 10 repuestos más usados</h2>
+        <table class="table table-sm align-middle mb-0">
+          <thead><tr><th>Código</th><th>Descripción</th><th class="text-end">Movs</th></tr></thead>
+          <tbody>
+            {% for r in top_repuestos %}
+              <tr>
+                <td>{{ r.repuesto__codigo }}</td>
+                <td>{{ r.repuesto__descripcion }}</td>
+                <td class="text-end">{{ r.movs }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3" class="text-muted">Sin datos.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card card-body">
+        <h2 class="h6 mb-3">Top 10 vehículos más frecuentes</h2>
+        <table class="table table-sm align-middle mb-0">
+          <thead><tr><th>Patente</th><th class="text-end">OTs</th></tr></thead>
+          <tbody>
+            {% for v in top_vehiculos %}
+              <tr>
+                <td>{{ v.vehiculo__patente }}</td>
+                <td class="text-end">{{ v.total }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="2" class="text-muted">Sin datos.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
