@@ -16,7 +16,7 @@ from django.db.models import Count, Avg
 from django.db.models import DurationField, ExpressionWrapper, F
 from openpyxl.formatting.rule import DataBarRule
 
-from django.db.models import Count, Q, Sum, Avg, F, ExpressionWrapper, DurationField
+from django.db.models import Count, Q, Sum, Avg, F, ExpressionWrapper, DurationField, Max
 
 # para resolver rutas de estáticos
 from django.contrib.staticfiles import finders
@@ -206,23 +206,63 @@ def export_excel(request):
     ws = wb.active
     ws.title = "Resumen"
 
+    # Anchos de columnas “cómodos” para el título y filtros
+    for col, w in zip("ABCDEFGH", [16, 20, 26, 16, 18, 18, 14, 14]):
+        ws.column_dimensions[col].width = w
+
+    # --- LOGO + TÍTULO sin superposición ---
+    from openpyxl.drawing.image import Image as XLImage
+
+    logo_path = _static_logo_path()  # busca static/img/logo_pepsico.png
+    wrote_header = False
+
     # --- LOGO en Excel (opcional si existe) ---
     try:
         from openpyxl.drawing.image import Image as XLImage
         _logo = _static_logo_path()
         if _logo:
             img = XLImage(_logo)
-            # celdas A1 (ajusta tamaño si quieres)
+            # Tamaño recomendado: ~140x40 px (ajusta si tu logo es muy alargado/alto)
+            img.width = 140
+            img.height = 40
             ws.add_image(img, "A1")
+            # Altura de filas para que no se monten textos
+            ws.row_dimensions[1].height = 32  # puntos (~px*0.75)
+            ws.row_dimensions[2].height = 22
+            # Títulos a partir de C1 para no chocar con el logo
+            ws.merge_cells("C1:G1")
+            ws["C1"] = f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"
+            ws.merge_cells("C2:G2")
+            ws["C2"] = f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"
+            # Línea en blanco
+            ws.append([])
+        else:
+            # Sin logo: usar el layout tradicional
+            ws.append([f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"])
+            ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
+            ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
+            ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
+            ws.append([])
     except Exception:
-        pass
+        # En caso de error con el logo, caer al layout tradicional
+        ws.append([f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"])
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
+        ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
+        ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
+        ws.append([])
 
-    ws.append([f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo"])
-    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
-    ws.append([f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}"])
-    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
+            # Título y “Generado”
+        title_col_start, title_col_end = 3, 8  # C..H
+        ws.merge_cells(start_row=1, start_column=title_col_start, end_row=1, end_column=title_col_end)
+        ws.merge_cells(start_row=2, start_column=title_col_start, end_row=2, end_column=title_col_end)
+        ws.cell(row=1, column=title_col_start, value=f"{cfg.nombre_taller} - Reporte de Órdenes de Trabajo")
+        ws.cell(row=2, column=title_col_start, value=f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}")
+        wrote_header = True
+    except Exception:
+        wrote_header = False
+
+    # Línea en blanco y bloque de Filtros
     ws.append([])
-
     ws.append(["Filtros"])
     # Si hay rango rápido, muéstralo
     if filtros.get("rango"):
@@ -280,14 +320,10 @@ def export_excel(request):
         cell.number_format = "#,##0.##"
 
     # --- después de dar formato a la columna C ---
-    if ws3.max_row > 1:  # hay datos
+    if ws3.max_row > 1:
         ws3.conditional_formatting.add(
             f"C2:C{ws3.max_row}",
-            DataBarRule(
-                start_type="num", start_value=0,
-                end_type="max", end_value=None,
-                color="638EC6"  # azul suave
-            )
+            DataBarRule(start_type="num", start_value=0, end_type="max", color="638EC6")
         )
 
     # Aplica barra de datos a los totales (desde la fila 2 hasta la última)
@@ -311,11 +347,7 @@ def export_excel(request):
     if ws4.max_row > 1:
         ws4.conditional_formatting.add(
             f"B2:B{ws4.max_row}",
-            DataBarRule(
-                start_type="num", start_value=0,
-                end_type="max", end_value=None,
-                color="95C76F"  # verde suave
-            )
+            DataBarRule(start_type="num", start_value=0, end_type="max", color="95C76F")
         )
 
     last_row_v = ws4.max_row
@@ -437,9 +469,10 @@ def export_pdf(request):
     from reportlab.lib.pagesizes import A4
     from reportlab.pdfgen import canvas
     from reportlab.lib.units import cm
+    from reportlab.lib.utils import ImageReader  # para el logo
 
     qs_ot, filtros = _parse_filters(request)
-    stats = _stats_dashboard(qs_ot, veh_metric=filtros.get("veh_metric") or "ots")
+    stats = _stats_dashboard(qs_ot)  # respeta filtros
     cfg = Config.get_solo()
 
     resp = HttpResponse(content_type="application/pdf")
@@ -447,92 +480,178 @@ def export_pdf(request):
     resp["Content-Disposition"] = f'attachment; filename="{fname}"'
     c = canvas.Canvas(resp, pagesize=A4)
     w, h = A4
+
+    # ===== Cabecera (logo opcional + título/fechas) =====
     y = h - 2*cm
+    left = 2*cm
+    top = y
 
-    # --- LOGO en PDF (opcional si existe) ---
-    try:
-        _logo = _static_logo_path()
-        if _logo:
-            # ancho/alto aproximados; ajusta si tu PNG es muy grande/pequeño
-            c.drawImage(_logo, 2*cm, y-1.2*cm, width=120, height=36, preserveAspectRatio=True, mask='auto')
-            y -= 0.3*cm  # pequeño espacio extra bajo el logo
-    except Exception:
-        pass
+    # Logo (si existe en staticfiles)
+    logo_path = _static_logo_path()  # usa tu helper
+    logo_w, logo_h = (0, 0)
+    if logo_path:
+        try:
+            img = ImageReader(logo_path)
+            # tamaño máximo 2.2cm alto, ancho proporcional, y reserva ~3cm de alto total
+            max_h = 2.2*cm
+            iw, ih = img.getSize()
+            scale = max_h / float(ih)
+            logo_w, logo_h = iw * scale, ih * scale
+            c.drawImage(img, left, top - logo_h, width=logo_w, height=logo_h,
+                        preserveAspectRatio=True, mask='auto')
+        except Exception:
+            logo_w, logo_h = (0, 0)
 
+    # Texto a la derecha del logo (o desde el margen si no hay logo)
+    text_x = left + (logo_w + 0.6*cm if logo_w else 0)
     c.setFont("Helvetica-Bold", 12)
-    c.drawString(2*cm, y, f"{cfg.nombre_taller} · Reporte de Órdenes de Trabajo")
-    y -= 0.7*cm
+    c.drawString(text_x, top, f"{cfg.nombre_taller} · Reporte de Órdenes de Trabajo")
     c.setFont("Helvetica", 10)
-    c.drawString(2*cm, y, f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}")
-    y -= 0.6*cm
+    c.drawString(text_x, top - 0.6*cm, f"Generado: {timezone.localtime(timezone.now()).strftime('%d-%m-%Y %H:%M')}")
 
-    # Filtros
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Filtros:"); c.setFont("Helvetica", 10)
+    # Avanza el cursor por debajo del logo o de la segunda línea
+    y = min(top - logo_h, top - 0.6*cm) - 0.8*cm
+
+    # ===== Filtros =====
+    c.setFont("Helvetica-Bold", 10); c.drawString(left, y, "Filtros:"); c.setFont("Helvetica", 10)
     y -= 0.5*cm
     if filtros.get("rango"):
-        etiqueta = {"hoy":"Hoy","ult7":"Últimos 7 días","mes":"Este mes"}.get(filtros["rango"], filtros["rango"])
-        c.drawString(2*cm, y, f"Rango rápido: {etiqueta}")
+        etiqueta = {"hoy": "Hoy", "ult7": "Últimos 7 días", "mes": "Este mes"}.get(filtros["rango"], filtros["rango"])
+        c.drawString(left, y, f"Rango rápido: {etiqueta}")
         y -= 0.5*cm
-    c.drawString(2*cm, y, f"Desde: {filtros['fini'] or '(todos)'}   Hasta: {filtros['ffin'] or '(todos)'}")
+    c.drawString(left, y, f"Desde: {filtros['fini'] or '(todos)'}   Hasta: {filtros['ffin'] or '(todos)'}")
     y -= 0.5*cm
-    c.drawString(2*cm, y, f"Estado: {filtros['estado'] or '(todos)'}   Taller: {filtros['taller'] or '(todos)'}   Mecánico: {filtros['mecanico'] or '(todos)'}")
+    c.drawString(left, y, f"Estado: {filtros['estado'] or '(todos)'}   Taller: {filtros['taller'] or '(todos)'}   Mecánico: {filtros['mecanico'] or '(todos)'}")
     y -= 0.8*cm
 
-    # KPIs
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "KPIs:"); c.setFont("Helvetica", 10)
+    # ===== KPIs =====
+    c.setFont("Helvetica-Bold", 10); c.drawString(left, y, "KPIs:"); c.setFont("Helvetica", 10)
     y -= 0.5*cm
-    c.drawString(2*cm, y, f"OTs abiertas: {stats['kpi_abiertas']}   OTs cerradas: {stats['kpi_cerradas']}   Tiempo prom: {stats['kpi_tiempo_prom']} h")
+    c.drawString(left, y, f"OTs abiertas: {stats['kpi_abiertas']}   OTs cerradas: {stats['kpi_cerradas']}   Tiempo prom: {stats['kpi_tiempo_prom']} h")
     y -= 0.8*cm
 
-    # Top Repuestos
-    titulo_top_veh = "Top 10 Vehículos (OTs)" if (filtros.get("veh_metric") or "ots") == "ots" else "Top 10 Vehículos (OTs cerradas)"
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, titulo_top_veh); c.setFont("Helvetica", 9)
-    y -= 0.5*cm
-    for v in stats["top_vehiculos"][:10]:
-        c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
-        if y < 2*cm:
-            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+    # ========== TOPS ==========
+    # ---------- Top Repuestos ----------
+    from django.db.models import Max
 
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(2*cm, y, "Top 10 Repuestos (por consumo en filtros)")
+    y -= 0.6*cm
+    c.setFont("Helvetica-Bold", 9)
+    c.drawString(2*cm, y, "Código")
+    c.drawString(7*cm, y, "Descripción")
+    c.drawRightString(15*cm, y, "Cantidad")
+    c.drawRightString(19*cm, y, "Últ. mov.")
+    y -= 0.45*cm
+    c.setFont("Helvetica", 9)
 
-    y -= 0.3*cm
-    c.setFont("Helvetica-Bold", 10); c.drawString(2*cm, y, "Top 10 Vehículos:"); c.setFont("Helvetica", 9)
-    y -= 0.5*cm
-    for v in stats["top_vehiculos"][:10]:
-        c.drawString(2*cm, y, f"{v['vehiculo__patente']} ({v['total']})"); y -= 0.45*cm
-        if y < 2*cm:
-            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
-
-    # Solo OTs cerradas válidas (evita duración negativa)
-    cerradas_ok = qs_ot.filter(
-        activa=False,
-        fecha_cierre__isnull=False,
-        fecha_cierre__gte=F("fecha_ingreso"),
-    ).annotate(
-        dur_td=ExpressionWrapper(F("fecha_cierre") - F("fecha_ingreso"), output_field=DurationField())
-    )
-
-    # Totales por taller
-    agg_base = qs_ot.values("taller__nombre").annotate(
-        total_ots=Count("id"),
-        abiertas=Count("id", filter=Q(activa=True)),
-        cerradas=Count("id", filter=Q(activa=False)),
-    ).order_by("taller__nombre")
-
-    # Promedio de duración (horas) por taller solo con cerradas válidas
-    dur_prom_map = {
-        (r["taller__nombre"] or "—"): (r["avg_dur"].total_seconds() / 3600.0) if r["avg_dur"] else 0.0
-        for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
+    # Último movimiento por repuesto (SALIDA) dentro de los filtros del reporte
+    ult_mov_map = {
+        r["repuesto__codigo"]: r["ultimo"]
+        for r in MovimientoStock.objects.filter(tipo=MovimientoStock.SALIDA)
+                   .values("repuesto__codigo")
+                   .annotate(ultimo=Max("creado_en"))
     }
+
+    for r in list(stats["top_repuestos"][:10]):
+        cod = r["repuesto__codigo"] or "—"
+        desc = (r["repuesto__descripcion"] or "—")[:50]
+        total = r["total"] or 0
+        ult = ult_mov_map.get(cod)
+        ult_txt = timezone.localtime(ult).strftime("%d-%m-%Y %H:%M") if ult else "—"
+
+        c.drawString(2*cm, y, cod[:20])
+        c.drawString(7*cm, y, desc)
+        c.drawRightString(15*cm, y, f"{total}")
+        c.drawRightString(19*cm, y, ult_txt)
+        y -= 0.42*cm
+        if y < 2*cm:
+            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
+
+    y -= 0.4*cm
+
+    # ---------- Top Vehículos ----------
+    # Contamos OTs por patente RESPECTANDO los filtros (qs_ot)
+    veh_counts = (
+        qs_ot.values("vehiculo__patente")
+             .annotate(total=Count("id"))
+             .order_by("-total", "vehiculo__patente")[:10]
+    )
+    patentes = [v["vehiculo__patente"] for v in veh_counts]
+
+    # Taller más frecuente por patente (dentro de filtros)
+    tfreq_qs = (
+        qs_ot.filter(vehiculo__patente__in=patentes)
+             .values("vehiculo__patente", "taller__nombre")
+             .annotate(n=Count("id"))
+             .order_by("vehiculo__patente", "-n")
+    )
+    taller_frecuente = {}
+    for row in tfreq_qs:
+        p = row["vehiculo__patente"]
+        if p not in taller_frecuente:
+            taller_frecuente[p] = row["taller__nombre"] or "—"
+
+    # Último servicio (máxima fecha_ingreso por patente)
+    ult_serv_qs = (
+        qs_ot.filter(vehiculo__patente__in=patentes)
+             .values("vehiculo__patente")
+             .annotate(ultimo=Max("fecha_ingreso"))
+    )
+    ultimo_serv = {r["vehiculo__patente"]: r["ultimo"] for r in ult_serv_qs}
+
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(2*cm, y, "Top 10 Vehículos (por OTs en filtros)")
+    y -= 0.6*cm
+    c.setFont("Helvetica-Bold", 9)
+    c.drawString(2*cm, y, "Patente")
+    c.drawRightString(8*cm, y, "OTs")
+    c.drawString(9*cm, y, "Taller más frecuente")
+    c.drawRightString(16*cm, y, "Últ. servicio")
+    c.drawRightString(19*cm, y, "Hace")
+    y -= 0.45*cm
+    c.setFont("Helvetica", 9)
+
+    now_local = timezone.localtime(timezone.now())
+    for v in veh_counts:
+        p = v["vehiculo__patente"] or "—"
+        tot = v["total"] or 0
+        tall = taller_frecuente.get(p, "—")
+        u = ultimo_serv.get(p)
+        if u:
+            u_loc = timezone.localtime(u)
+            ult_txt = u_loc.strftime("%d-%m-%Y %H:%M")
+            dias = (now_local.date() - u_loc.date()).days
+            hace_txt = f"{dias} d"
+        else:
+            ult_txt = "—"
+            hace_txt = "—"
+
+        c.drawString(2*cm, y, p[:15])
+        c.drawRightString(8*cm, y, str(tot))
+        c.drawString(9*cm, y, (tall or "—")[:24])
+        c.drawRightString(16*cm, y, ult_txt)
+        c.drawRightString(19*cm, y, hace_txt)
+        y -= 0.42*cm
+        if y < 2*cm:
+            c.showPage(); y = h - 2*cm; c.setFont("Helvetica", 9)
 
     # ===== Resumen por taller =====
     c.showPage()
     y = h - 2*cm
 
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(2*cm, y, "Resumen por taller")
-    y -= 0.8*cm
-    c.setFont("Helvetica", 9)
+    # --- columnas fijas (alineación consistente) ---
+    X_TALLER = 2*cm     # texto normal (izquierda)
+    X_TOTAL  = 11*cm    # números a la derecha
+    X_ABIERT = 13*cm
+    X_CERRAD = 15*cm
+    X_PROM   = 19*cm
 
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(X_TALLER, y, "Resumen por taller")
+    y -= 0.8*cm
+
+    # recalculo (por si venimos de otra página)
     cerradas_ok = qs_ot.filter(
         activa=False,
         fecha_cierre__isnull=False,
@@ -547,47 +666,59 @@ def export_pdf(request):
         cerradas=Count("id", filter=Q(activa=False)),
     ).order_by("taller__nombre")
 
+    # promedio de duración (horas) por taller
     dur_prom_map = {
         (r["taller__nombre"] or "—"): (r["avg_dur"].total_seconds() / 3600.0) if r["avg_dur"] else 0.0
         for r in cerradas_ok.values("taller__nombre").annotate(avg_dur=Avg("dur_td"))
     }
 
-    # Cabecera de columnas
+    # cabecera
     c.setFont("Helvetica-Bold", 9)
-    c.drawString(2*cm, y, "Taller")
-    c.drawString(9*cm, y, "Totales")
-    c.drawString(12*cm, y, "Abiertas")
-    c.drawString(14*cm, y, "Cerradas")
-    c.drawString(16*cm, y, "Tiempo prom. (h)")
+    c.drawString(X_TALLER, y, "Taller")
+    c.drawRightString(X_TOTAL,  y, "Totales")
+    c.drawRightString(X_ABIERT, y, "Abiertas")
+    c.drawRightString(X_CERRAD, y, "Cerradas")
+    c.drawRightString(X_PROM,   y, "T. prom (h)")
     y -= 0.5*cm
     c.setFont("Helvetica", 9)
 
-    for row in agg_base:
-        nombre = row["taller__nombre"] or "—"
-        t = row["total_ots"]; a = row["abiertas"]; crr = row["cerradas"]
-        prom = round(dur_prom_map.get(nombre, 0.0), 2)
+    # helper para cortar nombres largos con "…"
+    def ellipsize(txt, max_len=38):
+        if not txt:
+            return "—"
+        t = str(txt)
+        return t if len(t) <= max_len else (t[:max_len-1] + "…")
 
-        c.drawString(2*cm, y, str(nombre)[:30])
-        c.drawRightString(11*cm, y, str(t))
-        c.drawRightString(13*cm, y, str(a))
-        c.drawRightString(15*cm, y, str(crr))
-        c.drawRightString(19*cm, y, f"{prom:.2f}")
+    for row in agg_base:
+        nombre = ellipsize(row["taller__nombre"] or "—")
+        t = row["total_ots"] or 0
+        a = row["abiertas"] or 0
+        crr = row["cerradas"] or 0
+        prom = dur_prom_map.get(row["taller__nombre"] or "—", 0.0)
+
+        # columna 1: izquierda; resto: derecha (alineado por dígitos)
+        c.drawString(X_TALLER, y, nombre)
+        c.drawRightString(X_TOTAL,  y, f"{t:d}")
+        c.drawRightString(X_ABIERT, y, f"{a:d}")
+        c.drawRightString(X_CERRAD, y, f"{crr:d}")
+        c.drawRightString(X_PROM,   y, f"{prom:.2f}")
         y -= 0.45*cm
 
+        # salto de página con cabecera repetida
         if y < 2*cm:
             c.showPage()
             y = h - 2*cm
             c.setFont("Helvetica-Bold", 9)
-            c.drawString(2*cm, y, "Taller")
-            c.drawString(9*cm, y, "Totales")
-            c.drawString(12*cm, y, "Abiertas")
-            c.drawString(14*cm, y, "Cerradas")
-            c.drawString(16*cm, y, "T. prom (h)")
+            c.drawString(X_TALLER, y, "Taller")
+            c.drawRightString(X_TOTAL,  y, "Totales")
+            c.drawRightString(X_ABIERT, y, "Abiertas")
+            c.drawRightString(X_CERRAD, y, "Cerradas")
+            c.drawRightString(X_PROM,   y, "T. prom (h)")
             y -= 0.5*cm
             c.setFont("Helvetica", 9)
 
-    # Finaliza PDF
     c.showPage()
     c.save()
     AuditLog.objects.create(app="REPORTES", action="EXPORT_PDF", user=request.user, extra=str(request.GET.dict()))
     return resp
+
