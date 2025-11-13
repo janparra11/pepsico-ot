@@ -133,29 +133,6 @@
     </ul>
   </nav>
   {% endif %}
-
-
-  <h2 class="h6 mt-4">Sesiones (login/logout)</h2>
-  <div class="table-responsive">
-    <table class="table table-sm align-middle">
-      <thead>
-        <tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>IP</th><th>Agente</th></tr>
-      </thead>
-      <tbody>
-        {% for s in sessions %}
-          <tr>
-            <td class="text-nowrap">{{ s.ts|date:"d-m-Y H:i" }}</td>
-            <td>{{ s.user }}</td>
-            <td>{{ s.get_action_display }}</td>
-            <td>{{ s.ip|default:"—" }}</td>
-            <td class="small text-muted">{{ s.ua|default:"" }}</td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="5" class="text-muted">Sin sesiones.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 </div>
 
 <!-- Modal Detalle -->
