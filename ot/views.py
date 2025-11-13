@@ -29,11 +29,15 @@ from core.auth import require_roles
 from core.roles import Rol
 
 from .forms import IngresoForm
-from taller.models import Vehiculo
 from core.models import EventoAgenda
 
 from django.core.paginator import Paginator
 from core.filters import filter_ots_for_user
+
+from datetime import date
+from django.db.models.functions import TruncDate
+
+from taller.models import Vehiculo, TipoVehiculo
 
 def generar_folio():
     # folio corto legible; si prefieres secuencial, lo podemos cambiar luego
@@ -65,93 +69,73 @@ def home(request):
     }
     return render(request, "core/home.html", ctx)
 
-@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
 @login_required
+@require_roles(Rol.RECEPCIONISTA, Rol.GUARDIA, Rol.JEFE_TALLER)
 def ingreso_nuevo(request):
     if request.method == "POST":
         form = IngresoForm(request.POST, request.FILES)
         if form.is_valid():
             patente = form.cleaned_data["patente"].strip().upper()
-            chofer = (form.cleaned_data.get("chofer") or "").strip()
-            tipo   = form.cleaned_data.get("tipo")          # puede ser obj o None
-            tipo_txt = (form.cleaned_data.get("tipo_texto") or "").strip()  # ← NUEVO
+            chofer = form.cleaned_data.get("chofer", "")
+            tipo = form.cleaned_data.get("tipo")
+            tipo_txt = (form.cleaned_data.get("tipo_texto") or "").strip()
             taller = form.cleaned_data["taller"]
-            obs    = (form.cleaned_data.get("observaciones") or "").strip()
+            obs = form.cleaned_data.get("observaciones", "")
 
-            with transaction.atomic():
-                veh, _ = Vehiculo.objects.select_for_update().get_or_create(
-                    patente=patente
-                )
+            try:
+                with transaction.atomic():
+                    veh, _ = Vehiculo.objects.get_or_create(patente=patente)
 
-                # Resolver tipo: si hay catálogo, 'tipo' es ModelChoice; si no hay, usar texto
-                if tipo:  # catálogo
-                    if getattr(veh, "tipo_id", None) != getattr(tipo, "id", None):
+                    # asignar tipo
+                    if tipo:
                         veh.tipo = tipo
                         veh.save(update_fields=["tipo"])
-                elif tipo_txt:  # texto libre → intentar crear/usar un TipoVehiculo
-                    try:
-                        from taller.models import TipoVehiculo
-                        # Ajusta el nombre del campo según tu modelo (nombre / descripcion)
-                        tv, _ = TipoVehiculo.objects.get_or_create(nombre=tipo_txt)  # si tu campo es 'descripcion', cambia aquí
+                    elif tipo_txt:
+                        tv, _ = TipoVehiculo.objects.get_or_create(nombre=tipo_txt)
                         veh.tipo = tv
                         veh.save(update_fields=["tipo"])
-                    except Exception:
-                        # Si tu modelo no tiene ese campo o no quieres crear, simplemente lo ignoras
-                        pass
 
-                # Regla: una sola OT ACTIVA por vehículo
-                ot_activa = OrdenTrabajo.objects.filter(vehiculo=veh, activa=True).first()
-                if ot_activa:
-                    messages.warning(request, f"Ya existe una OT activa para {veh.patente} (OT {ot_activa.folio}).")
-                    return redirect("ot_detalle", ot_id=ot_activa.id)
+                    # regla: 1 OT activa por vehículo
+                    ot_activa = OrdenTrabajo.objects.filter(vehiculo=veh, activa=True).first()
+                    if ot_activa:
+                        messages.warning(request, f"Ya existe una OT activa para {veh.patente} (OT {ot_activa.folio}).")
+                        return redirect("ot_detalle", ot_id=ot_activa.id)
 
-                # Crear OT
-                ot = OrdenTrabajo.objects.create(
-                    folio=generar_folio(),
-                    vehiculo=veh,
-                    taller=taller,
-                    estado_actual=EstadoOT.INGRESADO,
-                    activa=True,
-                    chofer=chofer,
-                )
+                    # crear OT
+                    from uuid import uuid4
+                    ot = OrdenTrabajo.objects.create(
+                        folio=uuid4().hex[:8].upper(),
+                        vehiculo=veh,
+                        taller=taller,
+                        estado_actual=EstadoOT.INGRESADO,
+                        activa=True,
+                        chofer=chofer,
+                    )
 
-                # Historial inicial
-                HistorialEstadoOT.objects.create(
-                    ot=ot,
-                    estado=EstadoOT.INGRESADO,
-                    observaciones=obs
-                )
+                    archivo = request.FILES.get("evidencia")
+                    if archivo:
+                        doc = DocumentoOT(ot=ot, archivo=archivo, tipo="Evidencia ingreso", creado_por=request.user)
+                        doc.full_clean()
+                        doc.save()
 
-                # Evidencia (opcional) desde el formulario de ingreso  ← NUEVO
-                archivo = request.FILES.get("evidencia")
-                if archivo:
-                    doc = DocumentoOT(ot=ot, archivo=archivo, tipo="Evidencia ingreso", creado_por=request.user)
-                    doc.full_clean()
-                    doc.save()
+                    # historial inicial
+                    HistorialEstadoOT.objects.create(ot=ot, estado=EstadoOT.INGRESADO, observaciones=obs)
 
-                # Evento de agenda
-                EventoAgenda.objects.create(
-                    titulo=f"Ingreso OT {ot.folio}",
-                    inicio=ot.fecha_ingreso,
-                    ot=ot,
-                    asignado_a=request.user if request.user.is_authenticated else None
-                )
+                    # ✅ evidencias múltiples
+                    files = request.FILES.getlist("evidencias")
+                    for f in files:
+                        doc = DocumentoOT(ot=ot, archivo=f, tipo="Evidencia ingreso", creado_por=request.user)
+                        doc.full_clean()
+                        doc.save()
 
-                # Notificación
-                try:
-                    from core.services import notificar
-                    if request.user.is_authenticated:
-                        notificar(
-                            destinatario=request.user,
-                            titulo=f"OT creada: {ot.folio}",
-                            mensaje=f"Se creó la OT {ot.folio} para {veh.patente} en {taller.nombre}.",
-                            url=f"/ot/{ot.id}/"
-                        )
-                except Exception:
-                    pass
+                messages.success(request, f"OT {ot.folio} creada correctamente.")
+                return redirect("ot_detalle", ot_id=ot.id)
 
-            messages.success(request, f"OT {ot.folio} creada correctamente.")
-            return redirect("ot_detalle", ot_id=ot.id)
+            except Exception as e:
+                messages.error(request, f"Error al crear OT: {e}")
+                return redirect("ingreso_nuevo")
+        else:
+            messages.error(request, "Formulario inválido.")
     else:
         form = IngresoForm()
 
@@ -621,3 +605,31 @@ def ot_actualizar_compromiso(request, ot_id):
     except Exception:
         messages.error(request, "Fecha/hora inválida. Usa el selector de fecha y hora.")
     return redirect("ot_detalle", ot_id=ot.id)
+
+@login_required
+@require_roles(Rol.RECEPCIONISTA, Rol.JEFE_TALLER, Rol.SUPERVISOR, Rol.ADMIN)
+def ingresos_listar(request):
+    q = (request.GET.get("q") or "").strip().upper()
+    hoy = timezone.localdate()
+
+    qs = (
+        OrdenTrabajo.objects
+        .filter(fecha_ingreso__date=hoy)
+        .select_related("vehiculo", "taller")
+        .order_by("-fecha_ingreso")
+    )
+    if q:
+        qs = qs.filter(
+            Q(vehiculo__patente__icontains=q) |
+            Q(chofer__icontains=q)
+        )
+
+    paginator = Paginator(qs, 15)
+    page = request.GET.get("page")
+    page_obj = paginator.get_page(page)
+
+    return render(request, "ot/ingresos_listado.html", {
+        "page_obj": page_obj,
+        "q": q,
+        "hoy": hoy,
+    })

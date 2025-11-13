@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q, UniqueConstraint
 from datetime import timedelta
+from taller.models import Vehiculo, Taller
 
 class EstadoOT(models.TextChoices):
     INGRESADO   = "ING", "Ingresado"

@@ -1,53 +1,139 @@
 {% extends "base.html" %}
 {% block title %}Nuevo Ingreso{% endblock %}
-{% block content %}
-<div class="bg-white p-4 rounded shadow-sm">
-  <h1 class="h5 mb-3">Registrar Ingreso de Vehículo</h1>
 
-  <form method="post" novalidate>
+{% block content %}
+<style>
+  /* Detalles visuales suaves */
+  .card-soft { border: 0; box-shadow: 0 .25rem .75rem rgba(0,0,0,.06); }
+  .sticky-md { position: sticky; top: 1rem; }
+  .form-help { font-size: .875rem; color: #6c757d; }
+  .file-drop {
+    border: 1px dashed #cbd5e1; border-radius: .5rem; padding: .75rem;
+    background: #f8fafc;
+  }
+  .preview-img {
+    width: 100%; max-height: 220px; object-fit: cover; border-radius: .5rem;
+  }
+</style>
+
+<div class="bg-white p-4 rounded shadow-sm">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5 mb-0">Registrar Ingreso de Vehículo</h1>
+    <span class="text-muted small">Fecha y hora se registran automáticamente</span>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
 
-    {# Errores generales del formulario #}
     {% if form.non_field_errors %}
-      <div class="alert alert-danger">
-        {{ form.non_field_errors }}
-      </div>
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <div class="mb-3">
-      <label class="form-label" for="{{ form.patente.id_for_label }}">Patente</label>
-      {{ form.patente }}
-      {% if form.patente.errors %}
-        <div class="text-danger small">{{ form.patente.errors }}</div>
-      {% endif %}
+    <div class="row g-3">
+      <!-- IZQUIERDA: datos -->
+      <div class="col-12 col-lg-8">
+        <div class="card card-soft">
+          <div class="card-header bg-white">
+            <strong>Datos del vehículo</strong>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <label class="form-label" for="{{ form.patente.id_for_label }}">Patente</label>
+                {{ form.patente }}
+                {% if form.patente.errors %}<div class="text-danger small">{{ form.patente.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label" for="{{ form.taller.id_for_label }}">Taller</label>
+                {{ form.taller }}
+                {% if form.taller.errors %}<div class="text-danger small">{{ form.taller.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label" for="{{ form.chofer.id_for_label }}">Chofer</label>
+                {{ form.chofer }}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="{{ form.tipo.id_for_label }}">Tipo de vehículo (catálogo)</label>
+                {{ form.tipo }}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="{{ form.tipo_texto.id_for_label }}">Tipo de vehículo (texto)</label>
+                {{ form.tipo_texto }}
+                <div class="form-help">Usa este campo si no existe en el catálogo.</div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label" for="{{ form.observaciones.id_for_label }}">Observaciones</label>
+                {{ form.observaciones }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERECHA: evidencia -->
+      <div class="col-12 col-lg-4">
+        <div class="card card-soft sticky-md">
+          <div class="card-header bg-white">
+            <strong>Adjuntar evidencias</strong>
+          </div>
+          <div class="card-body">
+            <label class="form-label" for="{{ form.evidencia.id_for_label }}">Foto o PDF</label>
+            <div class="file-drop mb-2">
+              {{ form.evidencia }}
+            </div>
+            <div class="form-help">Permitidos: JPG, PNG, PDF. Máx 10&nbsp;MB.</div>
+
+            <!-- Preview -->
+            <div id="previewArea" class="mt-3 d-none">
+              <img id="previewImg" class="preview-img d-none" alt="Vista previa">
+              <div id="previewInfo" class="small text-muted"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label" for="{{ form.taller.id_for_label }}">Taller</label>
-      {{ form.taller }}
-      {% if form.taller.errors %}
-        <div class="text-danger small">{{ form.taller.errors }}</div>
-      {% endif %}
+    <div class="mt-3">
+      <button class="btn btn-primary btn-lg w-100">Registrar ingreso</button>
     </div>
-
-    <div class="mb-3">
-      <label class="form-label" for="{{ form.observaciones.id_for_label }}">Observaciones</label>
-      {{ form.observaciones }}
-      {% if form.observaciones.errors %}
-        <div class="text-danger small">{{ form.observaciones.errors }}</div>
-      {% endif %}
-    </div>
-
-    <div class="mb-2">
-      <label class="form-label">Chofer</label>
-      {{ form.chofer }}
-    </div>
-    <div class="mb-2">
-      <label class="form-label">Tipo de vehículo</label>
-      {{ form.tipo }}
-    </div>
-
-    <button class="btn btn-primary">Registrar ingreso</button>
   </form>
 </div>
+
+<script>
+  // Preview del archivo elegido (solo imágenes); muestra nombre/tipo si es PDF
+  (function () {
+    const input = document.getElementById('{{ form.evidencia.id_for_label }}');
+    if (!input) return;
+    const area = document.getElementById('previewArea');
+    const img  = document.getElementById('previewImg');
+    const info = document.getElementById('previewInfo');
+
+    input.addEventListener('change', () => {
+      area.classList.remove('d-none');
+      img.classList.add('d-none');
+      info.textContent = '';
+
+      const f = input.files && input.files[0];
+      if (!f) { area.classList.add('d-none'); return; }
+
+      const name = f.name.toLowerCase();
+      if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          img.src = e.target.result;
+          img.classList.remove('d-none');
+          info.textContent = f.name + ' (' + Math.round(f.size/1024) + ' KB)';
+        };
+        reader.readAsDataURL(f);
+      } else {
+        info.textContent = f.name + ' · ' + (f.type || 'archivo');
+      }
+    });
+  })();
+</script>
 {% endblock %}

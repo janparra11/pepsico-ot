@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Ingresos del día{% endblock %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h1 class="h5 mb-3">Ingresos del {{ hoy|date:"d-m-Y" }}</h1>
+
+  <form class="row g-2 mb-3" method="get">
+    <div class="col-sm-6">
+      <input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Buscar por patente o chofer">
+    </div>
+    <div class="col-sm-3 d-grid">
+      <button class="btn btn-primary">Buscar</button>
+    </div>
+    <div class="col-sm-3 d-grid">
+      <a class="btn btn-outline-secondary" href="{% url 'ingreso_nuevo' %}">Registrar nuevo ingreso</a>
+    </div>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Patente</th>
+          <th>Chofer</th>
+          <th>Tipo</th>
+          <th>Taller</th>
+          <th>OT</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ot in page_obj.object_list %}
+          <tr>
+            <td>{{ ot.fecha_ingreso|date:"H:i" }}</td>
+            <td>{{ ot.vehiculo.patente }}</td>
+            <td>{{ ot.chofer|default:"—" }}</td>
+            <td>{{ ot.vehiculo.tipo|default:"—" }}</td>
+            <td>{{ ot.taller.nombre }}</td>
+            <td><a class="btn btn-outline-primary btn-sm" href="{% url 'ot_detalle' ot.id %}">Abrir</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-muted">Sin ingresos hoy.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="mt-2">
+      <ul class="pagination pagination-sm">
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ q }}">«</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">«</span></li>
+        {% endif %}
+
+        <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+
+        {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ q }}">»</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">»</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+</div>
+{% endblock %}
