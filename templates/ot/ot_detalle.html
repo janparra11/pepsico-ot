@@ -318,44 +318,9 @@
       </div>
     </div>
   </div>
-
 </div>
-
-<h2 class="h6 mt-4">Agendar evento</h2>
-<div class="card card-body shadow-sm">
-  <form method="post" action="{% url 'ot_agendar_evento' ot.id %}">
-    {% csrf_token %}
-    <div class="mb-2">{{ evento_form.titulo }}</div>
-    <div class="mb-2">{{ evento_form.fecha }}</div>
-    <button class="btn btn-primary w-100 btn-action btn-wide">Agendar</button>
-  </form>
-</div>
-
-<h2 class="h6 mt-4">Agenda de esta OT</h2>
-<div class="card card-body shadow-sm">
-  {% if eventos_ot %}
-    <ul class="list-group">
-      {% for e in eventos_ot %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div>
-            <div class="fw-semibold">{{ e.titulo }}</div>
-            <div class="small text-muted">
-              {{ e.inicio }}{% if e.fin %} – {{ e.fin }}{% endif %}
-              {% if e.todo_el_dia %} · Todo el día{% endif %}
-            </div>
-          </div>
-          <a class="btn btn-outline-secondary btn-sm" href="{% url 'core_agenda' %}">Ver calendario</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <div class="text-muted">Sin eventos agendados para esta OT.</div>
-  {% endif %}
-</div>
-
 
 <h2 class="h6 mt-4">Documentos</h2>
-
 <div class="row g-3">
   {% load static %}
   {% is_role 'RECEPCIONISTA' 'MECANICO' 'JEFE_TALLER' as can_docs %}
@@ -429,6 +394,38 @@
     {% endwith %}
     </div>
   </div>
+</div>
+
+<h2 class="h6 mt-4">Agendar evento</h2>
+<div class="card card-body shadow-sm">
+  <form method="post" action="{% url 'ot_agendar_evento' ot.id %}">
+    {% csrf_token %}
+    <div class="mb-2">{{ evento_form.titulo }}</div>
+    <div class="mb-2">{{ evento_form.fecha }}</div>
+    <button class="btn btn-primary w-100 btn-action btn-wide">Agendar</button>
+  </form>
+</div>
+
+<h2 class="h6 mt-4">Agenda de esta OT</h2>
+<div class="card card-body shadow-sm">
+  {% if eventos_ot %}
+    <ul class="list-group">
+      {% for e in eventos_ot %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div>
+            <div class="fw-semibold">{{ e.titulo }}</div>
+            <div class="small text-muted">
+              {{ e.inicio }}{% if e.fin %} – {{ e.fin }}{% endif %}
+              {% if e.todo_el_dia %} · Todo el día{% endif %}
+            </div>
+          </div>
+          <a class="btn btn-outline-secondary btn-sm" href="{% url 'core_agenda' %}">Ver calendario</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-muted">Sin eventos agendados para esta OT.</div>
+  {% endif %}
 </div>
 
   <h2 class="h6 mt-4">Historial</h2>
