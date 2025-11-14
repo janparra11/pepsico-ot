@@ -1,19 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Agenda{% endblock %}
+
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
+  <!-- Título + botones de vista -->
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h5 mb-0">Agenda</h1>
-    <div>
-      <div class="btn-group">
-        <button class="btn btn-outline-secondary btn-sm" id="btnMonth">Mes</button>
-        <button class="btn btn-outline-secondary btn-sm" id="btnWeek">Semana</button>
-        <button class="btn btn-outline-secondary btn-sm" id="btnDay">Día</button>
-        <button class="btn btn-primary btn-sm" id="btnNuevo">+ Nuevo</button>
+    <div class="btn-toolbar">
+      <div class="btn-group me-2" role="group" aria-label="Cambiar vista">
+        <button class="btn btn-sm" id="btnMonth">Mes</button>
+        <button class="btn btn-sm" id="btnWeek">Semana</button>
+        <button class="btn btn-sm" id="btnDay">Día</button>
       </div>
+      <button class="btn btn-sm" id="btnNuevo">+ Nuevo</button>
     </div>
   </div>
-  <div id="calendar"></div>
+
+  <!-- Calendario -->
+  <div id="calendar" class="border rounded"></div>
 </div>
 
 <!-- MODAL crear/editar -->
@@ -65,17 +69,139 @@
   </div>
 </div>
 
+<!-- FullCalendar -->
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales-all.global.min.js"></script>
+
+<!-- Estilos -->
+<style>
+  /* ===== Botones superiores (Mes / Semana / Día) ===== */
+  #btnMonth,
+  #btnWeek,
+  #btnDay {
+    background-color: #ffffff;
+    color: #004B93;
+    border: 1px solid #004B93;
+    border-radius: 6px;
+    padding-inline: 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+  }
+
+  #btnMonth:hover,
+  #btnWeek:hover,
+  #btnDay:hover {
+    background-color: #e3f0ff;
+    color: #00356d;
+  }
+
+  /* botón activo (nuestros Mes / Semana / Día) */
+  .btn-view-active {
+    background-color: #004B93 !important;
+    color: #ffffff !important;
+  }
+
+  /* Botón + Nuevo */
+  #btnNuevo {
+    background-color: #ff8c00;
+    color: #ffffff;
+    border: 1px solid #ff8c00;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12);
+  }
+
+  #btnNuevo:hover {
+    background-color: #e17a00;
+    border-color: #e17a00;
+  }
+
+  /* ===== Botones de FullCalendar (flechas + Hoy) ===== */
+  /* Forzamos colores con !important para ganar a los estilos por defecto */
+  #calendar .fc .fc-button-primary {
+    background-color: #ffffff !important;
+    color: #004B93 !important;
+    border: 1px solid #004B93 !important;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+  }
+
+  #calendar .fc .fc-button-primary:hover {
+    background-color: #e3f0ff !important;
+    color: #00356d !important;
+  }
+
+  #calendar .fc .fc-button-primary:not(:disabled).fc-button-active,
+  #calendar .fc .fc-button-primary:not(:disabled):active {
+    background-color: #004B93 !important;
+    color: #ffffff !important;
+  }
+
+ /* ===== Eventos: fondo suave + colores por tipo ===== */
+
+/* Estilo base de todos los eventos */
+#calendar .fc-event {
+  border-radius: 6px;
+  border: 1px solid #0d6efd !important;
+  background-color: #e7f0ff !important;  /* azul muy clarito */
+}
+
+#calendar .fc-event .fc-event-main {
+  color: #0d6efd !important;
+  padding: 1px 3px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Vista semana/día: un poquito más legible */
+#calendar .fc-timegrid-event .fc-event-main {
+  font-size: 0.8rem;
+}
+
+/* Tipo: ENTREGAS (naranja) */
+#calendar .fc-event.ev-entrega {
+  border-color: #fd7e14 !important;
+  background-color: #ffe6cc !important;   /* naranja clarito */
+}
+#calendar .fc-event.ev-entrega .fc-event-main {
+  color: #c25a00 !important;
+}
+
+/* Tipo: REVISIONES (verde) */
+#calendar .fc-event.ev-revision {
+  border-color: #198754 !important;
+  background-color: #d8f3df !important;   /* verde clarito */
+}
+#calendar .fc-event.ev-revision .fc-event-main {
+  color: #13653f !important;
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const el = document.getElementById('calendar');
+
   const calendar = new FullCalendar.Calendar(el, {
-    initialView: 'timeGridWeek',          // 👈 vista con horas por defecto
+    initialView: 'dayGridMonth',   // Vista por defecto: mes
     locale: 'es',
+    firstDay: 1,
     timeZone: 'local',
-    headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+    buttonText: {
+      today: 'Hoy',
+      month: 'Mes',
+      week: 'Semana',
+      day: 'Día'
+    },
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: ''        // sin botones de vista internos
+    },
     events: '{% url "core_agenda_api" %}',
     selectable: true,
     selectMirror: true,
@@ -83,6 +209,24 @@ document.addEventListener('DOMContentLoaded', function () {
     slotMaxTime: "20:00:00",
     expandRows: true,
     eventTimeFormat: { hour: '2-digit', minute: '2-digit' },
+    height: 'auto',
+    nowIndicator: true,
+    navLinks: true,
+
+    /* Colorear eventos según título / descripción */
+    eventDidMount: function(info) {
+      const title = (info.event.title || "").toLowerCase();
+      const desc  = (info.event.extendedProps.descripcion || "").toLowerCase();
+      const text  = title + " " + desc;
+
+      if (text.includes("ingreso")) {
+        info.el.classList.add("ev-ingreso");
+      } else if (text.includes("entrega")) {
+        info.el.classList.add("ev-entrega");
+      } else if (text.includes("revision") || text.includes("revisión")) {
+        info.el.classList.add("ev-revision");
+      }
+    },
 
     select: function(info) {
       abrirModalCrear(info.start, info.end);
@@ -97,13 +241,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
   calendar.render();
 
-  // botones de vista
-  document.getElementById('btnMonth').onclick = () => calendar.changeView('dayGridMonth');
-  document.getElementById('btnWeek').onclick  = () => calendar.changeView('timeGridWeek');
-  document.getElementById('btnDay').onclick   = () => calendar.changeView('timeGridDay');
+  // -------- Botones de vista (Mes / Semana / Día) --------
+  const btnMonth = document.getElementById('btnMonth');
+  const btnWeek  = document.getElementById('btnWeek');
+  const btnDay   = document.getElementById('btnDay');
+
+  function marcarActivo(btn) {
+    [btnMonth, btnWeek, btnDay].forEach(b => b.classList.remove('btn-view-active'));
+    btn.classList.add('btn-view-active');
+  }
+
+  btnMonth.onclick = () => {
+    calendar.changeView('dayGridMonth');
+    marcarActivo(btnMonth);
+  };
+
+  btnWeek.onclick = () => {
+    calendar.changeView('timeGridWeek');
+    marcarActivo(btnWeek);
+  };
+
+  btnDay.onclick = () => {
+    calendar.changeView('timeGridDay');
+    marcarActivo(btnDay);
+  };
+
+  // Dejamos "Mes" como activa al cargar
+  marcarActivo(btnMonth);
+
+  // Botón + Nuevo
   document.getElementById('btnNuevo').onclick = () => abrirModalCrear();
 
-  // utilidades modal
+  // -------- Modal y CRUD --------
   const modalEl = document.getElementById('eventoModal');
   const modal = new bootstrap.Modal(modalEl);
   const form  = document.getElementById('eventoForm');

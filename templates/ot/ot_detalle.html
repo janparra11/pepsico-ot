@@ -301,21 +301,39 @@
     <div class="card card-body shadow-sm control-card">
       <h2 class="h6 mb-3">Estado del vehículo</h2>
 
-      <form method="post" action="{% url 'vehiculo_cambiar_estado' ot.id %}">
-        {% csrf_token %}
-        <div class="mb-2">
-          {{ estado_veh_form.estado }}
+      {% if ot.activa %}
+        <!-- Formulario habilitado -->
+        <form method="post" action="{% url 'vehiculo_cambiar_estado' ot.id %}">
+          {% csrf_token %}
+          <div class="mb-2">
+            {{ estado_veh_form.estado }}
+          </div>
+          <button class="btn btn-outline-primary w-100 btn-action btn-wide">
+            Actualizar estado de vehículo
+          </button>
+        </form>
+      {% else %}
+        <!-- Mensaje cuando la OT está cerrada -->
+        <div class="card card-body bg-light text-muted p-2">
+          La OT está cerrada. No se puede cambiar el estado del vehículo.
         </div>
-        <button class="btn btn-outline-primary w-100 btn-action btn-wide" {% if not ot.activa %}disabled{% endif %}>
-          Actualizar estado de vehículo
-        </button>
-      </form>
+      {% endif %}
 
-      <div class="mt-2">
-        <span class="badge {% if ot.vehiculo.estado == 'FUERA' %}text-bg-danger{% elif ot.vehiculo.estado == 'TALLER' %}text-bg-warning{% else %}text-bg-success{% endif %}">
+      <!-- Badge con estado actual -->
+      <div class="mt-3">
+        <span class="badge
+          {% if ot.vehiculo.estado == 'FUERA' %}
+            text-bg-danger
+          {% elif ot.vehiculo.estado == 'TALLER' %}
+            text-bg-warning
+          {% else %}
+            text-bg-success
+          {% endif %}
+        ">
           {{ ot.vehiculo.get_estado_display }}
         </span>
       </div>
+
     </div>
   </div>
 </div>
@@ -396,16 +414,25 @@
   </div>
 </div>
 
+{# === AGENDAR EVENTO === #}
 <h2 class="h6 mt-4">Agendar evento</h2>
-<div class="card card-body shadow-sm">
-  <form method="post" action="{% url 'ot_agendar_evento' ot.id %}">
-    {% csrf_token %}
-    <div class="mb-2">{{ evento_form.titulo }}</div>
-    <div class="mb-2">{{ evento_form.fecha }}</div>
-    <button class="btn btn-primary w-100 btn-action btn-wide">Agendar</button>
-  </form>
-</div>
 
+{% if ot.activa %}
+  <div class="card card-body shadow-sm">
+    <form method="post" action="{% url 'ot_agendar_evento' ot.id %}">
+      {% csrf_token %}
+      <div class="mb-2">{{ evento_form.titulo }}</div>
+      <div class="mb-2">{{ evento_form.fecha }}</div>
+      <button class="btn btn-primary w-100 btn-action btn-wide">Agendar</button>
+    </form>
+  </div>
+{% else %}
+  <div class="card card-body shadow-sm bg-light text-muted">
+    La OT está cerrada. No se pueden agendar eventos.
+  </div>
+{% endif %}
+
+{# === LISTA DE EVENTOS === #}
 <h2 class="h6 mt-4">Agenda de esta OT</h2>
 <div class="card card-body shadow-sm">
   {% if eventos_ot %}
@@ -419,7 +446,9 @@
               {% if e.todo_el_dia %} · Todo el día{% endif %}
             </div>
           </div>
-          <a class="btn btn-outline-secondary btn-sm" href="{% url 'core_agenda' %}">Ver calendario</a>
+          <a class="btn btn-outline-secondary btn-sm" href="{% url 'core_agenda' %}">
+            Ver calendario
+          </a>
         </li>
       {% endfor %}
     </ul>

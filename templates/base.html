@@ -1,12 +1,73 @@
 <!doctype html>
 <html lang="es">
 <head>
+  {% load static %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}PepsiCo Taller{% endblock %}</title>
-  <!-- Bootstrap CSS (CDN) para avanzar rápido) -->
+
+  <!-- Favicon PepsiCo -->
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
+    /* ============================
+       Colores PepsiCo + Navbar
+       ============================ */
+
+    /* Azul corporativo PepsiCo */
+    .bg-primary {
+      background-color: #003DA5 !important;
+    }
+
+    /* Navbar personalizada */
+    .navbar-pepsico {
+      background-color: #003DA5 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .navbar-pepsico .navbar-brand {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .navbar-pepsico .nav-link {
+      color: #E6F0FF !important;
+      padding-inline: 0.9rem;
+      border-radius: .375rem;
+      transition: background-color .15s ease-out, color .15s ease-out, border-color .15s ease-out;
+    }
+
+    /* Hover: fondo suave */
+    .navbar-pepsico .nav-link:hover,
+    .navbar-pepsico .nav-link:focus {
+      color: #FFFFFF !important;
+      background-color: rgba(255, 255, 255, 0.10);
+    }
+
+    /* Activo: SIN fondo distinto, solo subrayado abajo */
+    .navbar-pepsico .nav-link.active {
+      color: #FFFFFF !important;
+      background-color: transparent;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 0;
+    }
+
+    /* Logo en la navbar */
+    .navbar-logo {
+      height: 50px;
+      width: auto;
+      display: block;
+      transition: transform .15s ease-out, filter .15s ease-out;
+    }
+
+    .navbar-brand:hover .navbar-logo {
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.35));
+    }
+
     /* Misma altura visual para botones de acción en tarjetas */
     .btn-action { padding-top: .6rem; padding-bottom: .6rem; }
 
@@ -22,8 +83,7 @@
     .card .table { margin-bottom: 0; }
     .card .table thead th { border-top: 0; }
     .card .table tbody tr:last-child td { border-bottom: 0; }
-    .card .table-responsive { border-radius: .375rem; overflow: hidden; } /* redondeo continuo */
-
+    .card .table-responsive { border-radius: .375rem; overflow: hidden; }
 
     /* 🔹 Reloj con dígitos estables */
     #clock {

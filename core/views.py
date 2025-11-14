@@ -1,45 +1,67 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from core.roles import Rol
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
 
+from django.http import HttpResponse
+
+def healthcheck(request):
+    return HttpResponse("OK", content_type="text/plain")
+
 from ot.models import OrdenTrabajo, PausaOT, EstadoOT
 from core.models import Notificacion
-
+from django.db.models import Q, Count, F
 from core.filters import filter_ots_for_user
 
 @login_required
 def home(request):
     user = request.user
     now = timezone.now()
-    ctx = {"now": now}
     hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    hace_7 = now - timedelta(days=7)
 
-    # KPIs livianos (rápidos)
-    kpi_activas = OrdenTrabajo.objects.filter(activa=True).count()
+    # --- Base de OTs según el rol del usuario ---
+    qs_base = filter_ots_for_user(OrdenTrabajo.objects.all(), user)
+
+    # --- KPIs filtrados por rol ---
+    kpi_activas = qs_base.filter(activa=True).count()
     kpi_en_pausa = (
-        OrdenTrabajo.objects.filter(activa=True, pausas__fin__isnull=True)
-        .distinct().count()
+        qs_base.filter(activa=True, pausas__fin__isnull=True)
+        .distinct()
+        .count()
     )
-    kpi_creadas_hoy = OrdenTrabajo.objects.filter(fecha_ingreso__gte=hoy_inicio).count()
+    kpi_creadas_hoy = qs_base.filter(fecha_ingreso__gte=hoy_inicio).count()
 
-    # Listados cortos (últimas 5)
+    # --- Últimas 5 OTs visibles para ese usuario ---
     ultimas_ots = (
-        OrdenTrabajo.objects
+        qs_base
         .order_by("-fecha_ingreso")
-        .only("id", "folio", "estado_actual", "fecha_ingreso")
+        .only("id", "folio", "vehiculo__patente", "estado_actual", "fecha_ingreso")
     )[:5]
 
+    # --- Notificaciones del usuario ---
     ultimas_notifs = (
         Notificacion.objects
         .filter(destinatario=user)
         .order_by("-creada_en")
     )[:5]
 
-    notif_unread = Notificacion.objects.filter(destinatario=user, leida=False).count()
+    notif_unread = Notificacion.objects.filter(
+        destinatario=user, leida=False
+    ).count()
+
+    # --- Flags según rol ---
+    # Obtener rol del usuario
+    rol = getattr(getattr(user, "perfil", None), "rol", None)
+
+    # Accesos rápidos según rol (Admin ve todo)
+    can_registrar_ingreso = rol in (
+        Rol.ADMIN, Rol.GUARDIA, Rol.RECEPCIONISTA, Rol.JEFE_TALLER
+    )
+    can_ver_ots = True
+    can_ver_dashboard = rol in (Rol.ADMIN, Rol.SUPERVISOR, Rol.JEFE_TALLER)
+    can_ver_notifs = True
 
     ctx = {
         "username": user.get_username(),
@@ -50,28 +72,21 @@ def home(request):
         "kpi_creadas_hoy": kpi_creadas_hoy,
         "notif_unread": notif_unread,
 
-        # Listas
+        # Listas cortas
         "ultimas_ots": ultimas_ots,
         "ultimas_notifs": ultimas_notifs,
         "now": timezone.now(),
 
-        # Flags para accesos (luego se conectan a roles)
-        "can_registrar_ingreso": True,
-        "can_ver_ots": True,
-        "can_ver_dashboard": True,
-        "can_ver_notifs": True,
+        # Accesos
+        "can_registrar_ingreso": can_registrar_ingreso,
+        "can_ver_ots": can_ver_ots,
+        "can_ver_dashboard": can_ver_dashboard,
+        "can_ver_notifs": can_ver_notifs,
 
-        # Choices para render amigable
         "estado_choices_dict": dict(EstadoOT.choices),
     }
 
-    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
-    ctx["ultimas_ots"] = qs.order_by("-fecha_ingreso")[:5]
-
     return render(request, "core/home.html", ctx)
-
-def healthcheck(request):
-    return HttpResponse("OK", content_type="text/plain")
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
