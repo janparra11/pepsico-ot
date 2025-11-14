@@ -13,8 +13,19 @@
   {% endif %}
 </div>
 
-<!-- KPIs -->
+<!-- KPIs livianos -->
 <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+  <!-- Vehículos ingresados hoy -->
+  <div class="col">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small">Vehículos ingresados hoy</div>
+        <div class="fs-4 fw-bold">{{ kpi_vehiculos_hoy }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTs activas -->
   <div class="col">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
@@ -23,6 +34,8 @@
       </div>
     </div>
   </div>
+
+  <!-- OTs en pausa -->
   <div class="col">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
@@ -31,19 +44,13 @@
       </div>
     </div>
   </div>
+
+  <!-- Vehículos finalizados -->
   <div class="col">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
-        <div class="text-muted small">OTs creadas hoy</div>
-        <div class="fs-4 fw-bold">{{ kpi_creadas_hoy }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card border-0 shadow-sm">
-      <div class="card-body">
-        <div class="text-muted small">Notificaciones no leídas</div>
-        <div class="fs-4 fw-bold">{{ notif_unread }}</div>
+        <div class="text-muted small">Vehículos finalizados</div>
+        <div class="fs-4 fw-bold">{{ kpi_vehiculos_finalizados }}</div>
       </div>
     </div>
   </div>

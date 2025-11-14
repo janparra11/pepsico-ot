@@ -15,74 +15,74 @@ from core.models import Notificacion
 from django.db.models import Q, Count, F
 from core.filters import filter_ots_for_user
 
+from django.db import models
+from inventario.models import Repuesto
+
 @login_required
 def home(request):
     user = request.user
     now = timezone.now()
     hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    hace_7 = now - timedelta(days=7)
 
-    # --- Base de OTs según el rol del usuario ---
-    qs_base = filter_ots_for_user(OrdenTrabajo.objects.all(), user)
+    # 🔹 KPI: Vehículos ingresados hoy (equivale a OTs creadas hoy)
+    kpi_vehiculos_hoy = OrdenTrabajo.objects.filter(
+        fecha_ingreso__gte=hoy_inicio
+    ).count()
 
-    # --- KPIs filtrados por rol ---
-    kpi_activas = qs_base.filter(activa=True).count()
+    # 🔹 KPI: OTs activas
+    kpi_activas = OrdenTrabajo.objects.filter(activa=True).count()
+
+    # 🔹 KPI: OTs en pausa (al menos una pausa abierta)
     kpi_en_pausa = (
-        qs_base.filter(activa=True, pausas__fin__isnull=True)
+        OrdenTrabajo.objects.filter(activa=True, pausas__fin__isnull=True)
         .distinct()
         .count()
     )
-    kpi_creadas_hoy = qs_base.filter(fecha_ingreso__gte=hoy_inicio).count()
 
-    # --- Últimas 5 OTs visibles para ese usuario ---
-    ultimas_ots = (
-        qs_base
-        .order_by("-fecha_ingreso")
-        .only("id", "folio", "vehiculo__patente", "estado_actual", "fecha_ingreso")
-    )[:5]
+    # 🔹 KPI: Vehículos finalizados (ajusta el valor de EstadoOT.FINALIZADA si tu enum usa otro código)
+    kpi_vehiculos_finalizados = OrdenTrabajo.objects.filter(
+        activa=False,
+        estado_actual=EstadoOT.CERRADO  # si tu valor final es otro, cámbialo aquí
+    ).count()
 
-    # --- Notificaciones del usuario ---
-    ultimas_notifs = (
-        Notificacion.objects
-        .filter(destinatario=user)
-        .order_by("-creada_en")
-    )[:5]
-
+    # Notificaciones
     notif_unread = Notificacion.objects.filter(
         destinatario=user, leida=False
     ).count()
 
-    # --- Flags según rol ---
-    # Obtener rol del usuario
-    rol = getattr(getattr(user, "perfil", None), "rol", None)
+    # Últimas OTs filtradas por el rol del usuario
+    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
+    ultimas_ots = qs.order_by("-fecha_ingreso")[:5]
 
-    # Accesos rápidos según rol (Admin ve todo)
-    can_registrar_ingreso = rol in (
-        Rol.ADMIN, Rol.GUARDIA, Rol.RECEPCIONISTA, Rol.JEFE_TALLER
+    ultimas_notifs = (
+        Notificacion.objects
+        .filter(destinatario=user)
+        .order_by("-creada_en")[:5]
     )
-    can_ver_ots = True
-    can_ver_dashboard = rol in (Rol.ADMIN, Rol.SUPERVISOR, Rol.JEFE_TALLER)
-    can_ver_notifs = True
 
     ctx = {
         "username": user.get_username(),
+        "now": now,
 
         # KPIs
+        "kpi_vehiculos_hoy": kpi_vehiculos_hoy,
         "kpi_activas": kpi_activas,
         "kpi_en_pausa": kpi_en_pausa,
-        "kpi_creadas_hoy": kpi_creadas_hoy,
+        "kpi_vehiculos_finalizados": kpi_vehiculos_finalizados,
         "notif_unread": notif_unread,
 
-        # Listas cortas
+        # Listas
         "ultimas_ots": ultimas_ots,
         "ultimas_notifs": ultimas_notifs,
-        "now": timezone.now(),
 
-        # Accesos
-        "can_registrar_ingreso": can_registrar_ingreso,
-        "can_ver_ots": can_ver_ots,
-        "can_ver_dashboard": can_ver_dashboard,
-        "can_ver_notifs": can_ver_notifs,
+        # Flags para accesos (se pueden seguir usando)
+        "can_registrar_ingreso": True,
+        "can_ver_ots": True,
+        "can_ver_dashboard": True,
+        "can_ver_notifs": True,
 
+        # Choices para render amigable
         "estado_choices_dict": dict(EstadoOT.choices),
     }
 

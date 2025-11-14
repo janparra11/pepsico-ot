@@ -130,3 +130,7 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf"}
 LOGIN_REDIRECT_URL = "/"    # A dónde se redirige al iniciar sesión
 LOGOUT_REDIRECT_URL = "/login/"  # A dónde se redirige al cerrar sesión
 LOGIN_URL = "/login/"        # Página de inicio de sesión predeterminada
+
+# 15 minutos de inactividad
+SESSION_COOKIE_AGE = 15 * 60      # 900 segundos
+SESSION_SAVE_EVERY_REQUEST = True
