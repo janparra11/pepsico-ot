@@ -1,139 +1,167 @@
 PepsiCo Taller – Sistema de Gestión de Órdenes de Trabajo, Ingresos y Agenda
 
-    Versión: 1.0 – Proyecto Final
-
-    Sistema web desarrollado para la gestión operativa de un taller de PepsiCo: control de ingresos de vehículos, creación y seguimiento de Órdenes de Trabajo (OT), administración de repuestos, agenda de eventos, reportes, notificaciones y panel de administración con roles.
+Versión: 1.0 – Proyecto Final
+Descripción: Sistema web completo para la gestión operativa del taller de PepsiCo: control de ingresos, órdenes de trabajo, inventario, agenda, notificaciones y administración por roles.
 
 1. Características Principales
     Órdenes de Trabajo (OT)
 
-    - Creación automática al ingresar un vehículo.
-    - Flujo completo: ingreso → asignación → ejecución → cierre.
+    - Creación automática al registrar un ingreso.
+    - Flujo completo: Ingreso → Diagnóstico → Ejecución → Pausa → Finalización.
     - Estados y prioridades configurables.
     - Adjuntar imágenes o PDF como evidencia.
     - Agenda interna por OT (eventos, citas, recordatorios).
+    - Historial de estados y asignación de mecánico.
 
     Ingreso de Vehículos
 
-    - Patente, conductor, tipo, fecha/hora automática.
+    - Registro de patente, conductor, taller y tipo de vehículo (catálogo o personalizado).
+    - Fecha y hora automáticas.
     - Observaciones.
-    - Adjuntar fotos o documentos.
-    - Asignación automática de la OT correspondiente.
+    Subida de evidencias (fotos, PDF).
+    Creación automática de la OT correspondiente.
 
     Inventario de Repuestos
 
-    - Registro de repuestos con stock mínimo.
-    - Movimientos de entrada y salida.
-    - Alerta de stock bajo.
-    - Integración con reportes y dashboard.
+    Registro y edición de repuestos con stock mínimo.
+    Movimientos de entrada y salida.
+    Alertas de stock bajo.
+    Integración con reportes y dashboard.
+        
+    Agenda (FullCalendar)
 
-    Agenda FullCalendar
-
-    - Vista Mes / Semana / Día.
-    - Modal de creación/edición.
-    - Eventos estilizados.
-    - Enlace a OT desde el calendario.
-    - Drag & drop deshabilitado para evitar errores.
+    Vista mensual, semanal y diaria.
+    Modal de creación/edición de eventos.
+    Enlace directo a la OT asociada.
+    Eventos con colores y estilo profesionales.
+    Drag & drop deshabilitado para evitar errores.
 
     Dashboard Ejecutivo
 
-    - KPIs en tiempo real.
-    - Gráficos de rendimiento.
-    - OTs activas, cerradas, por taller, por mecánico.
-    - Top vehículos y top repuestos usados.
+    KPIs en tiempo real:
+        OTs activas
+        OTs en pausa
+        Vehículos finalizados
+        Ingresos diarios
+
+    Gráficos y estadísticas claves:
+        OTs por estado
+        Por taller
+        Por prioridad
+        Motivos de pausa más frecuentes
 
     Notificaciones Internas
 
-    - Notificaciones por usuario.
-    - Marcado como leído y ver todas.
-    - Indicador dinámico en el navbar.
-    - Generación automática por acciones del sistema (OTs, inventario).
+    Notificaciones por usuario.
+    Sistema de leído/no leído.
+    Indicador dinámico en el navbar.
+    Autogeneración por acciones como:
+    Cambios de estado de OT
+    Documentos añadidos
+    Pausas iniciadas/finalizadas
 
     Control de Usuarios y Roles
 
-    - Roles: Admin, Jefe de Taller, Supervisor, Mecanico, Guardia, Recepcionista, Asistente de Repuestos.
-    - Accesos y menús dinámicos según rol.
-    - Panel para crear usuarios, activar/desactivar y reasignar roles.
-    - Cambio de contraseña por administración.
+    Roles incluidos:
+        Admin, Jefe de Taller, Supervisor, Mecánico, Guardia, Recepcionista, Asistente de Repuestos
+    Menús dinámicos según permisos.
+    Panel completo de administración:
+        Crear usuarios
+        Cambiar roles
+        Activar/desactivar usuario
+        Resetear contraseña
+    Cambio de contraseña para usuarios desde el menú.
 
-    UX y Estética PepsiCo
+    Interfaz UX corporativa PepsiCo
 
-    - Navbar corporativa con logo.
-    - Paleta PepsiCo: azul #003DA5, blanco, gris.
-    - Cards limpias con sombras.
-    - Dashboard moderno.
-    - Formularios ordenados y consistentes.
+    Navbar con logo oficial.
+    Paleta corporativa azul #003DA5.
+    Cards limpias con sombras suaves.
+    Formularios modernos y responsivos.
+    Dashboard digno de producción.
 
 2. Requisitos del Sistema
-    
-    - Backend
-    - Python 3.13+
-    - Django 5.1+
-    - Django ORM (SQLite para desarrollo)
-    - Frontend
-    - Bootstrap 5
-    - FullCalendar 6.1
-    - SweetAlert2 (opcional)
-    - Íconos Bootstrap
-    - Entorno
-    - Git instalado
-    - virtualenv o entorno Python venv
+Backend
+
+Python 3.13+
+Django 5.1+
+Django ORM
+SQLite (desarrollo) / PostgreSQL recomendado (producción)
+Frontend
+Bootstrap 5
+FullCalendar 6.1
+Íconos Bootstrap
+SweetAlert2 (opcional)
+Entorno
+Git
+virtualenv o venv de Python
 
 3. Instalación y Configuración
+3.1 Clonar repositorio
+git clone <tu_repo>
+cd pepsico-ot
 
-    3.1 Clonar repositorio
-    - git clone <tu_repo>
-    - cd pepsico-ot
+3.2 Crear entorno virtual
+python -m venv .venv
 
-    3.2 Crear entorno virtual
-    - python -m venv .venv
-    - source .venv/bin/activate  # Linux/Mac
-    - .venv\Scripts\activate     # Windows
 
-    3.3 Instalar dependencias
-    - pip install -r requirements.txt
+Activar:
 
-    3.4 Migrar base de datos
-    - python manage.py makemigrations
-    - python manage.py migrate
+Windows:
 
-    3.5 Crear usuario administrador
-    - python manage.py createsuperuser
+.venv\Scripts\activate
 
-    3.6 Ejecutar servidor
-    - python manage.py runserver
+
+Linux / Mac:
+
+source .venv/bin/activate
+
+3.3 Instalar dependencias
+pip install -r requirements.txt
+
+3.4 Migrar base de datos
+python manage.py makemigrations
+python manage.py migrate
+
+3.5 Crear usuario administrador
+python manage.py createsuperuser
+
+3.6 Ejecutar servidor
+python manage.py runserver
 
 4. Estructura del Proyecto
-
-    pepsico-ot/
-    │
-    ├── core/               # Usuarios, roles, notificaciones, agenda
-    ├── ot/                 # Órdenes de Trabajo
-    ├── inventario/         # Repuestos y movimientos
-    ├── taller/             # Vehículos y talleres
-    │
-    ├── templates/          # Todos los templates HTML
-    ├── static/             # CSS, JS, imágenes (logo PepsiCo, favicon)
-    │
-    ├── config/             # Configuración global del proyecto
-    └── manage.py
+pepsico-ot/
+│
+├── core/               # Usuarios, roles, notificaciones, agenda
+├── ot/                 # Órdenes de Trabajo
+├── inventario/         # Repuestos y movimientos
+├── taller/             # Vehículos y talleres
+│
+├── templates/          # HTML templates
+├── static/             # CSS, JS, imágenes
+│
+├── config/             # Configuración global
+└── manage.py
 
 5. Roles y Permisos
-
-    Rol - Permisos principales
-    Admin - Ve todo, edita todo, panel de usuarios
-    Jefe Taller	- Dashboard, OTs, inventario, agenda
-    Supervisor - Dashboard, reportes, OTs
-    Mecánico - Mis OTs asignadas
-    Recepcionista - Ingreso de vehículos, agenda
-    Guardia - Registrar solo ingreso
-    Asistente de Repuestos - Inventario y movimientos
-
+Rol	Accesos principales
+Admin	Todo el sistema, usuarios, roles
+Jefe de Taller	Dashboard, OTs, inventario, agenda
+Supervisor	Dashboard, reportes, OTs
+Mecánico	Solo OTs asignadas (Mis OTs)
+Recepcionista	Ingreso de vehículos, agenda
+Guardia	Solo registrar ingreso
+Asistente de Repuestos	Inventario y movimientos
 6. Datos Iniciales (Carga Rápida)
 
-    - Puedes usar el Django Admin para crear:
-    - Usuarios por rol
-    - Tipos de vehículo
-    - Repuestos base
-    - Estados de OT
-    - Taller(es)
+Desde el Django Admin, puedes crear rápidamente:
+
+Usuarios por rol
+
+Tipos de vehículo
+
+Repuestos base
+
+Talleres
+
+Estados de OT

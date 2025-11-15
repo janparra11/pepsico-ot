@@ -154,7 +154,7 @@
                 {% for n in notif_latest %}
                   <li>
                     <a class="dropdown-item d-flex justify-content-between align-items-start"
-                       href="{% if n.url %}{{ n.url }}{% else %}{% url 'core_notificaciones' %}{% endif %}">
+                      href="{% url 'core_notificacion_detalle' n.id %}">
                       <div class="me-2">
                         <div class="fw-semibold">{{ n.titulo }}</div>
                         {% if n.mensaje %}
