@@ -79,8 +79,16 @@ def ingreso_nuevo(request):
             chofer = form.cleaned_data.get("chofer", "")
             tipo = form.cleaned_data.get("tipo")
             tipo_txt = (form.cleaned_data.get("tipo_texto") or "").strip()
-            taller = form.cleaned_data["taller"]
+
+            # 🔹 puede venir un taller seleccionado o uno nuevo escrito
+            taller = form.cleaned_data.get("taller")
+            taller_otro = (form.cleaned_data.get("taller_otro") or "").strip()
+
             obs = form.cleaned_data.get("observaciones", "")
+
+            # si no hay taller elegido pero sí texto, creamos/obtenemos el taller
+            if not taller and taller_otro:
+                taller, _ = Taller.objects.get_or_create(nombre=taller_otro)
 
             try:
                 with transaction.atomic():

@@ -4,7 +4,7 @@ from core.roles import Rol
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
-
+from core.models import Perfil
 from django.http import HttpResponse
 
 def healthcheck(request):
@@ -23,27 +23,34 @@ def home(request):
     user = request.user
     now = timezone.now()
     hoy_inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    hace_7 = now - timedelta(days=7)
 
-    # 🔹 KPI: Vehículos ingresados hoy (equivale a OTs creadas hoy)
-    kpi_vehiculos_hoy = OrdenTrabajo.objects.filter(
+    # 🔹 Rol del usuario (puede ser None si no tiene perfil)
+    rol = getattr(getattr(user, "perfil", None), "rol", None)
+
+    # ========= OTs filtradas por rol =========
+    # Usamos el mismo filtro que en otros lados para que el mecánico
+    # solo vea sus OTs, el guardia las activas, etc.
+    qs_base = filter_ots_for_user(OrdenTrabajo.objects.all(), user)
+
+    # 🔹 KPI: Vehículos ingresados hoy (sobre el queryset filtrado)
+    kpi_vehiculos_hoy = qs_base.filter(
         fecha_ingreso__gte=hoy_inicio
     ).count()
 
     # 🔹 KPI: OTs activas
-    kpi_activas = OrdenTrabajo.objects.filter(activa=True).count()
+    kpi_activas = qs_base.filter(activa=True).count()
 
     # 🔹 KPI: OTs en pausa (al menos una pausa abierta)
     kpi_en_pausa = (
-        OrdenTrabajo.objects.filter(activa=True, pausas__fin__isnull=True)
+        qs_base.filter(activa=True, pausas__fin__isnull=True)
         .distinct()
         .count()
     )
 
-    # 🔹 KPI: Vehículos finalizados (ajusta el valor de EstadoOT.FINALIZADA si tu enum usa otro código)
-    kpi_vehiculos_finalizados = OrdenTrabajo.objects.filter(
+    # 🔹 KPI: Vehículos finalizados (CERRADO, ajusta si tu estado final es otro)
+    kpi_vehiculos_finalizados = qs_base.filter(
         activa=False,
-        estado_actual=EstadoOT.CERRADO  # si tu valor final es otro, cámbialo aquí
+        estado_actual=EstadoOT.CERRADO
     ).count()
 
     # Notificaciones
@@ -51,15 +58,42 @@ def home(request):
         destinatario=user, leida=False
     ).count()
 
-    # Últimas OTs filtradas por el rol del usuario
-    qs = filter_ots_for_user(OrdenTrabajo.objects.all(), request.user)
-    ultimas_ots = qs.order_by("-fecha_ingreso")[:5]
+    # Últimas OTs ya filtradas por rol
+    ultimas_ots = qs_base.order_by("-fecha_ingreso")[:5]
 
     ultimas_notifs = (
         Notificacion.objects
         .filter(destinatario=user)
         .order_by("-creada_en")[:5]
     )
+
+    # ========= PERMISOS POR ROL (para mostrar/ocultar tarjetas) =========
+    can_registrar_ingreso = rol in (
+        Rol.RECEPCIONISTA,
+        Rol.GUARDIA,
+        Rol.JEFE_TALLER,
+        Rol.ADMIN,
+    )
+
+    can_ver_dashboard = rol in (
+        Rol.SUPERVISOR,
+        Rol.JEFE_TALLER,
+        Rol.ADMIN,
+    )
+
+    # Ver listado de OTs (mecánico, recepcionista, guardia, jefe, asistente, supervisor, admin)
+    can_ver_ots = rol in (
+        Rol.RECEPCIONISTA,
+        Rol.GUARDIA,
+        Rol.JEFE_TALLER,
+        Rol.MECANICO,
+        Rol.ASISTENTE_REPUESTO,
+        Rol.SUPERVISOR,
+        Rol.ADMIN,
+    )
+
+    # Notificaciones: todos los roles logueados
+    can_ver_notifs = True
 
     ctx = {
         "username": user.get_username(),
@@ -76,13 +110,13 @@ def home(request):
         "ultimas_ots": ultimas_ots,
         "ultimas_notifs": ultimas_notifs,
 
-        # Flags para accesos (se pueden seguir usando)
-        "can_registrar_ingreso": True,
-        "can_ver_ots": True,
-        "can_ver_dashboard": True,
-        "can_ver_notifs": True,
+        # Flags para accesos
+        "can_registrar_ingreso": can_registrar_ingreso,
+        "can_ver_ots": can_ver_ots,
+        "can_ver_dashboard": can_ver_dashboard,
+        "can_ver_notifs": can_ver_notifs,
 
-        # Choices para render amigable
+        # Por si lo usas en otros templates
         "estado_choices_dict": dict(EstadoOT.choices),
     }
 
@@ -285,6 +319,8 @@ def users_admin_list(request):
     qs = User.objects.select_related("perfil").order_by("username")
     return render(request, "core/users_admin_list.html", {"users": qs})
 
+from core.models import Perfil  # asegúrate de tener este import arriba
+
 @require_roles(Rol.ADMIN)
 @login_required
 def users_admin_create(request):
@@ -300,16 +336,18 @@ def users_admin_create(request):
                 password=make_password(form.cleaned_data["password"]),
             )
             u.save()
-            # asegurar perfil
-            from .models import Perfil
-            Perfil.objects.get_or_create(user=u, defaults={"rol": form.cleaned_data["rol"]})
-            if hasattr(u, "perfil"):
-                u.perfil.rol = form.cleaned_data["rol"]
-                u.perfil.save()
-            messages.success(request, f"Usuario {u.username} creado con rol {u.perfil.get_rol_display()}.")
+
+            # 🔹 Crear Perfil asociado (sin signals)
+            Perfil.objects.get_or_create(
+                user=u,
+                defaults={"rol": form.cleaned_data["rol"]},
+            )
+
+            messages.success(request, f"Usuario {u.username} creado correctamente.")
             return redirect("users_admin_list")
     else:
         form = UserCreateForm()
+
     return render(request, "core/users_admin_create.html", {"form": form})
 
 @require_roles(Rol.ADMIN)

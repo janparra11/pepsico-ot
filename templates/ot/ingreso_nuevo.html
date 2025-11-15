@@ -50,6 +50,13 @@
                 {% if form.taller.errors %}<div class="text-danger small">{{ form.taller.errors }}</div>{% endif %}
               </div>
 
+              <!-- NUEVO: campo para "Otro taller" (se muestra solo cuando elijas la opción) -->
+              <div class="col-12 col-md-4" id="row-taller-otro" style="display:none;">
+                <label class="form-label" for="{{ form.taller_otro.id_for_label }}">Otro taller</label>
+                {{ form.taller_otro }}
+                <div class="form-help">Si el taller no existe en el listado, escríbelo aquí.</div>
+              </div>
+
               <div class="col-12 col-md-4">
                 <label class="form-label" for="{{ form.chofer.id_for_label }}">Chofer</label>
                 {{ form.chofer }}
@@ -60,7 +67,7 @@
                 {{ form.tipo }}
               </div>
 
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-6" data-row-tipo-texto>
                 <label class="form-label" for="{{ form.tipo_texto.id_for_label }}">Tipo de vehículo (texto)</label>
                 {{ form.tipo_texto }}
                 <div class="form-help">Usa este campo si no existe en el catálogo.</div>
@@ -108,32 +115,88 @@
   // Preview del archivo elegido (solo imágenes); muestra nombre/tipo si es PDF
   (function () {
     const input = document.getElementById('{{ form.evidencia.id_for_label }}');
-    if (!input) return;
-    const area = document.getElementById('previewArea');
-    const img  = document.getElementById('previewImg');
-    const info = document.getElementById('previewInfo');
+    if (input) {
+      const area = document.getElementById('previewArea');
+      const img  = document.getElementById('previewImg');
+      const info = document.getElementById('previewInfo');
 
-    input.addEventListener('change', () => {
-      area.classList.remove('d-none');
-      img.classList.add('d-none');
-      info.textContent = '';
+      input.addEventListener('change', () => {
+        area.classList.remove('d-none');
+        img.classList.add('d-none');
+        info.textContent = '';
 
-      const f = input.files && input.files[0];
-      if (!f) { area.classList.add('d-none'); return; }
+        const f = input.files && input.files[0];
+        if (!f) { area.classList.add('d-none'); return; }
 
-      const name = f.name.toLowerCase();
-      if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          img.src = e.target.result;
-          img.classList.remove('d-none');
-          info.textContent = f.name + ' (' + Math.round(f.size/1024) + ' KB)';
-        };
-        reader.readAsDataURL(f);
-      } else {
-        info.textContent = f.name + ' · ' + (f.type || 'archivo');
+        const name = f.name.toLowerCase();
+        if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            img.src = e.target.result;
+            img.classList.remove('d-none');
+            info.textContent = f.name + ' (' + Math.round(f.size/1024) + ' KB)';
+          };
+          reader.readAsDataURL(f);
+        } else {
+          info.textContent = f.name + ' · ' + (f.type || 'archivo');
+        }
+      });
+    }
+
+    // ------------ LÓGICA PARA "OTRO TALLER" ------------
+    const selTaller = document.getElementById('{{ form.taller.id_for_label }}');
+    const rowTallerOtro = document.getElementById('row-taller-otro');
+    const inpTallerOtro = document.getElementById('{{ form.taller_otro.id_for_label }}');
+
+    if (selTaller && rowTallerOtro) {
+      // Añadimos opción "Otro taller..." al final
+      const optOtroTaller = document.createElement('option');
+      optOtroTaller.value = '';            // el valor vacío lo trataremos con el campo texto
+      optOtroTaller.textContent = 'Otro taller...';
+      optOtroTaller.setAttribute('data-otro', '1');
+      selTaller.appendChild(optOtroTaller);
+
+      function syncTaller() {
+        const opt = selTaller.options[selTaller.selectedIndex];
+        const isOtro = opt && opt.getAttribute('data-otro') === '1';
+        if (isOtro) {
+          rowTallerOtro.style.display = '';
+        } else {
+          rowTallerOtro.style.display = 'none';
+          if (inpTallerOtro) inpTallerOtro.value = '';
+        }
       }
-    });
+
+      selTaller.addEventListener('change', syncTaller);
+      syncTaller();
+    }
+
+    // ------------ LÓGICA PARA "OTRO TIPO DE VEHÍCULO" ------------
+    const selTipo = document.getElementById('{{ form.tipo.id_for_label }}');
+    const rowTipoTexto = document.querySelector('[data-row-tipo-texto]');
+    const inpTipoTexto = document.getElementById('{{ form.tipo_texto.id_for_label }}');
+
+    if (selTipo && rowTipoTexto) {
+      // Añadimos opción "Otro tipo de vehículo..."
+      const optOtroTipo = document.createElement('option');
+      optOtroTipo.value = '';
+      optOtroTipo.textContent = 'Otro tipo de vehículo...';
+      optOtroTipo.setAttribute('data-otro', '1');
+      selTipo.appendChild(optOtroTipo);
+
+      function syncTipo() {
+        const opt = selTipo.options[selTipo.selectedIndex];
+        const isOtro = opt && opt.getAttribute('data-otro') === '1';
+        rowTipoTexto.style.display = isOtro ? '' : 'none';
+        if (!isOtro && inpTipoTexto) {
+          inpTipoTexto.value = '';
+        }
+      }
+
+      selTipo.addEventListener('change', syncTipo);
+      // Al cargar la página, si ya había un tipo texto, lo mostramos
+      syncTipo();
+    }
   })();
 </script>
 {% endblock %}

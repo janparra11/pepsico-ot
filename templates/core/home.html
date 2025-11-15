@@ -176,9 +176,11 @@
             <li class="list-group-item text-muted">Sin notificaciones.</li>
           {% endfor %}
         </ul>
-        <div class="text-end mt-2">
-          <a href="{% url 'core_notificaciones' %}" class="btn btn-link btn-sm">Ver todas</a>
-        </div>
+        {% if can_ver_ots %}
+          <div class="text-end">
+            <a href="{% url 'ot_lista' %}" class="btn btn-link btn-sm">Ver todas</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>

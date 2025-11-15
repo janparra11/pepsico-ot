@@ -95,12 +95,12 @@
           {% endif %}
         {% endif %}
 
-        {# Ingresos: Recepcionista / Guardia / Jefe Taller #}
-        {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' as can_ingresar %}
+        {# Ingresos: Recepcionista / Guardia / Jefe Taller / Admin #}
+        {% is_role 'RECEPCIONISTA' 'GUARDIA' 'JEFE_TALLER' 'ADMIN' as can_ingresar %}
         {% if can_ingresar %}
           <li class="nav-item">
             <a class="nav-link {% if url_name == 'ingreso_nuevo' %}active border-bottom border-2{% endif %}"
-               href="{% url 'ingreso_nuevo' %}">
+              href="{% url 'ingreso_nuevo' %}">
               Ingresos
             </a>
           </li>
@@ -195,6 +195,7 @@
                   Rol: {{ request.user.perfil.get_rol_display|default:"(sin rol)" }}
                 </span>
               </li>
+              <li><a class="dropdown-item" href="{% url 'password_change' %}">Cambiar contraseña</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Salir</a></li>
             </ul>
