@@ -11,6 +11,22 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-key")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
+# Dominio público en Railway (si está definido como variable de entorno)
+RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+
+# Si Railway expone la variable, la usamos; si no, ponemos el dominio a mano
+CSRF_TRUSTED_ORIGINS = []
+
+if RAILWAY_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_DOMAIN}")
+else:
+    # Ajusta este dominio si tu URL es distinta
+    CSRF_TRUSTED_ORIGINS.append("https://pepsico-ot-production.up.railway.app")
+
+# Para producción con DEBUG=False, es buena idea permitir también el host de Railway
+if RAILWAY_DOMAIN and RAILWAY_DOMAIN not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RAILWAY_DOMAIN)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
