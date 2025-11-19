@@ -1,0 +1,9231 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$0FDP26mgaU0z89DagdHPH2$N0seN9XUub+fPhO6oamoqqZ/BiWaEKABI77XLvxl61o=",
+    "last_login": "2025-11-17T02:24:10.461Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin-prueba@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-01T21:26:11.955Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$gVmgpfoyc14jBI3zas1VqP$Pb9ztbXzE3R96Ih6yJzH/XT1yynge+XlF+2FBIVAM40=",
+    "last_login": "2025-11-17T03:35:17.838Z",
+    "is_superuser": false,
+    "username": "janis",
+    "first_name": "janis",
+    "last_name": "montecino",
+    "email": "jan.parra@duocuc.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-09T14:40:42.381Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$2WHxCCfDJPPqccccwZzXSX$sAu9Gwb49LuD/+37MiouWWEHpxvJHmLJkebJUlQEZ00=",
+    "last_login": "2025-11-17T00:58:03.510Z",
+    "is_superuser": false,
+    "username": "coni",
+    "first_name": "costanza",
+    "last_name": "parra",
+    "email": "coni.parra@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-15T01:27:26.151Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$eDMpiF6Rl3Wj3QYl6kSZu8$nlc7Fg4aqynG7NAByYUXJClQVZ/iFkvThDt3lX4tLhg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mati",
+    "first_name": "matias",
+    "last_name": "morales",
+    "email": "mati.morales@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T00:41:56.417Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "taller.taller",
+  "pk": 1,
+  "fields": {
+    "nombre": "Maip├║",
+    "direccion": "Av. X 123",
+    "capacidad": 6
+  }
+},
+{
+  "model": "taller.taller",
+  "pk": 2,
+  "fields": {
+    "nombre": "Renca",
+    "direccion": "",
+    "capacidad": 1
+  }
+},
+{
+  "model": "taller.tipovehiculo",
+  "pk": 6,
+  "fields": {
+    "nombre": "Cami├│n 3/4"
+  }
+},
+{
+  "model": "taller.tipovehiculo",
+  "pk": 7,
+  "fields": {
+    "nombre": "Furg├│n"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 1,
+  "fields": {
+    "patente": "AB12-34",
+    "marca": "Mercedes",
+    "modelo": "Actros",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 2,
+  "fields": {
+    "patente": "AB12-35",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 3,
+  "fields": {
+    "patente": "AB12-38",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 4,
+  "fields": {
+    "patente": "AB12-36",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 5,
+  "fields": {
+    "patente": "AB12-37",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 6,
+  "fields": {
+    "patente": "AB12-40",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 7,
+  "fields": {
+    "patente": "AB12-42",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 8,
+  "fields": {
+    "patente": "AB12-46",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 9,
+  "fields": {
+    "patente": "AB12-70",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 10,
+  "fields": {
+    "patente": "AB12-50",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 11,
+  "fields": {
+    "patente": "AB12-59",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "TALLER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 12,
+  "fields": {
+    "patente": "AB12-60",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 13,
+  "fields": {
+    "patente": "AB12-20",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 14,
+  "fields": {
+    "patente": "AB12-65",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 15,
+  "fields": {
+    "patente": "AB12-90",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 16,
+  "fields": {
+    "patente": "AB12-95",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 17,
+  "fields": {
+    "patente": "AB12-69",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 18,
+  "fields": {
+    "patente": "AB12-67",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 19,
+  "fields": {
+    "patente": "AB12-89",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 20,
+  "fields": {
+    "patente": "AB12-10",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 21,
+  "fields": {
+    "patente": "AB12-11",
+    "marca": "",
+    "modelo": "",
+    "tipo": null,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 22,
+  "fields": {
+    "patente": "XYZD45",
+    "marca": "",
+    "modelo": "",
+    "tipo": 6,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 23,
+  "fields": {
+    "patente": "AB1234",
+    "marca": "",
+    "modelo": "",
+    "tipo": 7,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "taller.vehiculo",
+  "pk": 24,
+  "fields": {
+    "patente": "TEST11",
+    "marca": "",
+    "modelo": "",
+    "tipo": 6,
+    "estado": "OPER"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 1,
+  "fields": {
+    "folio": "854E20C9",
+    "vehiculo": 1,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-01T22:46:02.836Z",
+    "fecha_cierre": "2025-11-02T02:14:43.989Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 2,
+  "fields": {
+    "folio": "E7B6806C",
+    "vehiculo": 2,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-01T23:56:33.393Z",
+    "fecha_cierre": "2025-11-02T01:10:36.707Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 3,
+  "fields": {
+    "folio": "0E7FDFB0",
+    "vehiculo": 3,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-01T23:57:05.935Z",
+    "fecha_cierre": "2025-11-02T02:08:27.410Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 4,
+  "fields": {
+    "folio": "7A025D45",
+    "vehiculo": 4,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-02T00:04:38.609Z",
+    "fecha_cierre": "2025-11-02T00:07:08.443Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 5,
+  "fields": {
+    "folio": "24847CAF",
+    "vehiculo": 5,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "DIA",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-02T02:16:25.944Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 6,
+  "fields": {
+    "folio": "3A952CC5",
+    "vehiculo": 6,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-02T02:33:41.887Z",
+    "fecha_cierre": "2025-11-02T02:52:52.285Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 7,
+  "fields": {
+    "folio": "54ED0195",
+    "vehiculo": 7,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ENT",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-02T17:14:51.086Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 8,
+  "fields": {
+    "folio": "EB563322",
+    "vehiculo": 8,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 1,
+    "fecha_ingreso": "2025-11-03T18:16:36.480Z",
+    "fecha_cierre": "2025-11-08T19:36:09.414Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 9,
+  "fields": {
+    "folio": "94513173",
+    "vehiculo": 9,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-06T18:09:33.918Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "admin"
+    ],
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 10,
+  "fields": {
+    "folio": "39C832F5",
+    "vehiculo": 10,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 3,
+    "fecha_ingreso": "2025-11-06T19:27:12.122Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 11,
+  "fields": {
+    "folio": "B371C018",
+    "vehiculo": 11,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 4,
+    "fecha_ingreso": "2025-11-07T18:33:54.350Z",
+    "fecha_cierre": "2025-11-14T04:13:29.457Z",
+    "activa": false,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": ""
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 12,
+  "fields": {
+    "folio": "4AE9052B",
+    "vehiculo": 12,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-08T14:26:31.033Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 13,
+  "fields": {
+    "folio": "0BE760A4",
+    "vehiculo": 13,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "DIA",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-08T16:18:14.708Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "admin"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 14,
+  "fields": {
+    "folio": "6687BB54",
+    "vehiculo": 14,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-09T14:59:00.158Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 15,
+  "fields": {
+    "folio": "B0B0EA18",
+    "vehiculo": 15,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-11T21:56:19.413Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": "2025-11-12T16:00:00Z",
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 16,
+  "fields": {
+    "folio": "2D5F99CA",
+    "vehiculo": 16,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "DIA",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-12T18:03:16.328Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 17,
+  "fields": {
+    "folio": "CE9036AF",
+    "vehiculo": 17,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "CER",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-13T01:58:59.121Z",
+    "fecha_cierre": "2025-11-14T05:05:39.046Z",
+    "activa": false,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 18,
+  "fields": {
+    "folio": "5C222CD1",
+    "vehiculo": 18,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-13T04:00:57.303Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "yo mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 19,
+  "fields": {
+    "folio": "1A7B3883",
+    "vehiculo": 19,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-13T04:14:10.327Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "yo mismoddddsdd"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 20,
+  "fields": {
+    "folio": "CB821C2E",
+    "vehiculo": 20,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-13T04:31:21.779Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "tu mismo"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 21,
+  "fields": {
+    "folio": "99FB644C",
+    "vehiculo": 21,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "REP",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-13T04:45:37.477Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "papoi"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 22,
+  "fields": {
+    "folio": "ED619384",
+    "vehiculo": 22,
+    "taller": 2,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-14T23:14:13.062Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": null,
+    "fecha_compromiso": null,
+    "chofer": "Pedro Gonz├ílez"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 23,
+  "fields": {
+    "folio": "33C0769D",
+    "vehiculo": 23,
+    "taller": 2,
+    "responsable": "",
+    "estado_actual": "ING",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-15T03:44:58.130Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "Mar├¡a L├│pez"
+  }
+},
+{
+  "model": "ot.ordentrabajo",
+  "pk": 24,
+  "fields": {
+    "folio": "FDA8A809",
+    "vehiculo": 24,
+    "taller": 1,
+    "responsable": "",
+    "estado_actual": "REP",
+    "prioridad": 2,
+    "fecha_ingreso": "2025-11-17T01:00:30.116Z",
+    "fecha_cierre": null,
+    "activa": true,
+    "mecanico_asignado": [
+      "janis"
+    ],
+    "fecha_compromiso": null,
+    "chofer": "pablo lopez"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 1,
+  "fields": {
+    "ot": 1,
+    "estado": "ING",
+    "inicio": "2025-11-01T22:46:02.842Z",
+    "fin": "2025-11-02T02:14:36.547Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 2,
+  "fields": {
+    "ot": 2,
+    "estado": "ING",
+    "inicio": "2025-11-01T23:56:33.394Z",
+    "fin": "2025-11-02T01:10:26.747Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 3,
+  "fields": {
+    "ot": 3,
+    "estado": "ING",
+    "inicio": "2025-11-01T23:57:05.937Z",
+    "fin": "2025-11-02T00:03:02.974Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 4,
+  "fields": {
+    "ot": 3,
+    "estado": "DIA",
+    "inicio": "2025-11-02T00:03:02.980Z",
+    "fin": "2025-11-02T02:08:23.878Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 5,
+  "fields": {
+    "ot": 4,
+    "estado": "ING",
+    "inicio": "2025-11-02T00:04:38.610Z",
+    "fin": "2025-11-02T00:07:00.848Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 6,
+  "fields": {
+    "ot": 4,
+    "estado": "DIA",
+    "inicio": "2025-11-02T00:07:00.853Z",
+    "fin": "2025-11-02T00:07:03.425Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 7,
+  "fields": {
+    "ot": 4,
+    "estado": "LIS",
+    "inicio": "2025-11-02T00:07:03.430Z",
+    "fin": "2025-11-02T00:07:05.947Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 8,
+  "fields": {
+    "ot": 4,
+    "estado": "ENT",
+    "inicio": "2025-11-02T00:07:05.951Z",
+    "fin": "2025-11-02T00:07:08.441Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 9,
+  "fields": {
+    "ot": 4,
+    "estado": "CER",
+    "inicio": "2025-11-02T00:07:08.445Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 10,
+  "fields": {
+    "ot": 2,
+    "estado": "DIA",
+    "inicio": "2025-11-02T01:10:26.754Z",
+    "fin": "2025-11-02T01:10:29.126Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 11,
+  "fields": {
+    "ot": 2,
+    "estado": "REP",
+    "inicio": "2025-11-02T01:10:29.131Z",
+    "fin": "2025-11-02T01:10:31.568Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 12,
+  "fields": {
+    "ot": 2,
+    "estado": "LIS",
+    "inicio": "2025-11-02T01:10:31.573Z",
+    "fin": "2025-11-02T01:10:34.201Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 13,
+  "fields": {
+    "ot": 2,
+    "estado": "ENT",
+    "inicio": "2025-11-02T01:10:34.205Z",
+    "fin": "2025-11-02T01:10:36.705Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 14,
+  "fields": {
+    "ot": 2,
+    "estado": "CER",
+    "inicio": "2025-11-02T01:10:36.709Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 15,
+  "fields": {
+    "ot": 3,
+    "estado": "LIS",
+    "inicio": "2025-11-02T02:08:23.882Z",
+    "fin": "2025-11-02T02:08:25.551Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 16,
+  "fields": {
+    "ot": 3,
+    "estado": "ENT",
+    "inicio": "2025-11-02T02:08:25.556Z",
+    "fin": "2025-11-02T02:08:27.408Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 17,
+  "fields": {
+    "ot": 3,
+    "estado": "CER",
+    "inicio": "2025-11-02T02:08:27.413Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 18,
+  "fields": {
+    "ot": 1,
+    "estado": "DIA",
+    "inicio": "2025-11-02T02:14:36.552Z",
+    "fin": "2025-11-02T02:14:38.310Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 19,
+  "fields": {
+    "ot": 1,
+    "estado": "REP",
+    "inicio": "2025-11-02T02:14:38.315Z",
+    "fin": "2025-11-02T02:14:40.663Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 20,
+  "fields": {
+    "ot": 1,
+    "estado": "LIS",
+    "inicio": "2025-11-02T02:14:40.667Z",
+    "fin": "2025-11-02T02:14:42.239Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 21,
+  "fields": {
+    "ot": 1,
+    "estado": "ENT",
+    "inicio": "2025-11-02T02:14:42.244Z",
+    "fin": "2025-11-02T02:14:43.986Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 22,
+  "fields": {
+    "ot": 1,
+    "estado": "CER",
+    "inicio": "2025-11-02T02:14:43.990Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 23,
+  "fields": {
+    "ot": 5,
+    "estado": "ING",
+    "inicio": "2025-11-02T02:16:25.945Z",
+    "fin": "2025-11-02T03:05:16.944Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 24,
+  "fields": {
+    "ot": 6,
+    "estado": "ING",
+    "inicio": "2025-11-02T02:33:41.889Z",
+    "fin": "2025-11-02T02:52:43.661Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 25,
+  "fields": {
+    "ot": 6,
+    "estado": "DIA",
+    "inicio": "2025-11-02T02:52:43.666Z",
+    "fin": "2025-11-02T02:52:46.322Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 26,
+  "fields": {
+    "ot": 6,
+    "estado": "REP",
+    "inicio": "2025-11-02T02:52:46.326Z",
+    "fin": "2025-11-02T02:52:47.998Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 27,
+  "fields": {
+    "ot": 6,
+    "estado": "LIS",
+    "inicio": "2025-11-02T02:52:48.002Z",
+    "fin": "2025-11-02T02:52:49.717Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 28,
+  "fields": {
+    "ot": 6,
+    "estado": "ENT",
+    "inicio": "2025-11-02T02:52:49.722Z",
+    "fin": "2025-11-02T02:52:52.283Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 29,
+  "fields": {
+    "ot": 6,
+    "estado": "CER",
+    "inicio": "2025-11-02T02:52:52.287Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 30,
+  "fields": {
+    "ot": 5,
+    "estado": "DIA",
+    "inicio": "2025-11-02T03:05:16.949Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 31,
+  "fields": {
+    "ot": 7,
+    "estado": "ING",
+    "inicio": "2025-11-02T17:14:51.088Z",
+    "fin": "2025-11-02T21:45:21.297Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 32,
+  "fields": {
+    "ot": 7,
+    "estado": "DIA",
+    "inicio": "2025-11-02T21:45:21.305Z",
+    "fin": "2025-11-02T22:16:53.657Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 33,
+  "fields": {
+    "ot": 7,
+    "estado": "REP",
+    "inicio": "2025-11-02T22:16:53.661Z",
+    "fin": "2025-11-03T17:39:41.915Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 34,
+  "fields": {
+    "ot": 7,
+    "estado": "LIS",
+    "inicio": "2025-11-03T17:39:41.919Z",
+    "fin": "2025-11-03T17:40:32.892Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 35,
+  "fields": {
+    "ot": 7,
+    "estado": "ENT",
+    "inicio": "2025-11-03T17:40:32.895Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 36,
+  "fields": {
+    "ot": 8,
+    "estado": "ING",
+    "inicio": "2025-11-03T18:16:36.481Z",
+    "fin": "2025-11-03T18:16:55.534Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 37,
+  "fields": {
+    "ot": 8,
+    "estado": "DIA",
+    "inicio": "2025-11-03T18:16:55.539Z",
+    "fin": "2025-11-08T19:35:59.755Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 38,
+  "fields": {
+    "ot": 9,
+    "estado": "ING",
+    "inicio": "2025-11-06T18:09:33.919Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 39,
+  "fields": {
+    "ot": 10,
+    "estado": "ING",
+    "inicio": "2025-11-06T19:27:12.123Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 40,
+  "fields": {
+    "ot": 11,
+    "estado": "ING",
+    "inicio": "2025-11-07T18:33:54.352Z",
+    "fin": "2025-11-07T22:50:22.619Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 41,
+  "fields": {
+    "ot": 11,
+    "estado": "DIA",
+    "inicio": "2025-11-07T22:50:22.626Z",
+    "fin": "2025-11-14T04:13:12.553Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 42,
+  "fields": {
+    "ot": 12,
+    "estado": "ING",
+    "inicio": "2025-11-08T14:26:31.034Z",
+    "fin": null,
+    "observaciones": "esto es una observacion muy observativa"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 43,
+  "fields": {
+    "ot": 13,
+    "estado": "ING",
+    "inicio": "2025-11-08T16:18:14.711Z",
+    "fin": "2025-11-08T16:34:35.344Z",
+    "observaciones": "si"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 44,
+  "fields": {
+    "ot": 13,
+    "estado": "DIA",
+    "inicio": "2025-11-08T16:34:35.351Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 45,
+  "fields": {
+    "ot": 8,
+    "estado": "REP",
+    "inicio": "2025-11-08T19:35:59.761Z",
+    "fin": "2025-11-08T19:36:02.702Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 46,
+  "fields": {
+    "ot": 8,
+    "estado": "LIS",
+    "inicio": "2025-11-08T19:36:02.709Z",
+    "fin": "2025-11-08T19:36:07.606Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 47,
+  "fields": {
+    "ot": 8,
+    "estado": "ENT",
+    "inicio": "2025-11-08T19:36:07.613Z",
+    "fin": "2025-11-08T19:36:09.412Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 48,
+  "fields": {
+    "ot": 8,
+    "estado": "CER",
+    "inicio": "2025-11-08T19:36:09.419Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 49,
+  "fields": {
+    "ot": 14,
+    "estado": "ING",
+    "inicio": "2025-11-09T14:59:00.159Z",
+    "fin": null,
+    "observaciones": "asasasa"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 50,
+  "fields": {
+    "ot": 15,
+    "estado": "ING",
+    "inicio": "2025-11-11T21:56:19.415Z",
+    "fin": null,
+    "observaciones": "estamos probando"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 51,
+  "fields": {
+    "ot": 16,
+    "estado": "ING",
+    "inicio": "2025-11-12T18:03:16.337Z",
+    "fin": "2025-11-12T18:03:38.070Z",
+    "observaciones": "aqui estamos con sue├▒o"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 52,
+  "fields": {
+    "ot": 16,
+    "estado": "DIA",
+    "inicio": "2025-11-12T18:03:38.082Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 53,
+  "fields": {
+    "ot": 17,
+    "estado": "ING",
+    "inicio": "2025-11-13T01:58:59.127Z",
+    "fin": "2025-11-14T05:05:25.049Z",
+    "observaciones": "ssssss"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 54,
+  "fields": {
+    "ot": 18,
+    "estado": "ING",
+    "inicio": "2025-11-13T04:00:57.307Z",
+    "fin": null,
+    "observaciones": "ghhhhhhhhhhhh"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 55,
+  "fields": {
+    "ot": 19,
+    "estado": "ING",
+    "inicio": "2025-11-13T04:14:10.335Z",
+    "fin": null,
+    "observaciones": "dssssssssssssssssss"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 56,
+  "fields": {
+    "ot": 20,
+    "estado": "ING",
+    "inicio": "2025-11-13T04:31:21.798Z",
+    "fin": null,
+    "observaciones": "ultima"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 57,
+  "fields": {
+    "ot": 21,
+    "estado": "ING",
+    "inicio": "2025-11-13T04:45:37.489Z",
+    "fin": "2025-11-15T03:15:16.887Z",
+    "observaciones": "la papoi tiene auto"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 58,
+  "fields": {
+    "ot": 11,
+    "estado": "REP",
+    "inicio": "2025-11-14T04:13:12.572Z",
+    "fin": "2025-11-14T04:13:22.550Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 59,
+  "fields": {
+    "ot": 11,
+    "estado": "LIS",
+    "inicio": "2025-11-14T04:13:22.560Z",
+    "fin": "2025-11-14T04:13:26.040Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 60,
+  "fields": {
+    "ot": 11,
+    "estado": "ENT",
+    "inicio": "2025-11-14T04:13:26.050Z",
+    "fin": "2025-11-14T04:13:29.453Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 61,
+  "fields": {
+    "ot": 11,
+    "estado": "CER",
+    "inicio": "2025-11-14T04:13:29.463Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 62,
+  "fields": {
+    "ot": 17,
+    "estado": "DIA",
+    "inicio": "2025-11-14T05:05:25.058Z",
+    "fin": "2025-11-14T05:05:27.531Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 63,
+  "fields": {
+    "ot": 17,
+    "estado": "REP",
+    "inicio": "2025-11-14T05:05:27.542Z",
+    "fin": "2025-11-14T05:05:32.689Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 64,
+  "fields": {
+    "ot": 17,
+    "estado": "LIS",
+    "inicio": "2025-11-14T05:05:32.698Z",
+    "fin": "2025-11-14T05:05:36.590Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 65,
+  "fields": {
+    "ot": 17,
+    "estado": "ENT",
+    "inicio": "2025-11-14T05:05:36.599Z",
+    "fin": "2025-11-14T05:05:39.043Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 66,
+  "fields": {
+    "ot": 17,
+    "estado": "CER",
+    "inicio": "2025-11-14T05:05:39.056Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 67,
+  "fields": {
+    "ot": 22,
+    "estado": "ING",
+    "inicio": "2025-11-14T23:14:13.086Z",
+    "fin": null,
+    "observaciones": "Ingreso por mantenimiento preventivo"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 68,
+  "fields": {
+    "ot": 21,
+    "estado": "DIA",
+    "inicio": "2025-11-15T03:15:16.898Z",
+    "fin": "2025-11-15T03:15:50.399Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 69,
+  "fields": {
+    "ot": 21,
+    "estado": "REP",
+    "inicio": "2025-11-15T03:15:50.407Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 70,
+  "fields": {
+    "ot": 23,
+    "estado": "ING",
+    "inicio": "2025-11-15T03:44:58.139Z",
+    "fin": null,
+    "observaciones": "Cliente reporta ruido en suspensi├│n."
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 71,
+  "fields": {
+    "ot": 24,
+    "estado": "ING",
+    "inicio": "2025-11-17T01:00:30.123Z",
+    "fin": "2025-11-17T01:03:34.994Z",
+    "observaciones": "Ingreso prueba smoke test"
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 72,
+  "fields": {
+    "ot": 24,
+    "estado": "DIA",
+    "inicio": "2025-11-17T01:03:35.007Z",
+    "fin": "2025-11-17T01:03:38.021Z",
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.historialestadoot",
+  "pk": 73,
+  "fields": {
+    "ot": 24,
+    "estado": "REP",
+    "inicio": "2025-11-17T01:03:38.030Z",
+    "fin": null,
+    "observaciones": ""
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 1,
+  "fields": {
+    "ot": 3,
+    "motivo": "holaa",
+    "inicio": "2025-11-02T00:03:19.793Z",
+    "fin": "2025-11-02T00:03:24.959Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 2,
+  "fields": {
+    "ot": 4,
+    "motivo": "holaa",
+    "inicio": "2025-11-02T00:06:30.605Z",
+    "fin": "2025-11-02T00:06:32.820Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 3,
+  "fields": {
+    "ot": 2,
+    "motivo": "holaa2",
+    "inicio": "2025-11-02T00:20:29.608Z",
+    "fin": "2025-11-02T00:20:40.050Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 4,
+  "fields": {
+    "ot": 2,
+    "motivo": "no se",
+    "inicio": "2025-11-02T00:20:52.760Z",
+    "fin": "2025-11-02T00:20:55.970Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 5,
+  "fields": {
+    "ot": 2,
+    "motivo": "ti",
+    "inicio": "2025-11-02T00:22:19.538Z",
+    "fin": "2025-11-02T00:22:58.337Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 6,
+  "fields": {
+    "ot": 3,
+    "motivo": "no se",
+    "inicio": "2025-11-02T00:22:43.019Z",
+    "fin": "2025-11-02T00:22:47.721Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 7,
+  "fields": {
+    "ot": 2,
+    "motivo": "dado",
+    "inicio": "2025-11-02T01:10:12.313Z",
+    "fin": "2025-11-02T01:10:19.721Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 8,
+  "fields": {
+    "ot": 3,
+    "motivo": "ti",
+    "inicio": "2025-11-02T02:08:16.063Z",
+    "fin": "2025-11-02T02:08:18.245Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 9,
+  "fields": {
+    "ot": 1,
+    "motivo": "ti",
+    "inicio": "2025-11-02T02:14:24.085Z",
+    "fin": "2025-11-02T02:14:28.130Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 10,
+  "fields": {
+    "ot": 7,
+    "motivo": "no se",
+    "inicio": "2025-11-02T21:55:20.329Z",
+    "fin": "2025-11-02T22:16:53.651Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 11,
+  "fields": {
+    "ot": 7,
+    "motivo": "holaa",
+    "inicio": "2025-11-03T17:40:09.857Z",
+    "fin": "2025-11-03T17:40:32.885Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 12,
+  "fields": {
+    "ot": 8,
+    "motivo": "ti",
+    "inicio": "2025-11-03T18:17:03.074Z",
+    "fin": "2025-11-03T18:17:08.725Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 13,
+  "fields": {
+    "ot": 8,
+    "motivo": "holaa",
+    "inicio": "2025-11-03T19:59:29.228Z",
+    "fin": "2025-11-03T20:00:54.249Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 14,
+  "fields": {
+    "ot": 11,
+    "motivo": "no se",
+    "inicio": "2025-11-07T18:34:14.158Z",
+    "fin": "2025-11-07T18:34:31.673Z"
+  }
+},
+{
+  "model": "ot.pausaot",
+  "pk": 15,
+  "fields": {
+    "ot": 21,
+    "motivo": "no se",
+    "inicio": "2025-11-13T19:31:29.274Z",
+    "fin": "2025-11-13T19:31:39.989Z"
+  }
+},
+{
+  "model": "ot.documentoot",
+  "pk": 4,
+  "fields": {
+    "ot": 6,
+    "archivo": "docs/ot_6/7559713f647a44e3b6ebfdaf7bec46a8.jpeg",
+    "tipo": "auto",
+    "creado_por": [
+      "admin"
+    ],
+    "ts": "2025-11-02T02:52:35.181Z"
+  }
+},
+{
+  "model": "ot.documentoot",
+  "pk": 5,
+  "fields": {
+    "ot": 5,
+    "archivo": "docs/ot_5/f782ca2c9e9b4e6e8ba5dd4d02a9d862.jpeg",
+    "tipo": "",
+    "creado_por": [
+      "admin"
+    ],
+    "ts": "2025-11-02T03:03:34.556Z"
+  }
+},
+{
+  "model": "ot.documentoot",
+  "pk": 11,
+  "fields": {
+    "ot": 20,
+    "archivo": "docs/ot_20/6daab7051d554bdeb8da549a40ab0a0c.jpeg",
+    "tipo": "Evidencia ingreso",
+    "creado_por": [
+      "admin"
+    ],
+    "ts": "2025-11-13T04:31:21.793Z"
+  }
+},
+{
+  "model": "ot.documentoot",
+  "pk": 12,
+  "fields": {
+    "ot": 21,
+    "archivo": "docs/ot_21/f1c9591de3fd46799719661ae89c039b.jpeg",
+    "tipo": "Evidencia ingreso",
+    "creado_por": [
+      "admin"
+    ],
+    "ts": "2025-11-13T04:45:37.487Z"
+  }
+},
+{
+  "model": "ot.documentoot",
+  "pk": 13,
+  "fields": {
+    "ot": 22,
+    "archivo": "docs/ot_22/ee7e59c522a54a2e8339acc7a115e8ba.jpeg",
+    "tipo": "Evidencia ingreso",
+    "creado_por": [
+      "admin"
+    ],
+    "ts": "2025-11-14T23:14:13.083Z"
+  }
+},
+{
+  "model": "core.perfil",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "rol": "ADMIN"
+  }
+},
+{
+  "model": "core.perfil",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "rol": "MECANICO"
+  }
+},
+{
+  "model": "core.perfil",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "rol": "RECEPCIONISTA"
+  }
+},
+{
+  "model": "core.perfil",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "mati"
+    ],
+    "rol": "GUARDIA"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 1,
+  "fields": {
+    "titulo": "OT 54ED0195: Diagn├│stico",
+    "mensaje": "La OT 54ED0195 cambi├│ a Diagn├│stico.",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-02T21:45:21.307Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 2,
+  "fields": {
+    "titulo": "OT 54ED0195: Reparaci├│n",
+    "mensaje": "La OT 54ED0195 cambi├│ a Reparaci├│n.",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-02T22:16:53.663Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 3,
+  "fields": {
+    "titulo": "OT 54ED0195: Listo",
+    "mensaje": "La OT 54ED0195 cambi├│ a Listo.",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T17:39:41.920Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 4,
+  "fields": {
+    "titulo": "Pausa iniciada en OT 54ED0195",
+    "mensaje": "Motivo: holaa",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T17:40:09.867Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 5,
+  "fields": {
+    "titulo": "OT 54ED0195: Entregado",
+    "mensaje": "La OT 54ED0195 cambi├│ a Entregado.",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T17:40:32.896Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 6,
+  "fields": {
+    "titulo": "Documento agregado en OT 54ED0195",
+    "mensaje": "Tipo: autos ┬À Archivo: docs/ot_7/131657692c844900878f585826eff54c.jpeg",
+    "url": "/ot/7/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T17:41:59.848Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 7,
+  "fields": {
+    "titulo": "OT creada: EB563322",
+    "mensaje": "Se cre├│ la OT EB563322 para el veh├¡culo AB12-46 en Maip├║.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:16:36.483Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 8,
+  "fields": {
+    "titulo": "OT EB563322: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:16:55.540Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 9,
+  "fields": {
+    "titulo": "Pausa iniciada en OT EB563322",
+    "mensaje": "Motivo: ti",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:17:03.083Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 10,
+  "fields": {
+    "titulo": "Pausa finalizada en OT EB563322",
+    "mensaje": "Se cerr├│ la pausa abierta.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:17:08.734Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 11,
+  "fields": {
+    "titulo": "Documento agregado en OT EB563322",
+    "mensaje": "Tipo: auto ┬À Archivo: docs/ot_8/64f622f964234f459a8073dff653cc15.jpeg",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:17:18.716Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 12,
+  "fields": {
+    "titulo": "Documento agregado en OT EB563322",
+    "mensaje": "Tipo: (sin tipo) ┬À Archivo: docs/ot_8/0646264f84c24d408613b7d0e9730cff.jpeg",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:24:09.191Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 13,
+  "fields": {
+    "titulo": "Documento eliminado en OT EB563322",
+    "mensaje": "Tipo: (sin tipo) ┬À Archivo: None",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T18:24:11.405Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 14,
+  "fields": {
+    "titulo": "Pausa iniciada en OT EB563322",
+    "mensaje": "Motivo: holaa",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T19:59:29.238Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 15,
+  "fields": {
+    "titulo": "Pausa finalizada en OT EB563322",
+    "mensaje": "Se cerr├│ la pausa abierta.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-03T20:00:54.258Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 16,
+  "fields": {
+    "titulo": "Veh├¡culo AB12-46: En taller",
+    "mensaje": "Estado de veh├¡culo actualizado a En taller.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:04.569Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 17,
+  "fields": {
+    "titulo": "OT EB563322: Prioridad Alta",
+    "mensaje": "Se actualiz├│ la prioridad a Alta.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:20.375Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 18,
+  "fields": {
+    "titulo": "OT EB563322: Prioridad Cr├¡tica",
+    "mensaje": "Se actualiz├│ la prioridad a Cr├¡tica.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:31.773Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 19,
+  "fields": {
+    "titulo": "Veh├¡culo AB12-46: Fuera de servicio",
+    "mensaje": "Estado de veh├¡culo actualizado a Fuera de servicio.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:41.351Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 20,
+  "fields": {
+    "titulo": "Veh├¡culo AB12-46: Operativo",
+    "mensaje": "Estado de veh├¡culo actualizado a Operativo.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:46.729Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 21,
+  "fields": {
+    "titulo": "OT EB563322: Prioridad Baja",
+    "mensaje": "Se actualiz├│ la prioridad a Baja.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:08:52.459Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 22,
+  "fields": {
+    "titulo": "OT creada: 94513173",
+    "mensaje": "Se cre├│ la OT 94513173 para el veh├¡culo AB12-70 en Maip├║.",
+    "url": "/ot/9/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T18:09:33.922Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 23,
+  "fields": {
+    "titulo": "OT creada: 39C832F5",
+    "mensaje": "Se cre├│ la OT 39C832F5 para el veh├¡culo AB12-50 en Maip├║.",
+    "url": "/ot/10/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-06T19:27:12.125Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 24,
+  "fields": {
+    "titulo": "OT 39C832F5: Prioridad Alta",
+    "mensaje": "Se actualiz├│ la prioridad a Alta.",
+    "url": "/ot/10/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:03:29.013Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 25,
+  "fields": {
+    "titulo": "OT creada: B371C018",
+    "mensaje": "Se cre├│ la OT B371C018 para el veh├¡culo AB12-59 en Maip├║.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:33:54.354Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 26,
+  "fields": {
+    "titulo": "Pausa iniciada en OT B371C018",
+    "mensaje": "Motivo: no se",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:34:14.168Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 27,
+  "fields": {
+    "titulo": "Pausa finalizada en OT B371C018",
+    "mensaje": "Se cerr├│ la pausa abierta.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:34:31.685Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 28,
+  "fields": {
+    "titulo": "Veh├¡culo AB12-59: Fuera de servicio",
+    "mensaje": "Estado de veh├¡culo actualizado a Fuera de servicio.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:34:51.007Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 29,
+  "fields": {
+    "titulo": "OT B371C018: Prioridad Cr├¡tica",
+    "mensaje": "Se actualiz├│ la prioridad a Cr├¡tica.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T18:34:55.065Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 30,
+  "fields": {
+    "titulo": "Veh├¡culo AB12-59: En taller",
+    "mensaje": "Estado de veh├¡culo actualizado a En taller.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T21:15:15.805Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 31,
+  "fields": {
+    "titulo": "OT B371C018: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-07T22:50:22.627Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 32,
+  "fields": {
+    "titulo": "OT creada: 4AE9052B",
+    "mensaje": "Se cre├│ la OT 4AE9052B para AB12-60 en Maip├║.",
+    "url": "/ot/12/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T14:26:31.036Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 33,
+  "fields": {
+    "titulo": "OT creada: 0BE760A4",
+    "mensaje": "Se cre├│ la OT 0BE760A4 para AB12-20 en Maip├║.",
+    "url": "/ot/13/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T16:18:14.717Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 34,
+  "fields": {
+    "titulo": "OT 0BE760A4: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/13/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T16:34:35.352Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 35,
+  "fields": {
+    "titulo": "OT EB563322: Reparaci├│n",
+    "mensaje": "Cambio de estado: Diagn├│stico ÔåÆ Reparaci├│n.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T19:35:59.762Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 36,
+  "fields": {
+    "titulo": "OT EB563322: Listo",
+    "mensaje": "Cambio de estado: Reparaci├│n ÔåÆ Listo.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T19:36:02.710Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 37,
+  "fields": {
+    "titulo": "OT EB563322: Entregado",
+    "mensaje": "Cambio de estado: Listo ÔåÆ Entregado.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T19:36:07.614Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 38,
+  "fields": {
+    "titulo": "OT EB563322: Cerrado",
+    "mensaje": "Cambio de estado: Entregado ÔåÆ Cerrado.",
+    "url": "/ot/8/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-08T19:36:09.419Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 39,
+  "fields": {
+    "titulo": "OT creada: 6687BB54",
+    "mensaje": "Se cre├│ la OT 6687BB54 para AB12-65 en Maip├║.",
+    "url": "/ot/14/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-09T14:59:00.163Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 40,
+  "fields": {
+    "titulo": "Stock bajo: FILTRO-AIRE-123",
+    "mensaje": "Filtro de aire en m├¡nimo (stock 28.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-10T06:25:24.438Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 41,
+  "fields": {
+    "titulo": "Stock bajo: FILTRO-ACEITE-123",
+    "mensaje": "Filtro de aceite Cummins en m├¡nimo (stock 27.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-10T07:04:02.976Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 42,
+  "fields": {
+    "titulo": "Stock bajo: FILTRO-AIRE-123",
+    "mensaje": "Filtro de aire en m├¡nimo (stock 26.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-10T07:14:52.022Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 43,
+  "fields": {
+    "titulo": "Documento eliminado en OT 24847CAF",
+    "mensaje": "Tipo: (sin tipo) ┬À Archivo: None",
+    "url": "/ot/5/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-10T07:15:19.548Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 44,
+  "fields": {
+    "titulo": "OT creada: B0B0EA18",
+    "mensaje": "Se cre├│ la OT B0B0EA18 para AB12-90 en Maip├║.",
+    "url": "/ot/15/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-11T21:56:19.417Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 45,
+  "fields": {
+    "titulo": "OT B0B0EA18: compromiso actualizado",
+    "mensaje": "Nuevo compromiso: 2025-11-20 13:00:00-03:00.",
+    "url": "/ot/15/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T01:54:21.337Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 46,
+  "fields": {
+    "titulo": "OT B0B0EA18: compromiso actualizado",
+    "mensaje": "Nuevo compromiso: 2025-11-10 13:00:00-03:00.",
+    "url": "/ot/15/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T01:54:30.286Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 47,
+  "fields": {
+    "titulo": "OT B0B0EA18: compromiso actualizado",
+    "mensaje": "Nuevo compromiso: 2025-11-12 13:00:00-03:00.",
+    "url": "/ot/15/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T01:54:50.037Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 48,
+  "fields": {
+    "titulo": "Stock bajo: PASTILLAS-FRENO-123",
+    "mensaje": "Pastillas de freno en m├¡nimo (stock 35.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T06:26:16.294Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 49,
+  "fields": {
+    "titulo": "Stock bajo: PASTILLAS-FRENO-123",
+    "mensaje": "Pastillas de freno en m├¡nimo (stock 33.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T06:26:54.041Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 50,
+  "fields": {
+    "titulo": "Stock bajo: FILTRO-AIRE-123",
+    "mensaje": "Filtro de aire en m├¡nimo (stock 23.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T09:41:42.211Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 51,
+  "fields": {
+    "titulo": "OT creada: 2D5F99CA",
+    "mensaje": "Se cre├│ la OT 2D5F99CA para AB12-95 en Maip├║.",
+    "url": "/ot/16/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T18:03:16.343Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 52,
+  "fields": {
+    "titulo": "OT 2D5F99CA: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/16/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-12T18:03:38.085Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 53,
+  "fields": {
+    "titulo": "OT creada: CE9036AF",
+    "mensaje": "Se cre├│ la OT CE9036AF para AB12-69 en Maip├║.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-13T01:58:59.131Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 54,
+  "fields": {
+    "titulo": "Stock bajo: PASTILLAS-FRENO-123",
+    "mensaje": "Pastillas de freno en m├¡nimo (stock 29.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-13T04:49:09.153Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 55,
+  "fields": {
+    "titulo": "Pausa iniciada en OT 99FB644C",
+    "mensaje": "Motivo: no se",
+    "url": "/ot/21/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-13T19:31:29.283Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 56,
+  "fields": {
+    "titulo": "Pausa finalizada en OT 99FB644C",
+    "mensaje": "Se cerr├│ la pausa abierta.",
+    "url": "/ot/21/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-13T19:31:39.997Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 57,
+  "fields": {
+    "titulo": "OT B371C018: Reparaci├│n",
+    "mensaje": "Cambio de estado: Diagn├│stico ÔåÆ Reparaci├│n.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T04:13:12.573Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 58,
+  "fields": {
+    "titulo": "OT B371C018: Listo",
+    "mensaje": "Cambio de estado: Reparaci├│n ÔåÆ Listo.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T04:13:22.562Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 59,
+  "fields": {
+    "titulo": "OT B371C018: Entregado",
+    "mensaje": "Cambio de estado: Listo ÔåÆ Entregado.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T04:13:26.051Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 60,
+  "fields": {
+    "titulo": "OT B371C018: Cerrado",
+    "mensaje": "Cambio de estado: Entregado ÔåÆ Cerrado.",
+    "url": "/ot/11/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T04:13:29.464Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 61,
+  "fields": {
+    "titulo": "OT CE9036AF: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T05:05:25.059Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 62,
+  "fields": {
+    "titulo": "OT CE9036AF: Reparaci├│n",
+    "mensaje": "Cambio de estado: Diagn├│stico ÔåÆ Reparaci├│n.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T05:05:27.543Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 63,
+  "fields": {
+    "titulo": "OT CE9036AF: Listo",
+    "mensaje": "Cambio de estado: Reparaci├│n ÔåÆ Listo.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T05:05:32.699Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 64,
+  "fields": {
+    "titulo": "OT CE9036AF: Entregado",
+    "mensaje": "Cambio de estado: Listo ÔåÆ Entregado.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T05:05:36.599Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 65,
+  "fields": {
+    "titulo": "OT CE9036AF: Cerrado",
+    "mensaje": "Cambio de estado: Entregado ÔåÆ Cerrado.",
+    "url": "/ot/17/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-14T05:05:39.057Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 66,
+  "fields": {
+    "titulo": "OT 99FB644C: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/21/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-15T03:15:16.899Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 67,
+  "fields": {
+    "titulo": "OT 99FB644C: Reparaci├│n",
+    "mensaje": "Cambio de estado: Diagn├│stico ÔåÆ Reparaci├│n.",
+    "url": "/ot/21/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-15T03:15:50.408Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 68,
+  "fields": {
+    "titulo": "Stock bajo: AMORTIGUADORES_123",
+    "mensaje": "Amortiguadores en m├¡nimo (stock 26.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": true,
+    "creada_en": "2025-11-16T00:45:36.949Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 69,
+  "fields": {
+    "titulo": "OT FDA8A809: Diagn├│stico",
+    "mensaje": "Cambio de estado: Ingresado ÔåÆ Diagn├│stico.",
+    "url": "/ot/24/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": false,
+    "creada_en": "2025-11-17T01:03:35.008Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 70,
+  "fields": {
+    "titulo": "OT FDA8A809: Reparaci├│n",
+    "mensaje": "Cambio de estado: Diagn├│stico ÔåÆ Reparaci├│n.",
+    "url": "/ot/24/",
+    "destinatario": [
+      "janis"
+    ],
+    "leida": false,
+    "creada_en": "2025-11-17T01:03:38.031Z"
+  }
+},
+{
+  "model": "core.notificacion",
+  "pk": 71,
+  "fields": {
+    "titulo": "Stock bajo: FILTRO-ACEITE-123",
+    "mensaje": "Filtro de aceite Cummins en m├¡nimo (stock 25.00 / min 50.00).",
+    "url": "/inventario/repuestos/",
+    "destinatario": [
+      "admin"
+    ],
+    "leida": false,
+    "creada_en": "2025-11-17T01:07:56.405Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 1,
+  "fields": {
+    "titulo": "holaa",
+    "inicio": "2025-11-07T03:00:00Z",
+    "fin": "2025-11-08T03:00:00Z",
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": null,
+    "descripcion": "",
+    "creado_en": "2025-11-07T21:02:52.386Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 2,
+  "fields": {
+    "titulo": "revision",
+    "inicio": "2025-11-10T16:00:00Z",
+    "fin": "2025-11-10T17:00:00Z",
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": null,
+    "descripcion": "",
+    "creado_en": "2025-11-07T21:14:14.545Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 3,
+  "fields": {
+    "titulo": "holaa (OT B371C018)",
+    "inicio": "2025-11-10T18:00:00Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 11,
+    "descripcion": "aqui estamos",
+    "creado_en": "2025-11-07T21:14:58.941Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 5,
+  "fields": {
+    "titulo": "aqui estamos (OT B371C018)",
+    "inicio": "2025-11-12T11:00:00Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 11,
+    "descripcion": "",
+    "creado_en": "2025-11-08T01:56:37.350Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 6,
+  "fields": {
+    "titulo": "Ingreso OT 4AE9052B",
+    "inicio": "2025-11-08T14:26:31.033Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 12,
+    "descripcion": "",
+    "creado_en": "2025-11-08T14:26:31.035Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 7,
+  "fields": {
+    "titulo": "Ingreso OT 0BE760A4",
+    "inicio": "2025-11-08T16:18:14.708Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 13,
+    "descripcion": "",
+    "creado_en": "2025-11-08T16:18:14.714Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 8,
+  "fields": {
+    "titulo": "Entrega OT EB563322",
+    "inicio": "2025-11-08T20:36:02.707Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 8,
+    "descripcion": "",
+    "creado_en": "2025-11-08T19:36:02.708Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 9,
+  "fields": {
+    "titulo": "Entrega OT EB563322",
+    "inicio": "2025-11-08T20:36:07.612Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 8,
+    "descripcion": "",
+    "creado_en": "2025-11-08T19:36:07.612Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 10,
+  "fields": {
+    "titulo": "Entrega OT EB563322",
+    "inicio": "2025-11-08T20:36:09.416Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 8,
+    "descripcion": "",
+    "creado_en": "2025-11-08T19:36:09.417Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 11,
+  "fields": {
+    "titulo": "Ingreso OT 6687BB54",
+    "inicio": "2025-11-09T14:59:00.158Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "janis"
+    ],
+    "ot": 14,
+    "descripcion": "",
+    "creado_en": "2025-11-09T14:59:00.161Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 12,
+  "fields": {
+    "titulo": "Ingreso OT B0B0EA18",
+    "inicio": "2025-11-11T21:56:19.413Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 15,
+    "descripcion": "",
+    "creado_en": "2025-11-11T21:56:19.416Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 13,
+  "fields": {
+    "titulo": "Ingreso OT 2D5F99CA",
+    "inicio": "2025-11-12T18:03:16.328Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 16,
+    "descripcion": "",
+    "creado_en": "2025-11-12T18:03:16.340Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 14,
+  "fields": {
+    "titulo": "Ingreso OT CE9036AF",
+    "inicio": "2025-11-13T01:58:59.121Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 17,
+    "descripcion": "",
+    "creado_en": "2025-11-13T01:58:59.130Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 16,
+  "fields": {
+    "titulo": "revision (OT 2D5F99CA)",
+    "inicio": "2025-11-14T16:00:00Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 16,
+    "descripcion": "",
+    "creado_en": "2025-11-14T01:15:56.312Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 17,
+  "fields": {
+    "titulo": "Entrega OT B371C018",
+    "inicio": "2025-11-14T05:13:22.557Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 11,
+    "descripcion": "",
+    "creado_en": "2025-11-14T04:13:22.558Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 18,
+  "fields": {
+    "titulo": "Entrega OT B371C018",
+    "inicio": "2025-11-14T05:13:26.048Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 11,
+    "descripcion": "",
+    "creado_en": "2025-11-14T04:13:26.049Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 19,
+  "fields": {
+    "titulo": "Entrega OT B371C018",
+    "inicio": "2025-11-14T05:13:29.461Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": 11,
+    "descripcion": "",
+    "creado_en": "2025-11-14T04:13:29.462Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 20,
+  "fields": {
+    "titulo": "Entrega OT CE9036AF",
+    "inicio": "2025-11-14T06:05:32.697Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "janis"
+    ],
+    "ot": 17,
+    "descripcion": "",
+    "creado_en": "2025-11-14T05:05:32.698Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 21,
+  "fields": {
+    "titulo": "Entrega OT CE9036AF",
+    "inicio": "2025-11-14T06:05:36.597Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "janis"
+    ],
+    "ot": 17,
+    "descripcion": "",
+    "creado_en": "2025-11-14T05:05:36.598Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 22,
+  "fields": {
+    "titulo": "Entrega OT CE9036AF",
+    "inicio": "2025-11-14T06:05:39.054Z",
+    "fin": null,
+    "todo_el_dia": false,
+    "asignado_a": [
+      "janis"
+    ],
+    "ot": 17,
+    "descripcion": "",
+    "creado_en": "2025-11-14T05:05:39.055Z"
+  }
+},
+{
+  "model": "core.eventoagenda",
+  "pk": 24,
+  "fields": {
+    "titulo": "Entrada de personal",
+    "inicio": "2025-11-16T10:00:00Z",
+    "fin": "2025-11-16T13:00:00Z",
+    "todo_el_dia": false,
+    "asignado_a": [
+      "admin"
+    ],
+    "ot": null,
+    "descripcion": "el personal tiene que llegar entre las horas estipuladas en el evento",
+    "creado_en": "2025-11-16T00:48:40.432Z"
+  }
+},
+{
+  "model": "core.config",
+  "pk": 1,
+  "fields": {
+    "nombre_taller": "Taller ",
+    "horario": "08:00 - 17:00",
+    "contacto": "Whatsapp",
+    "updated_at": "2025-11-16T00:54:46.280Z",
+    "sla_horas": 48
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 1,
+  "fields": {
+    "app": "CORE",
+    "action": "EXPORT_MEDIA",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "",
+    "ts": "2025-11-12T09:08:11.574Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 2,
+  "fields": {
+    "app": "CORE",
+    "action": "UPDATE_CONFIG",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Taller Maipu",
+    "extra": "",
+    "ts": "2025-11-12T09:29:45.461Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 3,
+  "fields": {
+    "app": "CORE",
+    "action": "EXPORT_MEDIA",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "",
+    "ts": "2025-11-12T09:30:49.806Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 4,
+  "fields": {
+    "app": "INV",
+    "action": "CREATE",
+    "user": null,
+    "object_repr": "MOV 9 ┬À FILTRO-AIRE-123 ┬À Salida",
+    "extra": "{'repuesto': 'FILTRO-AIRE-123', 'descripcion': 'Filtro de aire', 'tipo': 'Salida', 'cantidad': 3.0, 'motivo': 'Consumo en OT', 'ot': '6687BB54'}",
+    "ts": "2025-11-12T09:41:42.208Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 5,
+  "fields": {
+    "app": "INV_REP",
+    "action": "UPDATE",
+    "user": null,
+    "object_repr": "Repuesto FILTRO-AIRE-123",
+    "extra": "{'codigo': 'FILTRO-AIRE-123', 'descripcion': 'Filtro de aire', 'stock_minimo': 50.0, 'activo': True}",
+    "ts": "2025-11-12T09:41:42.210Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 6,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-12T09:42:04.777Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 7,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-12T09:42:11.182Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 8,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-12T09:42:14.616Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 9,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-12T09:42:19.711Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 10,
+  "fields": {
+    "app": "CORE",
+    "action": "UPDATE_CONFIG",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Taller Maipu",
+    "extra": "",
+    "ts": "2025-11-12T10:09:16.314Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 11,
+  "fields": {
+    "app": "CORE",
+    "action": "EXPORT_MEDIA",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "",
+    "ts": "2025-11-12T10:09:17.426Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 12,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T10:21:39.883Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 13,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T10:21:56.454Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 14,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T10:35:09.861Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 15,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T10:35:21.853Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 16,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'fini': '', 'ffin': '', 'estado': 'DIA', 'taller': '', 'mecanico': ''}",
+    "ts": "2025-11-12T10:42:01.076Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 17,
+  "fields": {
+    "app": "CORE",
+    "action": "EXPORT_MEDIA",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "",
+    "ts": "2025-11-12T10:57:39.431Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 18,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T10:58:13.601Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 19,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T11:22:17.545Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 20,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T11:51:54.213Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 21,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T11:51:57.579Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 22,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T11:53:13.085Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 23,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T12:12:05.349Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 24,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T12:12:08.096Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 25,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T12:31:07.098Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 26,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T12:31:27.352Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 27,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:17:07.996Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 28,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:26:00.111Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 29,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:26:05.768Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 30,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:27:48.444Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 31,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:28:07.723Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 32,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:46:14.281Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 33,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:46:34.334Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 34,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:51:02.273Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 35,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T13:51:04.751Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 36,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:08:58.044Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 37,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:10:56.953Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 38,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:21:58.683Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 39,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:22:45.441Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 40,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:40:36.392Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 41,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:46:38.873Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 42,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:47:13.568Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 43,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:47:16.590Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 44,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:52:05.949Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 45,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:56:22.825Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 46,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:56:44.026Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 47,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T14:57:44.113Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 48,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': 'mes', 'fini': '2025-11-01', 'ffin': '2025-11-12', 'estado': 'CER', 'taller': '', 'mecanico': ''}",
+    "ts": "2025-11-12T15:12:06.168Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 49,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': 'mes', 'fini': '2025-11-01', 'ffin': '2025-11-12', 'estado': 'CER', 'taller': '', 'mecanico': ''}",
+    "ts": "2025-11-12T15:24:05.224Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 50,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': 'mes', 'fini': '2025-11-01', 'ffin': '2025-11-12', 'estado': 'CER', 'taller': '', 'mecanico': ''}",
+    "ts": "2025-11-12T15:26:19.063Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 51,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T15:26:48.307Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 52,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T15:27:01.108Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 53,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T15:27:25.610Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 54,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:24:47.538Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 55,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:25:05.276Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 56,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:25:23.519Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 57,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:26:24.625Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 58,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:26:41.136Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 59,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:26:58.854Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 60,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:32:17.999Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 61,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T16:41:21.917Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 62,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:02:27.554Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 63,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:02:33.120Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 64,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:04:01.368Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 65,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:12:23.558Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 66,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:33:29.770Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 67,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T17:38:15.989Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 68,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": null,
+    "object_repr": "OT 2D5F99CA ┬À AB12-95",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-95\", \"fecha_ingreso\": \"2025-11-12T18:03:16.328862+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-12T18:03:16.335Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 69,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": null,
+    "object_repr": "OT 2D5F99CA ┬À AB12-95",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-95\", \"fecha_ingreso\": \"2025-11-12T18:03:16.328862+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-12T18:03:23.400Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 70,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": null,
+    "object_repr": "OT 2D5F99CA ┬À AB12-95",
+    "extra": "{\"estado\": \"DIA\", \"estado_label\": \"Diagn├│stico\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-95\", \"fecha_ingreso\": \"2025-11-12T18:03:16.328862+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-12T18:03:38.081Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 71,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T19:53:42.395Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 72,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T20:08:47.357Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 73,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T20:08:59.322Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 74,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T20:44:29.319Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 75,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T20:44:40.961Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 76,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T20:54:00.043Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 77,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': '', 'fini': '', 'ffin': '', 'estado': 'CER', 'taller': '', 'mecanico': ''}",
+    "ts": "2025-11-12T20:54:33.055Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 78,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T21:07:07.313Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 79,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T21:15:19.795Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 80,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T21:15:22.580Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 81,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:08:58.004Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 82,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:09:19.801Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 83,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:10:28.410Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 84,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:10:47.050Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 85,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:17:28.282Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 86,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:17:57.810Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 87,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:18:07.672Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 88,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:26:27.560Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 89,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-12T22:26:37.480Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 90,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T01:22:44.142Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 91,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T01:22:51.627Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 92,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-13T01:58:59.125Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 93,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T02:08:27.409Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 94,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T02:08:40.417Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 95,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': '', 'fini': '', 'ffin': '', 'estado': '', 'taller': '', 'mecanico': '2'}",
+    "ts": "2025-11-13T02:09:24.485Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 96,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T02:10:30.947Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 97,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T02:10:40.318Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 98,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T02:10:52.992Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 99,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T02:10:59.624Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 100,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 5C222CD1 ┬À AB12-67",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-67\", \"fecha_ingreso\": \"2025-11-13T04:00:57.303646+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-13T04:00:57.305Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 101,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 1A7B3883 ┬À AB12-89",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-89\", \"fecha_ingreso\": \"2025-11-13T04:14:10.327966+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-13T04:14:10.332Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 102,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT CB821C2E ┬À AB12-10",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-10\", \"fecha_ingreso\": \"2025-11-13T04:31:21.779776+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-13T04:31:21.781Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 103,
+  "fields": {
+    "app": "OT_DOC",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Doc Evidencia ingreso ┬À OT CB821C2E",
+    "extra": "{\"tipo\": \"Evidencia ingreso\", \"archivo\": \"docs/ot_20/6daab7051d554bdeb8da549a40ab0a0c.jpeg\", \"ot\": \"CB821C2E\"}",
+    "ts": "2025-11-13T04:31:21.796Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 104,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 99FB644C ┬À AB12-11",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-11\", \"fecha_ingreso\": \"2025-11-13T04:45:37.477116+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-13T04:45:37.478Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 105,
+  "fields": {
+    "app": "OT_DOC",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Doc Evidencia ingreso ┬À OT 99FB644C",
+    "extra": "{\"tipo\": \"Evidencia ingreso\", \"archivo\": \"docs/ot_21/f1c9591de3fd46799719661ae89c039b.jpeg\", \"ot\": \"99FB644C\"}",
+    "ts": "2025-11-13T04:45:37.488Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 106,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T04:47:42.597Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 107,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-13T04:47:59.644Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 108,
+  "fields": {
+    "app": "INV",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "MOV #10 ┬À PASTILLAS-FRENO-123 ┬À Salida",
+    "extra": "{\"repuesto\": \"PASTILLAS-FRENO-123\", \"descripcion\": \"Pastillas de freno\", \"tipo\": \"Salida\", \"cantidad\": 4.0, \"motivo\": \"Consumo en OT\", \"ot\": \"99FB644C\"}",
+    "ts": "2025-11-13T04:49:09.150Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 109,
+  "fields": {
+    "app": "INV_REP",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Repuesto PASTILLAS-FRENO-123",
+    "extra": "{\"codigo\": \"PASTILLAS-FRENO-123\", \"descripcion\": \"Pastillas de freno\", \"stock_minimo\": 50.0, \"activo\": true}",
+    "ts": "2025-11-13T04:49:09.153Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 110,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T19:50:07.890Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 111,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T19:50:33.278Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 112,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T20:17:34.009Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 113,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T20:17:39.933Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 114,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T20:42:00.935Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 115,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T20:42:06.557Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 116,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-13T20:42:09.490Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 117,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-13T20:42:16.005Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 118,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T00:38:05.638Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 119,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T00:38:11.905Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 120,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T00:38:24.727Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 121,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T00:38:30.902Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 122,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T01:25:36.838Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 123,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T01:25:45.333Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 124,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T01:25:58.152Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 125,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T01:26:13.037Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 126,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 99FB644C ┬À AB12-11",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-11\", \"fecha_ingreso\": \"2025-11-13T04:45:37.477116+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T01:26:31.129Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 127,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T01:26:32.854Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 128,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T01:26:41.787Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 129,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T02:03:59.956Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 130,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T02:04:08.001Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 131,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-14T02:04:39.443Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 132,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT B371C018 ┬À AB12-59",
+    "extra": "{\"estado\": \"REP\", \"estado_label\": \"Reparaci├│n\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-59\", \"fecha_ingreso\": \"2025-11-07T18:33:54.350201+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T04:13:12.569Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 133,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT B371C018 ┬À AB12-59",
+    "extra": "{\"estado\": \"LIS\", \"estado_label\": \"Listo\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-59\", \"fecha_ingreso\": \"2025-11-07T18:33:54.350201+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T04:13:22.557Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 134,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT B371C018 ┬À AB12-59",
+    "extra": "{\"estado\": \"ENT\", \"estado_label\": \"Entregado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-59\", \"fecha_ingreso\": \"2025-11-07T18:33:54.350201+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T04:13:26.047Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 135,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT B371C018 ┬À AB12-59",
+    "extra": "{\"estado\": \"CER\", \"estado_label\": \"Cerrado\", \"activa\": false, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-59\", \"fecha_ingreso\": \"2025-11-07T18:33:54.350201+00:00\", \"fecha_cierre\": \"2025-11-14T04:13:29.457516+00:00\"}",
+    "ts": "2025-11-14T04:13:29.460Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 136,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:04:58.821Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 137,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:05:06.801Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 138,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"DIA\", \"estado_label\": \"Diagn├│stico\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T05:05:25.056Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 139,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"REP\", \"estado_label\": \"Reparaci├│n\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T05:05:27.538Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 140,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"LIS\", \"estado_label\": \"Listo\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T05:05:32.696Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 141,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"ENT\", \"estado_label\": \"Entregado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T05:05:36.597Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 142,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT CE9036AF ┬À AB12-69",
+    "extra": "{\"estado\": \"CER\", \"estado_label\": \"Cerrado\", \"activa\": false, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-69\", \"fecha_ingreso\": \"2025-11-13T01:58:59.121403+00:00\", \"fecha_cierre\": \"2025-11-14T05:05:39.046518+00:00\"}",
+    "ts": "2025-11-14T05:05:39.051Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 143,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:19:10.176Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 144,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:19:15.946Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 145,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:31:15.032Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 146,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:31:19.966Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 147,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:31:27.629Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 148,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:31:39.595Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 149,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:31:53.735Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 150,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:32:08.520Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 151,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:32:20.238Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 152,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:32:28.666Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 153,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:43:13.000Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 154,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:43:22.905Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 155,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:43:27.341Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 156,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:43:33.078Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 157,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T05:53:58.252Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 158,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T05:54:03.665Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 159,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:08:00.724Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 160,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T06:08:07.744Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 161,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T06:08:20.131Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 162,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:08:30.275Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 163,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:09:01.316Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 164,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T06:09:06.972Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 165,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T06:09:16.897Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 166,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:09:23.490Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 167,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:09:32.513Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 168,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:09:50.293Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 169,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-14T06:10:00.448Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 170,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T06:10:05.954Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 171,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-14T06:24:59.327Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 172,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T08:51:14.737Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 173,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-14T20:05:18.418Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 174,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-14T20:14:54.748Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 175,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-14T20:14:58.519Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 176,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT ED619384 ┬À XYZD45",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Renca\", \"vehiculo\": \"XYZD45\", \"fecha_ingreso\": \"2025-11-14T23:14:13.062474+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-14T23:14:13.070Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 177,
+  "fields": {
+    "app": "OT_DOC",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Doc Evidencia ingreso ┬À OT ED619384",
+    "extra": "{\"tipo\": \"Evidencia ingreso\", \"archivo\": \"docs/ot_22/ee7e59c522a54a2e8339acc7a115e8ba.jpeg\", \"ot\": \"ED619384\"}",
+    "ts": "2025-11-14T23:14:13.086Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 178,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T00:03:25.951Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 179,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T00:03:33.222Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 180,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T00:04:06.059Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 181,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T00:04:13.358Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 182,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T00:44:47.694Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 183,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T00:44:54.231Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 184,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T01:28:21.324Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 185,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T01:28:34.473Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 186,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T01:28:56.090Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 187,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T01:29:07.477Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 188,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T02:12:14.404Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 189,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 99FB644C ┬À AB12-11",
+    "extra": "{\"estado\": \"DIA\", \"estado_label\": \"Diagn├│stico\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-11\", \"fecha_ingreso\": \"2025-11-13T04:45:37.477116+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-15T03:15:16.896Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 190,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 99FB644C ┬À AB12-11",
+    "extra": "{\"estado\": \"REP\", \"estado_label\": \"Reparaci├│n\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"AB12-11\", \"fecha_ingreso\": \"2025-11-13T04:45:37.477116+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-15T03:15:50.405Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 191,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T03:35:26.953Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 192,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T03:35:33.648Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 193,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T03:38:44.726Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 194,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T03:38:55.007Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 195,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T03:41:24.970Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 196,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T03:41:31.687Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 197,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "OT 33C0769D ┬À AB1234",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Renca\", \"vehiculo\": \"AB1234\", \"fecha_ingreso\": \"2025-11-15T03:44:58.130955+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-15T03:44:58.136Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 198,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T03:45:12.785Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 199,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T03:45:18.504Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 200,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T03:45:27.590Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 201,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T03:45:34.288Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 202,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:18:15.871Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 203,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:18:23.384Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 204,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT 33C0769D ┬À AB1234",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Renca\", \"vehiculo\": \"AB1234\", \"fecha_ingreso\": \"2025-11-15T03:44:58.130955+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-15T04:22:10.638Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 205,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:22:12.811Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 206,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:22:18.650Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 207,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:22:44.168Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 208,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T04:22:57.798Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 209,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-15T04:23:13.025Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 210,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:23:20.048Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 211,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:23:31.393Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 212,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:23:37.172Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 213,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:29:05.726Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 214,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:29:13.039Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 215,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:29:23.484Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 216,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:29:29.478Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 217,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-15T04:29:45.704Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 218,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-15T04:34:06.766Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 219,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-15T04:42:50.230Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 220,
+  "fields": {
+    "app": "CONFIG",
+    "action": "UPDATE",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "Config",
+    "extra": "sla_horas=72",
+    "ts": "2025-11-15T04:44:15.417Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 221,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "",
+    "extra": "{'rango': '', 'fini': '', 'ffin': '', 'estado': '', 'taller': '2', 'mecanico': ''}",
+    "ts": "2025-11-15T04:46:42.630Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 222,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:47:53.927Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 223,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:48:01.223Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 224,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:48:09.715Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 225,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:48:16.176Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 226,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-15T04:48:21.385Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 227,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-15T04:48:28.626Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 228,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T00:31:44.468Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 229,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T00:31:57.332Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 230,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T00:32:12.867Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 231,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-16T00:33:54.264Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 232,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_EXCEL",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-16T00:34:53.029Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 233,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T00:37:44.963Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 234,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-16T00:37:51.353Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 235,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-16T00:39:49.577Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 236,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T00:39:56.193Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 237,
+  "fields": {
+    "app": "INV_REP",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Repuesto AMORTIGUADORES_123",
+    "extra": "{\"codigo\": \"AMORTIGUADORES_123\", \"descripcion\": \"Amortiguadores\", \"stock_minimo\": 50.0, \"activo\": true}",
+    "ts": "2025-11-16T00:44:31.955Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 238,
+  "fields": {
+    "app": "INV",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "MOV #11 ┬À AMORTIGUADORES_123 ┬À Entrada",
+    "extra": "{\"repuesto\": \"AMORTIGUADORES_123\", \"descripcion\": \"Amortiguadores\", \"tipo\": \"Entrada\", \"cantidad\": 30.0, \"motivo\": \"Compra\", \"ot\": \"\"}",
+    "ts": "2025-11-16T00:45:18.684Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 239,
+  "fields": {
+    "app": "INV_REP",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Repuesto AMORTIGUADORES_123",
+    "extra": "{\"codigo\": \"AMORTIGUADORES_123\", \"descripcion\": \"Amortiguadores\", \"stock_minimo\": 50.0, \"activo\": true}",
+    "ts": "2025-11-16T00:45:18.697Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 240,
+  "fields": {
+    "app": "INV",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "MOV #12 ┬À AMORTIGUADORES_123 ┬À Salida",
+    "extra": "{\"repuesto\": \"AMORTIGUADORES_123\", \"descripcion\": \"Amortiguadores\", \"tipo\": \"Salida\", \"cantidad\": 4.0, \"motivo\": \"Consumo en OT\", \"ot\": \"ED619384\"}",
+    "ts": "2025-11-16T00:45:36.938Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 241,
+  "fields": {
+    "app": "INV_REP",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Repuesto AMORTIGUADORES_123",
+    "extra": "{\"codigo\": \"AMORTIGUADORES_123\", \"descripcion\": \"Amortiguadores\", \"stock_minimo\": 50.0, \"activo\": true}",
+    "ts": "2025-11-16T00:45:36.946Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 242,
+  "fields": {
+    "app": "CONFIG",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Config",
+    "extra": "sla_horas=48",
+    "ts": "2025-11-16T00:54:46.296Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 243,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T02:05:37.299Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 244,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T02:31:03.510Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 245,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:52:33.312Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 246,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:52:39.789Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 247,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:52:59.789Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 248,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:53:02.198Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 249,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:53:15.622Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 250,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:53:17.463Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 251,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:53:28.856Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 252,
+  "fields": {
+    "app": "REPORTES",
+    "action": "EXPORT_PDF",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "",
+    "extra": "{}",
+    "ts": "2025-11-16T05:56:07.896Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 253,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T05:59:45.225Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 254,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-16T05:59:51.732Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 255,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-16T06:01:03.191Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 256,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T06:01:11.766Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 257,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T16:40:04.670Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 258,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T16:40:07.177Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 259,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T16:54:15.316Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 260,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T16:54:18.075Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 261,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-16T16:57:05.780Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 262,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T00:55:02.231Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 263,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T00:55:40.184Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 264,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T00:57:09.804Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 265,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T00:57:56.363Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 266,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-17T00:58:03.520Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 267,
+  "fields": {
+    "app": "OT",
+    "action": "CREATE",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "OT FDA8A809 ┬À TEST11",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"TEST11\", \"fecha_ingreso\": \"2025-11-17T01:00:30.116545+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-17T01:00:30.122Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 268,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "coni"
+    ],
+    "object_repr": "coni",
+    "extra": "",
+    "ts": "2025-11-17T01:00:59.874Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 269,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-17T01:01:05.570Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 270,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-17T01:01:50.924Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 271,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T01:01:56.459Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 272,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "OT FDA8A809 ┬À TEST11",
+    "extra": "{\"estado\": \"ING\", \"estado_label\": \"Ingresado\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"TEST11\", \"fecha_ingreso\": \"2025-11-17T01:00:30.116545+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-17T01:02:05.265Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 273,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T01:02:07.445Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 274,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-17T01:02:12.351Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 275,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT FDA8A809 ┬À TEST11",
+    "extra": "{\"estado\": \"DIA\", \"estado_label\": \"Diagn├│stico\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"TEST11\", \"fecha_ingreso\": \"2025-11-17T01:00:30.116545+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-17T01:03:35.006Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 276,
+  "fields": {
+    "app": "OT",
+    "action": "UPDATE",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "OT FDA8A809 ┬À TEST11",
+    "extra": "{\"estado\": \"REP\", \"estado_label\": \"Reparaci├│n\", \"activa\": true, \"taller\": \"Maip├║\", \"vehiculo\": \"TEST11\", \"fecha_ingreso\": \"2025-11-17T01:00:30.116545+00:00\", \"fecha_cierre\": null}",
+    "ts": "2025-11-17T01:03:38.030Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 277,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGOUT",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-17T01:05:13.380Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 278,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T01:06:12.470Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 279,
+  "fields": {
+    "app": "INV",
+    "action": "CREATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "MOV #13 ┬À FILTRO-ACEITE-123 ┬À Salida",
+    "extra": "{\"repuesto\": \"FILTRO-ACEITE-123\", \"descripcion\": \"Filtro de aceite Cummins\", \"tipo\": \"Salida\", \"cantidad\": 2.0, \"motivo\": \"Consumo en OT\", \"ot\": \"FDA8A809\"}",
+    "ts": "2025-11-17T01:07:56.396Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 280,
+  "fields": {
+    "app": "INV_REP",
+    "action": "UPDATE",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "Repuesto FILTRO-ACEITE-123",
+    "extra": "{\"codigo\": \"FILTRO-ACEITE-123\", \"descripcion\": \"Filtro de aceite Cummins\", \"stock_minimo\": 50.0, \"activo\": true}",
+    "ts": "2025-11-17T01:07:56.404Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 281,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "admin"
+    ],
+    "object_repr": "admin",
+    "extra": "",
+    "ts": "2025-11-17T02:24:10.472Z"
+  }
+},
+{
+  "model": "core.auditlog",
+  "pk": 282,
+  "fields": {
+    "app": "AUTH",
+    "action": "LOGIN",
+    "user": [
+      "janis"
+    ],
+    "object_repr": "janis",
+    "extra": "",
+    "ts": "2025-11-17T03:35:17.850Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-12T09:42:04.771Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-12T09:42:11.178Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-12T09:42:14.609Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-12T09:42:19.705Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T02:10:30.936Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T02:10:40.314Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T02:10:52.985Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T02:10:59.619Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T19:50:07.880Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T19:50:33.273Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:17:34.000Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:17:39.927Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:42:00.928Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:42:06.552Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:42:09.483Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-13T20:42:15.999Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T00:38:05.628Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T00:38:11.897Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T00:38:24.720Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T00:38:30.896Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:25:36.830Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:25:45.327Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:25:58.134Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:26:13.033Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:26:32.847Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T01:26:41.781Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T02:03:59.946Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T02:04:07.993Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:04:58.813Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:05:06.796Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:19:10.168Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:19:15.942Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:31:15.024Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:31:19.961Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:31:27.623Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:31:39.589Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:31:53.726Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:32:08.515Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:32:20.232Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:32:28.661Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:43:12.991Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:43:22.900Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 43,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:43:27.335Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:43:33.073Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 45,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:53:58.244Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 46,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T05:54:03.661Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 47,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:08:00.716Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 48,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:08:07.738Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 49,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:08:20.124Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 50,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:08:30.270Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 51,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:01.310Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 52,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:06.967Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 53,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:16.890Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 54,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:23.485Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 55,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:32.507Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 56,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:09:50.288Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 57,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:10:00.442Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 58,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T06:10:05.948Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 59,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T08:51:14.732Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 60,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-14T20:05:18.369Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 61,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:03:25.943Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 62,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:03:33.217Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 63,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:04:06.051Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 64,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:04:13.354Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 65,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:44:47.686Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 66,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T00:44:54.227Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 67,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T01:28:21.316Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 68,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T01:28:34.468Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 69,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T01:28:56.082Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 70,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T01:29:07.472Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 71,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Mobile Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T02:12:14.399Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 72,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:35:26.947Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 73,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:35:33.643Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 74,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:38:44.720Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 75,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:38:55.003Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 76,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:41:24.964Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 77,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:41:31.681Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 78,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:45:12.779Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 79,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:45:18.498Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 80,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:45:27.583Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 81,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T03:45:34.282Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 82,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:18:15.864Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 83,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:18:23.379Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 84,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:22:12.804Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 85,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:22:18.646Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 86,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:22:44.162Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 87,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:22:57.793Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 88,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:23:13.018Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 89,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:23:20.043Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 90,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:23:31.386Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 91,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:23:37.167Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 92,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:29:05.719Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 93,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:29:13.034Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 94,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:29:23.478Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 95,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:29:29.473Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 96,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:47:53.920Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 97,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:48:01.217Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 98,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:48:09.709Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 99,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:48:16.170Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 100,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:48:21.378Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 101,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-15T04:48:28.620Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 102,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:31:44.462Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 103,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:31:57.322Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 104,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:32:12.861Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 105,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:37:44.955Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 106,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:37:51.346Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 107,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:39:49.564Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 108,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T00:39:56.185Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 109,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T02:05:37.285Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 110,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T02:31:03.504Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 111,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:52:33.301Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 112,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:52:39.780Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 113,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:52:59.779Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 114,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:53:02.187Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 115,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:53:15.614Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 116,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:53:17.453Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 117,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:53:28.851Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 118,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:59:45.219Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 119,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T05:59:51.726Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 120,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T06:01:03.185Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 121,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T06:01:11.758Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 122,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T16:40:04.665Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 123,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T16:40:07.170Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 124,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T16:54:15.311Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 125,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T16:54:18.067Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 126,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-16T16:57:05.775Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 127,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T00:55:02.226Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 128,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T00:55:40.178Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 129,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T00:57:09.799Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 130,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T00:57:56.355Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 131,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T00:58:03.516Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 132,
+  "fields": {
+    "user": [
+      "coni"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:00:59.868Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 133,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:01:05.564Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 134,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:01:50.907Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 135,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:01:56.454Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 136,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:02:07.438Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 137,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:02:12.341Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 138,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGOUT",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:05:13.373Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 139,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T01:06:12.465Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 140,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T02:24:10.467Z"
+  }
+},
+{
+  "model": "core.sessionlog",
+  "pk": 141,
+  "fields": {
+    "user": [
+      "janis"
+    ],
+    "action": "LOGIN",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1",
+    "ts": "2025-11-17T03:35:17.845Z"
+  }
+},
+{
+  "model": "inventario.repuesto",
+  "pk": 1,
+  "fields": {
+    "codigo": "FILTRO-AIRE-123",
+    "descripcion": "Filtro de aire",
+    "unidad": "un",
+    "stock_actual": "23.00",
+    "stock_minimo": "50.00",
+    "activo": true
+  }
+},
+{
+  "model": "inventario.repuesto",
+  "pk": 2,
+  "fields": {
+    "codigo": "FILTRO-ACEITE-123",
+    "descripcion": "Filtro de aceite Cummins",
+    "unidad": "un",
+    "stock_actual": "25.00",
+    "stock_minimo": "50.00",
+    "activo": true
+  }
+},
+{
+  "model": "inventario.repuesto",
+  "pk": 3,
+  "fields": {
+    "codigo": "PASTILLAS-FRENO-123",
+    "descripcion": "Pastillas de freno",
+    "unidad": "un",
+    "stock_actual": "29.00",
+    "stock_minimo": "50.00",
+    "activo": true
+  }
+},
+{
+  "model": "inventario.repuesto",
+  "pk": 4,
+  "fields": {
+    "codigo": "AMORTIGUADORES_123",
+    "descripcion": "Amortiguadores",
+    "unidad": "un",
+    "stock_actual": "26.00",
+    "stock_minimo": "50.00",
+    "activo": true
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 1,
+  "fields": {
+    "repuesto": 1,
+    "tipo": "ENTRADA",
+    "cantidad": "30.00",
+    "motivo": "ingreso bodega",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-10T06:25:11.787Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 2,
+  "fields": {
+    "repuesto": 1,
+    "tipo": "SALIDA",
+    "cantidad": "2.00",
+    "motivo": "consumo",
+    "ot": 11,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-10T06:25:24.432Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 3,
+  "fields": {
+    "repuesto": 2,
+    "tipo": "ENTRADA",
+    "cantidad": "30.00",
+    "motivo": "Devoluci├│n a stock",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-10T07:03:37.545Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 4,
+  "fields": {
+    "repuesto": 2,
+    "tipo": "SALIDA",
+    "cantidad": "3.00",
+    "motivo": "Consumo en OT",
+    "ot": 10,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-10T07:04:02.971Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 5,
+  "fields": {
+    "repuesto": 1,
+    "tipo": "SALIDA",
+    "cantidad": "2.00",
+    "motivo": "Pr├®stamo a otro taller",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-10T07:14:52.017Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 6,
+  "fields": {
+    "repuesto": 3,
+    "tipo": "ENTRADA",
+    "cantidad": "30.00",
+    "motivo": "Devoluci├│n a stock",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-12T06:25:46.179Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 7,
+  "fields": {
+    "repuesto": 3,
+    "tipo": "AJUSTE",
+    "cantidad": "5.00",
+    "motivo": "Ajuste por inventario f├¡sico",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-12T06:26:16.289Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 8,
+  "fields": {
+    "repuesto": 3,
+    "tipo": "SALIDA",
+    "cantidad": "2.00",
+    "motivo": "Consumo en OT",
+    "ot": 15,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-12T06:26:54.035Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 9,
+  "fields": {
+    "repuesto": 1,
+    "tipo": "SALIDA",
+    "cantidad": "3.00",
+    "motivo": "Consumo en OT",
+    "ot": 14,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-12T09:41:42.204Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 10,
+  "fields": {
+    "repuesto": 3,
+    "tipo": "SALIDA",
+    "cantidad": "4.00",
+    "motivo": "Consumo en OT",
+    "ot": 21,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-13T04:49:09.146Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 11,
+  "fields": {
+    "repuesto": 4,
+    "tipo": "ENTRADA",
+    "cantidad": "30.00",
+    "motivo": "Compra",
+    "ot": null,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-16T00:45:18.671Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 12,
+  "fields": {
+    "repuesto": 4,
+    "tipo": "SALIDA",
+    "cantidad": "4.00",
+    "motivo": "Consumo en OT",
+    "ot": 22,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-16T00:45:36.911Z"
+  }
+},
+{
+  "model": "inventario.movimientostock",
+  "pk": 13,
+  "fields": {
+    "repuesto": 2,
+    "tipo": "SALIDA",
+    "cantidad": "2.00",
+    "motivo": "Consumo en OT",
+    "ot": 24,
+    "creado_por": [
+      "admin"
+    ],
+    "creado_en": "2025-11-17T01:07:56.390Z"
+  }
+}
+]
