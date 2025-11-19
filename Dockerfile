@@ -11,8 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del proyecto
 COPY . .
 
-# Exponer el puerto interno del contenedor
+# El contenedor escuchará en el 8000
 EXPOSE 8000
 
-# Comando de arranque (SIN $PORT)
-CMD gunicorn config.wsgi:application --bind 0.0.0.0:8000
+# 🔹 Arranque: usa PORT si existe, si no, 8000
+CMD sh -c "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"
