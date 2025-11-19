@@ -35,7 +35,7 @@
             <td>{{ ot.vehiculo.patente }}</td>
             <td>{{ ot.chofer|default:"—" }}</td>
             <td>{{ ot.vehiculo.tipo|default:"—" }}</td>
-            <td>{{ ot.taller.nombre }}</td>
+            <td>{{ ot.taller.nombre_normalizado }}</td>
             <td><a class="btn btn-outline-primary btn-sm" href="{% url 'ot_detalle' ot.id %}">Abrir</a></td>
           </tr>
         {% empty %}

@@ -249,7 +249,7 @@
                         </td>
                         <td class="text-nowrap">{{ ot.vehiculo.patente }}</td>
                         <td>{{ ot.get_estado_actual_display }}</td>
-                        <td>{{ ot.taller.nombre }}</td>
+                        <td>{{ ot.taller.nombre_normalizado }}</td>
                         <td class="text-nowrap">{{ ot.fecha_ingreso|date:"d-m-Y H:i" }}</td>
                         <td class="text-nowrap">{% if ot.fecha_cierre %}{{ ot.fecha_cierre|date:"d-m-Y H:i" }}{% else %}—{% endif %}</td>
                         <td>

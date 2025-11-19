@@ -1,4 +1,5 @@
 from django.db import models
+import unicodedata
 
 class Taller(models.Model):
     nombre = models.CharField(max_length=120, unique=True)
@@ -9,8 +10,18 @@ class Taller(models.Model):
         verbose_name = "Taller"
         verbose_name_plural = "Talleres"
 
-    def __str__(self):
-        return self.nombre
+    @property
+    def nombre_normalizado(self):
+        """
+        Intenta limpiar el nombre por si viene con caracteres raros.
+        Si algo sale mal, devuelve el nombre tal cual.
+        """
+        try:
+            texto = self.nombre
+            # Normalización básica
+            return unicodedata.normalize("NFKC", texto)
+        except Exception:
+            return self.nombre
 
 class EstadoVehiculo(models.TextChoices):
     TALLER = "TALLER", "En taller"
