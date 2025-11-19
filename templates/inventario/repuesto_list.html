@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cleantext %}
 {% block title %}Repuestos{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -17,13 +18,20 @@
   <div class="table-responsive">
     <table class="table align-middle mb-0">
       <thead>
-        <tr><th>Código</th><th>Descripción</th><th>Unidad</th><th>Stock</th><th>Mínimo</th><th></th></tr>
+        <tr>
+          <th>Código</th>
+          <th>Descripción</th>
+          <th>Unidad</th>
+          <th>Stock</th>
+          <th>Mínimo</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
         {% for r in items %}
         <tr class="{% if r.en_minimo %}table-warning{% endif %}">
           <td>{{ r.codigo }}</td>
-          <td>{{ r.descripcion }}</td>
+          <td>{{ r.descripcion|cleantext }}</td>
           <td>{{ r.get_unidad_display }}</td>
           <td>{{ r.stock_actual|floatformat:"-2" }}</td>
           <td>{{ r.stock_minimo|floatformat:"-2" }}</td>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load dict_extras %}
+{% load dict_extras cleantext %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -160,9 +160,9 @@
           {% for n in ultimas_notifs %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div>
-                <div class="fw-semibold">{{ n.titulo }}</div>
+                <div class="fw-semibold">{{ n.titulo|cleantext }}</div>
                 {% if n.mensaje %}
-                  <div class="small text-muted">{{ n.mensaje }}</div>
+                  <div class="small text-muted">{{ n.mensaje|cleantext }}</div>
                 {% endif %}
                 <div class="small text-muted">{{ n.creada_en }}</div>
               </div>

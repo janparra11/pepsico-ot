@@ -151,3 +151,6 @@ LOGIN_URL = "/login/"        # Página de inicio de sesión predeterminada
 # 15 minutos de inactividad
 SESSION_COOKIE_AGE = 15 * 60      # 900 segundos
 SESSION_SAVE_EVERY_REQUEST = True
+
+DEFAULT_CHARSET = "utf-8"
+FILE_CHARSET = "utf-8"

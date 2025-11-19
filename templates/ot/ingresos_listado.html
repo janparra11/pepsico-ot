@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cleantext %}
 {% block title %}Ingresos del día{% endblock %}
 {% block content %}
 <div class="bg-white p-4 rounded shadow-sm">
@@ -33,8 +34,8 @@
           <tr>
             <td>{{ ot.fecha_ingreso|date:"H:i" }}</td>
             <td>{{ ot.vehiculo.patente }}</td>
-            <td>{{ ot.chofer|default:"—" }}</td>
-            <td>{{ ot.vehiculo.tipo|default:"—" }}</td>
+            <td>{{ ot.chofer|default:"—"|cleantext }}</td>
+            <td>{{ ot.vehiculo.tipo|default:"—"|cleantext }}</td>
             <td>{{ ot.taller.nombre_normalizado }}</td>
             <td><a class="btn btn-outline-primary btn-sm" href="{% url 'ot_detalle' ot.id %}">Abrir</a></td>
           </tr>
