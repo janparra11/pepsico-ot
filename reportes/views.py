@@ -13,13 +13,39 @@ from ot.models import OrdenTrabajo, EstadoOT
 from inventario.models import MovimientoStock
 
 from openpyxl.formatting.rule import DataBarRule
-from django.contrib.staticfiles import finders
+from django.conf import settings
+import os
+
 
 
 # ---------- estáticos ----------
 def _static_logo_path():
-    """Devuelve la ruta absoluta del logo si existe en staticfiles."""
-    return finders.find("img/logo_pepsico.png")
+    """
+    Devuelve la ruta absoluta del logo si existe.
+    Busca en STATIC_ROOT (producción) o en STATICFILES_DIRS (desarrollo).
+    """
+    filename = os.path.join("img", "logo_pepsico.png")
+
+    # 1) Si tienes STATIC_ROOT (cuando corres collectstatic)
+    static_root = getattr(settings, "STATIC_ROOT", None)
+    if static_root:
+        path = os.path.join(static_root, filename)
+        if os.path.exists(path):
+            return path
+
+    # 2) Si usas STATICFILES_DIRS en desarrollo
+    for base in getattr(settings, "STATICFILES_DIRS", []):
+        path = os.path.join(base, filename)
+        if os.path.exists(path):
+            return path
+
+    # 3) Fallback: BASE_DIR/static/img/logo_pepsico.png
+    base_dir_static = os.path.join(settings.BASE_DIR, "static", filename)
+    if os.path.exists(base_dir_static):
+        return base_dir_static
+
+    # Si no se encuentra, devolvemos None (o podrías lanzar una excepción)
+    return None
 
 
 # ---------- utilidades ----------
