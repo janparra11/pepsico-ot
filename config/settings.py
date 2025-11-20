@@ -54,7 +54,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.middleware.CurrentUserMiddleware",
     "config.middlewares.NoCacheMiddleware",
-    'whitenoise.middleware.WhiteNoiseMi ddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
