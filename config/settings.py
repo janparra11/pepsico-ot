@@ -120,9 +120,16 @@ USE_TZ = True
 # ==========
 # Static & Media
 # ==========
+# Ruta pública donde se sirven los estáticos
 STATIC_URL = "/static/"
+
+# Carpeta donde collectstatic deja TODO para producción
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # para archivos estáticos locales (opcional)
+
+# Carpeta donde tú pones tus archivos (como static/admin, static/core, etc)
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
