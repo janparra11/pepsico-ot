@@ -38,6 +38,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.middleware.CurrentUserMiddleware",
     "config.middlewares.NoCacheMiddleware",
+#    "config.middlewares.SecurityHeadersMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -135,3 +136,33 @@ LOGIN_URL = "/login/"        # Página de inicio de sesión predeterminada
 # 15 minutos de inactividad
 SESSION_COOKIE_AGE = 15 * 60      # 900 segundos
 SESSION_SAVE_EVERY_REQUEST = True
+
+# ============================
+# SEGURIDAD ADICIONAL
+# ============================
+
+# Evita que el navegador "adivine" tipos MIME
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Previene ciertos XSS en navegadores antiguos
+SECURE_BROWSER_XSS_FILTER = True
+
+# Cabecera X-Frame-Options (ya tienes el middleware activado)
+X_FRAME_OPTIONS = "DENY"
+
+# Cookies más seguras
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+# SameSite para cookies (Lax es un buen equilibrio)
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+
+# ⚠️ SOLO activar esto cuando tu sitio esté en HTTPS real
+# Si aún no tienes HTTPS en producción, deja SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = False  # Cambia a True cuando tengas HTTPS
+
+# HSTS: también solo tiene efecto real sobre HTTPS, pero lo dejamos listo
+SECURE_HSTS_SECONDS = 31536000  # 1 año
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
